@@ -9,4 +9,8 @@ public interface AdminService {
     List<UserPage> userList();
 
     void addNewAdmin(AdminQueryParam adminQueryParam);
+
+    void modifyAdmin(AdminQueryParam adminQueryParam);
+
+    void deleteAdmin(Integer id);
 }

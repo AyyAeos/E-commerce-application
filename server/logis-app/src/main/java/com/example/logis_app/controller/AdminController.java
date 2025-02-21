@@ -31,11 +31,25 @@ public class AdminController {
        return Result.success(userList);
     }
 
-    @PostMapping()
+    @PostMapping
     public Result addNewAdmin(@RequestBody AdminQueryParam adminQueryParam) {
     log.info("New admin : {}" , adminQueryParam);
     adminService.addNewAdmin(adminQueryParam);
-    return null;
+    return Result.success();
+    }
+
+    @PutMapping
+    public Result modifyAdmin(@RequestBody AdminQueryParam adminQueryParam ){
+        log.info("New admin : {}" , adminQueryParam);
+        adminService.modifyAdmin(adminQueryParam);
+        return Result.success();
+    }
+
+    @DeleteMapping
+    public Result deleteAdmin(Integer id) {
+        log.info("Admin id to delete : ");
+        adminService.deleteAdmin(id);
+        return Result.success();
     }
 
 }

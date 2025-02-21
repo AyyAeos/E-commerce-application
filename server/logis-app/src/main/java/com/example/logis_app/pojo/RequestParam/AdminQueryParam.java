@@ -11,17 +11,22 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 
+
+
 public class AdminQueryParam {
     private String userFullName;
     private String userPhone;
     private String userRole;
-    private String userCreateTime;
-    private String userLastModifiedTime;
+    private LocalDateTime userCreateTime;
+    private LocalDateTime userLastModifiedTime;
     private String username;
     private String password;
     private String email;
     private String adminRole;
     private Integer departmentId;
-    private LocalDateTime adminHirDateTime;
+    private LocalDateTime adminHireDateTime;
     private BigDecimal adminSalary;
+
+    // for AddnewAdmin retrieve mysql id
+    private Integer userId;
 }

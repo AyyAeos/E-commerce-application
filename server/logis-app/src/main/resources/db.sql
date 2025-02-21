@@ -64,15 +64,12 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `logis`.`user_customer_address` (
   `customer_address_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` INT UNSIGNED NOT NULL,
-  `customer_full_name` VARCHAR(255) NOT NULL,
-  `customer_phone_number` VARCHAR(45) NOT NULL,
   `customer_address_line` VARCHAR(255) NOT NULL,
   `customer_address_city` VARCHAR(100) NOT NULL,
   `customer_address_postal_code` VARCHAR(5) NOT NULL,
   `customer_address_country` VARCHAR(20) NOT NULL,
   `customer_address_state` VARCHAR(100) NOT NULL,
   `customer_default_address` TINYINT NOT NULL DEFAULT 0,
-  `customer_address_type` ENUM('HOME', 'WORK', 'OTHER') NULL,
   PRIMARY KEY (`customer_address_id`),
   UNIQUE INDEX `customer_phone_number_UNIQUE` (`customer_phone_number` ASC) VISIBLE,
   INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
@@ -234,6 +231,18 @@ CREATE TABLE transactions_supplier_payments (
   FOREIGN KEY (supplier_id) REFERENCES inventory_supplier(supplier_id) ,
   FOREIGN KEY (item_id) REFERENCES inventory(item_id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
+
+//testing department
+INSERT INTO user_emp_department (department_name, department_description)
+VALUES
+    ('Human Resources', 'Responsible for employee relations, recruitment, and training.'),
+    ('Finance', 'Handles budgeting, financial planning, and company accounts.'),
+    ('Information Technology', 'Manages IT infrastructure, cybersecurity, and software development.'),
+    ('Operations', 'Oversees daily business activities and process improvements.'),
+    ('Marketing', 'Focuses on branding, advertising, and customer engagement.'),
+    ('Sales', 'Handles client relations, sales strategies, and revenue growth.'),
+    ('Customer Support', 'Manages customer queries, complaints, and service improvement.');
+
 
 
 
