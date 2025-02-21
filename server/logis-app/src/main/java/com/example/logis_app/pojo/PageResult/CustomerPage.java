@@ -1,4 +1,4 @@
-package main.java.com.example.logis_app.pojo.PageResult;
+package com.example.logis_app.pojo.PageResult;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 
-public class CustomerPage extends UserPage {
+public class CustomerPage   {
     private String customerAddress;
     private String customerAddressCity;
     private String customerAddressPostalCode;

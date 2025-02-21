@@ -1,15 +1,15 @@
 package com.example.logis_app.service.Impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.logis_app.pojo.PageResult.UserPage;
+import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.logis_app.Mapper.AdminMapper;
-import com.example.logis_app.pojo.User;
 import com.example.logis_app.service.AdminService;
-
-import main.java.com.example.logis_app.pojo.PageResult.CustomerPage;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -19,9 +19,12 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public List<CustomerPage> userList() {
+    public List<UserPage> userList() {
         return adminMapper.findAllUserList() ;
     }
 
-    
+    @Override
+    public void addNewAdmin(AdminQueryParam a) {
+
+    }
 }

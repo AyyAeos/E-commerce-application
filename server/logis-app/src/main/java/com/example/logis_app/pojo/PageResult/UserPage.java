@@ -1,4 +1,4 @@
-package main.java.com.example.logis_app.pojo.PageResult;
+package com.example.logis_app.pojo.PageResult;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 
-public abstract class UserPage {
+public class UserPage {
 private Integer userId;
 private String userFullName;
 private String userPhone;

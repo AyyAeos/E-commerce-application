@@ -2,19 +2,17 @@ package com.example.logis_app.controller;
 
 import java.util.List;
 
+import com.example.logis_app.pojo.PageResult.UserPage;
+import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.logis_app.pojo.Result;
-import com.example.logis_app.pojo.User;
 import com.example.logis_app.service.AdminService;
 
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.example.logis_app.pojo.PageResult.CustomerPage;
-
-import org.springframework.web.bind.annotation.GetMapping;
-
 
 
 @Slf4j
@@ -22,14 +20,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("/emps")
 public class AdminController {
 
+    private static final Logger log = LoggerFactory.getLogger(AdminController.class);
     @Autowired
     private AdminService adminService;
 
     @GetMapping
-    public Result userList() {
-        List<CustomerPage> userList = adminService.userList();
+    public Result adminList() {
+        log.info("Query admin list" );
+        List<UserPage> userList = adminService.userList();
        return Result.success(userList);
     }
-    
+
+    @PostMapping()
+    public Result addNewAdmin(@RequestBody AdminQueryParam adminQueryParam) {
+    log.info("New admin : {}" , adminQueryParam);
+    adminService.addNewAdmin(adminQueryParam);
+    return null;
+    }
 
 }

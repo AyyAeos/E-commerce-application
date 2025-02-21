@@ -5,8 +5,20 @@
 
 <mapper namespace="com.example.logis_app.Mapper.AdminMapper">
 
-    <select id = "findAllUserList" resultType = "com.example.logis_app.pojo.CustomerPage" >
-      select user_id, name, user_phone, user_role, username, password, email
+    <resultMap id="UserMap" type="com.example.logis_app.pojo.PageResult.UserPage">
+        <result property="userId" column="user_id"/>
+        <result property="userFullName" column="name"/>
+        <result property="userPhone" column="user_phone"/>
+        <result property="userRole" column="user_role"/>
+        <result property="userCreateTime" column="user_create_time"/>
+        <result property="userLastModifiedTime" column="user_last_modified_time"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+    </resultMap>
+
+    <select id = "findAllUserList" resultMap = "UserMap" >
+      select user_id,name , user_phone, user_role,user_create_time, user_last_modified_time, username, password, email
       FROM user 
     </select>
 </mapper>

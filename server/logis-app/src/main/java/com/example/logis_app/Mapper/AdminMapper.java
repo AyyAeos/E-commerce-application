@@ -2,14 +2,11 @@ package com.example.logis_app.Mapper;
 
 import java.util.List;
 
+import com.example.logis_app.pojo.PageResult.UserPage;
 import org.apache.ibatis.annotations.Mapper;
-
-import com.example.logis_app.pojo.User;
-
-import main.java.com.example.logis_app.pojo.PageResult.CustomerPage;
 
 @Mapper
 public interface AdminMapper {
-    public List<CustomerPage> findAllUserList();
+    public List<UserPage> findAllUserList();
 }
 
