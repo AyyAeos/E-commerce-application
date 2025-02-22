@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/emps")
 public class AdminController {
 
-    private static final Logger log = LoggerFactory.getLogger(AdminController.class);
     @Autowired
     private AdminService adminService;
 
@@ -40,7 +39,7 @@ public class AdminController {
 
     @PutMapping
     public Result modifyAdmin(@RequestBody AdminQueryParam adminQueryParam ){
-        log.info("New admin : {}" , adminQueryParam);
+        log.info("Modify admin : {}" , adminQueryParam);
         adminService.modifyAdmin(adminQueryParam);
         return Result.success();
     }

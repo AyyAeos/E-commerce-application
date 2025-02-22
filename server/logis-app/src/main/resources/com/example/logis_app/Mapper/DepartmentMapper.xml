@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.logis_app.Mapper.DepartmentMapper">
+
+    <select id="findAllDepartment" resultType="com.example.logis_app.pojo.PageResult.DepartmentPage">
+        SELECT department_id, department_name, department_description
+        FROM user_emp_department
+    </select>
+
+    <insert id="addNewDepartment" >
+        INSERT INTO user_emp_department (department_name, department_description)
+        VALUES (#{departmentName}, #{departmentDescription})
+    </insert>
+
+    <update id="modifyDepartment">
+        UPDATE user_emp_department
+        <set>
+            <if test="departmentName != null">department_name = #{departmentName},</if>
+            <if test="departmentDescription != null">department_description = #{departmentDescription},</if>
+        </set>
+        WHERE department_id = #{departmentId}
+    </update>
+
+    <delete id="deleteDepartment">
+        DELETE FROM user_emp_department WHERE department_id = #{id};
+    </delete>
+
+</mapper>
