@@ -9,4 +9,10 @@ public interface TransactionService {
     TransactionPage transactionList();
 
     TransactionPage querySpecificTransaction(TransactionQueryParam transactionQueryParam);
+
+    void addNewTransaction(TransactionQueryParam transactionQueryParam);
+
+    void modifyTransaction(TransactionQueryParam transactionQueryParam);
+
+    void deleteTransaction(Integer id);
 }

@@ -15,4 +15,5 @@ public class Transaction {
     private Integer itemId;
     private Double amount;
     private LocalDateTime transactionDate;
+    private String description;
 }

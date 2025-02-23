@@ -33,5 +33,29 @@ public class TransactionController {
         return Result.success(list);
     }
 
+    @PostMapping("/create")
+    public Result addNewTransaction(@RequestBody TransactionQueryParam transactionQueryParam) {
+        log.info("Add new Transaction : {} ", transactionQueryParam);
+        transactionService.addNewTransaction(transactionQueryParam);
+        return Result.success();
+    }
+    @PutMapping
+    public Result modifyTransaction(@RequestBody TransactionQueryParam transactionQueryParam) {
+        log.info("Modify new Transaction : {}", transactionQueryParam);
+        transactionService.modifyTransaction(transactionQueryParam);
+        return Result.success();
+    }
+
+    @DeleteMapping
+    public Result deleteTransaction(Integer id) {
+        log.info("Transaction id to be deleted  : {}", id);
+        transactionService.deleteTransaction(id);
+        return Result.success();
+    }
+
+
+
+
+
     
 }

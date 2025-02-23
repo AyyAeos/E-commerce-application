@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -33,5 +34,28 @@ public class TransactionServiceImpl implements TransactionService {
         Integer count = transactionMapper.findAllTransactionList();
         List<Transaction> list = transactionMapper.querySpecificTransaction(transactionQueryParam);
         return new TransactionPage(list,transactionQueryParam.getPage(),transactionQueryParam.getPageLimit(), count);
+    }
+
+    @Override
+    public void addNewTransaction(TransactionQueryParam transactionQueryParam) {
+        transactionMapper.addNewTransaction(transactionQueryParam);
+        transactionMapper.addNewTransactionDetails(transactionQueryParam);
+        BigDecimal amount = BigDecimal.valueOf(transactionQueryParam.getAmount());
+        if(transactionQueryParam.getTransactionType().equals("SALE")) {
+            transactionMapper.addBalance(amount);
+        } else {
+            transactionMapper.minusBalance(amount);
+        }
+    }
+
+    @Override
+    public void modifyTransaction(TransactionQueryParam transactionQueryParam) {
+        transactionMapper.modifyTransaction(transactionQueryParam);
+        transactionMapper.modifyTransactionDetails(transactionQueryParam);
+    }
+
+    @Override
+    public void deleteTransaction(Integer id) {
+        transactionMapper.deleteTransaction(id);
     }
 }

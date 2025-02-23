@@ -132,7 +132,7 @@ CREATE TABLE inventory (
 CREATE TABLE inventory_sizes (
   size_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   item_id INT UNSIGNED NOT NULL,
-  size VARCHAR(50) NOT NULL,
+  storage VARCHAR(50) NOT NULL,
   price DECIMAL(10,2) NOT NULL,  -- Price depends on size
   stock_quantity INT UNSIGNED NOT NULL,
   PRIMARY KEY (size_id),

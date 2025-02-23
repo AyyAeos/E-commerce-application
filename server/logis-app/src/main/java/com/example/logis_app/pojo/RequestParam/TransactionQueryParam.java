@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class TransactionQueryParam {
     private Integer page;
     private Integer pageLimit;
+    private Integer transactionId;
     private String transactionType;
     private Integer itemId;
     private Double amount;
@@ -22,4 +23,19 @@ public class TransactionQueryParam {
     //Query start end date
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+
+    private String description;
+
+    //for expenses
+    private String expenseType;
+
+    //for supplier
+    private String supplierId;
+
+    // for user
+    private Integer userId;
+
+
+
+
 }
