@@ -266,4 +266,74 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 
 
+Fake Data
+-- Insert users
+INSERT INTO `logis`.`user` (`name`, `user_phone`, `user_role`, `username`, `password`, `email`) VALUES
+('John Doe', '1234567890', 'ADMIN', 'johndoe', 'password123', 'johndoe@example.com'),
+('Alice Smith', '0987654321', 'CUSTOMER', 'alicesmith', 'password456', 'alicesmith@example.com'),
+('Bob Johnson', '1122334455', 'DRIVER', 'bobjohnson', 'password789', 'bobjohnson@example.com');
 
+-- Insert user_customer_details
+INSERT INTO `logis`.`user_customer_details` (`user_id`, `customer_age`, `customer_gender`, `customer_account_created_day`, `customer_employment_status`) VALUES
+(2, 28, 'FEMALE', '2023-05-15 10:00:00', 'EMPLOYED');
+
+-- Insert user_customer_address
+INSERT INTO `logis`.`user_customer_address` (`user_id`, `customer_address_line`, `customer_address_city`, `customer_address_postal_code`, `customer_address_country`, `customer_address_state`, `customer_default_address`) VALUES
+(2, '123 Main St', 'Cityville', '12345', 'Country', 'State', 1);
+
+-- Insert user_emp_department
+INSERT INTO `logis`.`user_emp_department` (`department_name`, `department_description`) VALUES
+('HR', 'Human Resources Department'),
+('Sales', 'Sales and Marketing Department');
+
+-- Insert user_admin_details
+INSERT INTO `logis`.`user_admin_details` (`user_id`, `admin_role`, `department_id`, `admin_hire_date`, `admin_salary`) VALUES
+(1, 'MANAGER', 1, '2022-01-01', 50000.00);
+
+-- Insert inventory
+INSERT INTO `logis`.`inventory` (`item_name`, `on_sale`, `description`) VALUES
+('Laptop', 1, 'High-performance laptop'),
+('Headphones', 1, 'Noise-cancelling headphones');
+
+-- Insert inventory_sizes
+INSERT INTO `logis`.`inventory_sizes` (`item_id`, `size`, `stock`, `price`) VALUES
+(1, '16GB RAM, 512GB SSD', 10, 1200.00),
+(2, 'Over-Ear', 20, 200.00);
+
+-- Insert inventory_supplier
+INSERT INTO `logis`.`inventory_supplier` (`supplier_name`, `contact_info`) VALUES
+('TechSupplier Inc.', 'contact@techsupplier.com'),
+('AudioTech Ltd.', 'support@audiotech.com');
+
+-- Insert company_balance
+INSERT INTO `logis`.`company_balance` (`total_balance`, `last_updated`) VALUES
+(100000.00, '2025-02-24 12:00:00');
+
+-- Insert transactions
+INSERT INTO `logis`.`transactions` (`transaction_type`, `item_id`, `amount`, `transaction_date`, `description`) VALUES
+('SALE', 1, 1200.00, '2025-02-24 12:00:00', 'Sale of Laptop'),
+('EXPENSE', NULL, 500.00, '2025-02-24 12:00:00', 'Office rent');
+
+-- Insert transactions_supplier_payments
+INSERT INTO `logis`.`transactions_supplier_payments` (`transaction_id`, `supplier_id`, `item_id`, `amount`, `payment_date`) VALUES
+(1, 1, 1, 600.00, '2025-02-24 12:00:00');
+
+-- Insert transactions_salaries
+INSERT INTO `logis`.`transactions_salaries` (`transaction_id`, `user_id`, `amount`, `salary_date`) VALUES
+(1, 1, 3000.00, '2025-02-24 12:00:00');
+
+-- Insert transactions_sales
+INSERT INTO `logis`.`transactions_sales` (`transaction_id`, `item_id`, `amount`, `sale_date`) VALUES
+(1, 1, 1200.00, '2025-02-24 12:00:00');
+
+-- Insert transactions_expenses
+INSERT INTO `logis`.`transactions_expenses` (`transaction_id`, `item_id`, `expense_type`, `description`, `amount`, `expense_date`) VALUES
+(2, NULL, 'RENT', 'Monthly office rent', 500.00, '2025-02-24 12:00:00');
+
+-- Insert inventory_stock_tracking
+INSERT INTO `logis`.`inventory_stock_tracking` (`item_id`, `change_type`, `quantity_changed`, `stock_date`) VALUES
+(1, 'INCREMENT', 10, '2025-02-24 12:00:00');
+
+-- Insert user_driver_details
+INSERT INTO `logis`.`user_driver_details` (`user_id`, `driver_license_number`, `license_expiry_date`, `vehicle_type`, `vehicle_plate_number`, `driver_status`) VALUES
+(3, 'DL123456789', '2026-02-24', 'CAR', 'ABC123', 'AVAILABLE');
