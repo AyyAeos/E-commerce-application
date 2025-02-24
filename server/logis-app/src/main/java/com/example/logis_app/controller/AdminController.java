@@ -2,6 +2,7 @@ package com.example.logis_app.controller;
 
 import java.util.List;
 
+import com.example.logis_app.pojo.PageResult.AdminPage;
 import com.example.logis_app.pojo.PageResult.UserPage;
 import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/emps")
+@RequestMapping("/admins/selection/admin")
 public class AdminController {
 
     @Autowired
@@ -26,7 +27,7 @@ public class AdminController {
     @GetMapping
     public Result adminList() {
         log.info("Query admin list" );
-        List<UserPage> userList = adminService.userList();
+        List<AdminPage> userList = adminService.userList();
        return Result.success(userList);
     }
 
@@ -37,15 +38,16 @@ public class AdminController {
     return Result.success();
     }
 
-    @PutMapping
-    public Result modifyAdmin(@RequestBody AdminQueryParam adminQueryParam ){
+    @PutMapping("/{id}")
+    public Result modifyAdmin( @PathVariable Integer id ,@RequestBody AdminQueryParam adminQueryParam ){
+        adminQueryParam.setUserId(id);
         log.info("Modify admin : {}" , adminQueryParam);
         adminService.modifyAdmin(adminQueryParam);
         return Result.success();
     }
 
-    @DeleteMapping
-    public Result deleteAdmin(Integer id) {
+    @DeleteMapping("/{id}")
+    public Result deleteAdmin(@PathVariable Integer id) {
         log.info("Admin id to delete : ");
         adminService.deleteAdmin(id);
         return Result.success();

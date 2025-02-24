@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/depts")
+@RequestMapping("/admins/selection/dept")
 public class DepartmentController {
 
     @Autowired
@@ -33,15 +33,16 @@ public class DepartmentController {
         return Result.success();
     }
 
-    @PutMapping
-    public Result modifyDepartment(@RequestBody DepartmentQueryParam departmentQueryParam ){
+    @PutMapping("/{id}")
+    public Result modifyDepartment(@PathVariable Integer id, @RequestBody DepartmentQueryParam departmentQueryParam ){
+        departmentQueryParam.setDepartmentId(id);
         log.info("MOdify department : {}" , departmentQueryParam);
         departmentService.modifyDepartment(departmentQueryParam);
         return Result.success();
     }
 
-    @DeleteMapping
-    public Result deleteDepartment(Integer id) {
+    @DeleteMapping("/{id}")
+    public Result deleteDepartment(@PathVariable Integer id) {
         log.info("Department id to delete : {} ", id);
         departmentService.deleteDepartment(id);
         return Result.success();

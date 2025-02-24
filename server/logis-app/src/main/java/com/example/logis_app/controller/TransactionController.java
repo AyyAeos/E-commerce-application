@@ -39,15 +39,16 @@ public class TransactionController {
         transactionService.addNewTransaction(transactionQueryParam);
         return Result.success();
     }
-    @PutMapping
-    public Result modifyTransaction(@RequestBody TransactionQueryParam transactionQueryParam) {
+    @PutMapping("/{id}")
+    public Result modifyTransaction(@PathVariable Integer id, @RequestBody TransactionQueryParam transactionQueryParam) {
+        transactionQueryParam.setTransactionId(id);
         log.info("Modify new Transaction : {}", transactionQueryParam);
         transactionService.modifyTransaction(transactionQueryParam);
         return Result.success();
     }
 
-    @DeleteMapping
-    public Result deleteTransaction(Integer id) {
+    @DeleteMapping("/{id}")
+    public Result deleteTransaction(@PathVariable Integer id) {
         log.info("Transaction id to be deleted  : {}", id);
         transactionService.deleteTransaction(id);
         return Result.success();

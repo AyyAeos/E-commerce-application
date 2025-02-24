@@ -4,21 +4,17 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.logis_app.Mapper.AdminMapper">
-    <resultMap id="UserMap" type="com.example.logis_app.pojo.PageResult.UserPage">
-        <result property="userId" column="user_id"/>
-        <result property="userFullName" column="name"/>
-        <result property="userPhone" column="user_phone"/>
-        <result property="userRole" column="user_role"/>
-        <result property="userCreateTime" column="user_create_time"/>
-        <result property="userLastModifiedTime" column="user_last_modified_time"/>
-        <result property="username" column="username"/>
-        <result property="password" column="password"/>
-        <result property="email" column="email"/>
-    </resultMap>
 
-    <select id = "findAllUserList" resultMap = "UserMap" >
-      select user_id,name , user_phone, user_role,user_create_time, user_last_modified_time, username, password, email
-      FROM user 
+
+    <select id = "findAllUserList" resultType = "com.example.logis_app.pojo.PageResult.AdminPage" >
+        SELECT
+        u.user_id, u.name,uad.department_id, uad.admin_salary,
+        u.user_phone, u.user_last_modified_time,
+        u.username, u.password, u.email,
+        uad.admin_hire_date, uad.admin_role
+        FROM user u
+        LEFT JOIN user_admin_details uad ON u.user_id = uad.user_id
+        WHERE u.user_role = 'ADMIN';
     </select>
 
     <insert id="addNewAdmin" useGeneratedKeys="true" keyProperty="userId">

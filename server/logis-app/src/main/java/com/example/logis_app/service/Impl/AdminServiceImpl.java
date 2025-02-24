@@ -3,6 +3,7 @@ package com.example.logis_app.service.Impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.logis_app.pojo.PageResult.AdminPage;
 import com.example.logis_app.pojo.PageResult.UserPage;
 import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public List<UserPage> userList() {
+    public List<AdminPage> userList() {
         return adminMapper.findAllUserList() ;
     }
 

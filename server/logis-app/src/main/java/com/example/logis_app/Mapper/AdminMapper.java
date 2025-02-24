@@ -2,13 +2,14 @@ package com.example.logis_app.Mapper;
 
 import java.util.List;
 
+import com.example.logis_app.pojo.PageResult.AdminPage;
 import com.example.logis_app.pojo.PageResult.UserPage;
 import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AdminMapper {
-    public List<UserPage> findAllUserList();
+     List<AdminPage> findAllUserList();
 
     void addNewAdmin(AdminQueryParam adminQueryParam);
 

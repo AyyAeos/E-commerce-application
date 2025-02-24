@@ -10,9 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class AdminPage   {
-   private String adminRole;
+   private Integer userId;
+   private String name;
+   private String userPhone;
    private Integer departmentId;
-   private LocalDateTime adminHirDateTime;
    private BigDecimal adminSalary;
+   private LocalDateTime adminHireDate;
+   private String adminRole;
+   private String email;
+   private String username;
+   private String password;
+   private LocalDateTime userLastModifiedTime;
 }
 

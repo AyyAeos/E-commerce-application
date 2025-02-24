@@ -1,12 +1,72 @@
 package com.example.logis_app.controller;
 
+import com.example.logis_app.pojo.PageResult.InventoryPage;
+import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
+import com.example.logis_app.pojo.Result;
+import com.example.logis_app.service.InventoryService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/inventorys")
+@RequestMapping("/admins/inventory")
 public class InventoryController {
 
+    @Autowired
+    private InventoryService inventoryService;
+
+    @GetMapping
+    public Result getAllItems() {
+         List<InventoryPage> list = inventoryService.getAllItems();
+         return Result.success(list);
+    }
+
+
+    @GetMapping("/search")
+    public Result getItemByParam(@ModelAttribute InventoryQueryParam inventoryQueryParam) {
+        List<InventoryPage> list = inventoryService.getItemBySelected(inventoryQueryParam);
+         return Result.success(list);
+    }
+
+    /*
+   { http://localhost:8080/admins/inventory/create
+ "itemName": "Laptop",
+ "size": "17-inch",
+ "price": 1200.40,
+ "stockQuantity": 20,
+ "onSale": true
+}
+  */
+    @PostMapping("/create")
+    public Result addItem(@RequestBody InventoryQueryParam inventoryQueryParam) {
+        inventoryService.insertNewItem(inventoryQueryParam);
+        return Result.success();
+    }
+    /*
+    http://localhost:8080/admins/inventory/9
+      {
+    "itemName": "Lapto",
+    "size": "17-inch",
+    "price": 120.40,
+    "stockQuantity": 2,
+    "onSale": false
+
+  }
+     */
+    @PutMapping("/{id}")
+    public Result updateItem(@PathVariable Integer id, @RequestBody InventoryQueryParam item) {
+        item.setItemId(id);
+        inventoryService.updateItem(item);
+        return Result.success();
+    }
+
+    @DeleteMapping("/{id}")
+    public Result deleteItem(@PathVariable Integer id) {
+        log.info("Item id to  be deleted : {}" , id );
+        inventoryService.deleteItem(id);
+        return Result.success();
+    }
 }

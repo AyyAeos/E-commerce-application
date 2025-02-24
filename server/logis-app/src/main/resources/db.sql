@@ -123,21 +123,13 @@ CREATE TABLE IF NOT EXISTS `logis`.`user_driver_details` (
 
 -- Main Inventory Table (Stores Only Item Details)
 CREATE TABLE inventory (
-  item_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  item_name VARCHAR(255) NOT NULL,
-  PRIMARY KEY (item_id)
-) ENGINE = InnoDB;
-
-
-CREATE TABLE inventory_sizes (
-  size_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  item_id INT UNSIGNED NOT NULL,
-  storage VARCHAR(50) NOT NULL,
-  price DECIMAL(10,2) NOT NULL,  -- Price depends on size
-  stock_quantity INT UNSIGNED NOT NULL,
-  PRIMARY KEY (size_id),
-  FOREIGN KEY (item_id) REFERENCES inventory(item_id) ON DELETE CASCADE
-) ENGINE = InnoDB;
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    size VARCHAR(50) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    stock_quantity INT NOT NULL CHECK (stock_quantity >= 0),
+    on_sale BOOLEAN DEFAULT FALSE;
+);
 
 
 CREATE TABLE inventory_supplier (
