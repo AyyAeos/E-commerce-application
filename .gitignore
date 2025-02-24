@@ -61,3 +61,5 @@ yarn-error.log*
 
 client/logis-app/public
 
+server/logis-app/src/main/resources/*.sql
+
