@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.logis_app.Mapper.InventoryMapper">
+
+
+
+    <select id="getAllItems" resultType="com.example.logis_app.pojo.PageResult.InventoryPage">
+        SELECT i.item_id, i.item_name, i.description, i.on_sale, isz.size, isz.price, isz.stock
+        FROM inventory i
+        JOIN inventory_sizes isz ON i.item_id = isz.item_id;
+    </select>
+
+    <select id="getItemBySelected" resultType="com.example.logis_app.pojo.PageResult.InventoryPage">
+        SELECT i.item_id, i.item_name,i.description, i.on_sale, isz.size, isz.price, isz.stock
+        FROM inventory i
+        JOIN inventory_sizes isz ON i.item_id = isz.item_id
+        <where>
+            <if test="itemName != null and itemName != ''">
+                AND i.item_name LIKE CONCAT('%', #{itemName}, '%')
+            </if>
+
+            <if test="size != null and size != ''">
+                AND isz.size = #{size}
+            </if>
+
+            <if test="minPrice != null and maxPrice != null">
+                AND isz.price BETWEEN #{minPrice} AND #{maxPrice}
+            </if>
+
+            <if test="onSale != null">
+                AND i.on_sale = #{onSale}
+            </if>
+        </where>
+    </select>
+
+        <insert id="insertItem" useGeneratedKeys="true" keyProperty="itemId">
+            INSERT INTO inventory (item_name, on_sale, description)
+            VALUES (#{itemName}, #{onSale}, #{description})
+        </insert>
+
+        <insert id="insertItemSize">
+            INSERT INTO inventory_sizes (item_id, size, price, stock)
+            VALUES (#{itemId}, #{size}, #{price}, #{stockQuantity})
+        </insert>
+
+    <update id="updateItem" >
+        UPDATE inventory
+        <set>
+            <if test="itemName != null"> item_name = #{itemName}, </if>
+            <if test="onSale != null"> on_sale = #{onSale}, </if>
+            <if test="description != null"> description = #{description}, </if>
+        </set>
+        WHERE item_id = #{itemId};
+    </update>
+
+    <update id="updateInventorySize">
+        UPDATE inventory_sizes
+        <set>
+            <if test="price != null"> price = #{price}, </if>
+            <if test="stockQuantity != null"> stock = #{stockQuantity}, </if>
+        </set>
+        WHERE item_id = #{itemId} AND size = #{size};
+    </update>
+
+
+    <delete id="deleteItem" >
+        DELETE FROM inventory WHERE item_id = #{itemId};
+    </delete>
+
+
+
+</mapper>

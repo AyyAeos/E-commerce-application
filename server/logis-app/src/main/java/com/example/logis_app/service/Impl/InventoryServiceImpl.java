@@ -1,0 +1,48 @@
+package com.example.logis_app.service.Impl;
+
+import com.example.logis_app.Mapper.InventoryMapper;
+import com.example.logis_app.pojo.PageResult.InventoryPage;
+import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
+import com.example.logis_app.service.InventoryService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+@Transactional
+@Service
+@Slf4j
+public class InventoryServiceImpl implements InventoryService {
+    @Autowired
+    private InventoryMapper inventoryMapper;
+
+
+    @Override
+    public List<InventoryPage> getAllItems() {
+        return inventoryMapper.getAllItems();
+    }
+
+    @Override
+    public List<InventoryPage>  getItemBySelected(InventoryQueryParam inventoryQueryParam) {
+        return  inventoryMapper.getItemBySelected(inventoryQueryParam);
+    }
+
+    @Override
+    public void insertNewItem(InventoryQueryParam inventoryQueryParam) {
+        inventoryMapper.insertItem(inventoryQueryParam);
+        inventoryMapper.insertItemSize(inventoryQueryParam);
+    }
+
+    @Override
+    public void updateItem(InventoryQueryParam item) {
+
+        inventoryMapper.updateItem(item);
+        inventoryMapper.updateInventorySize(item);
+    }
+
+    @Override
+    public void deleteItem(Integer id) {
+        inventoryMapper.deleteItem(id);
+    }
+}
