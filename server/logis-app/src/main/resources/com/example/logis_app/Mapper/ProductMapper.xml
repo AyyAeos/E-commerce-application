@@ -21,4 +21,10 @@
         LEFT JOIN inventory_sizes isz ON i.item_id = isz.item_id
         WHERE on_sale = 1 AND i.item_id = #{id}
     </select>
+
+    
+        <insert id="addToCard">
+            INSERT INTO cart_item ( user_id, item_id, quantity, size, username)
+            VALUES (#{userId}, #{itemId}, #{quantity}, #{size}, #{username})
+        </insert>
 </mapper>

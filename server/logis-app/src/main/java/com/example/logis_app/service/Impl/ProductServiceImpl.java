@@ -94,7 +94,7 @@ public class ProductServiceImpl  implements ProductService {
 
     @Override
     public void addToCard(AddItemToCartQueryParam addItemToCartQueryParam) {
-         productMapper.addToCard();
+         productMapper.addToCard(addItemToCartQueryParam);
         
     }
 

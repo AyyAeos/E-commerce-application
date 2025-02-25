@@ -39,8 +39,9 @@ public class ProductController {
         return Result.success(product);
     }
 
-    @PostMapping
-    public Result addToCart(@RequestBody AddItemToCartQueryParam addItemToCartQueryParam) {
+    @PostMapping("/{id}")
+    public Result addToCart(@PathVariable Integer id, @RequestBody AddItemToCartQueryParam addItemToCartQueryParam) {
+        addItemToCartQueryParam.setItemId(id);
         log.info("Add item to card : {}" , addItemToCartQueryParam);
         productService.addToCard(addItemToCartQueryParam);
         return Result.success();
@@ -49,6 +50,6 @@ public class ProductController {
     @GetMapping("/cart")
     public Result checkCart() {
         log.info("Checking Cart . . . ");
-        
+        return null;
     }
 }

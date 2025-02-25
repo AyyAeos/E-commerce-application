@@ -337,3 +337,18 @@ INSERT INTO `logis`.`inventory_stock_tracking` (`item_id`, `change_type`, `quant
 -- Insert user_driver_details
 INSERT INTO `logis`.`user_driver_details` (`user_id`, `driver_license_number`, `license_expiry_date`, `vehicle_type`, `vehicle_plate_number`, `driver_status`) VALUES
 (3, 'DL123456789', '2026-02-24', 'CAR', 'ABC123', 'AVAILABLE');
+
+
+CREATE TABLE cart_item (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NULL,  -- NULL for guest users
+    item_id INT unsigned NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    size VARCHAR(20) NOT NULL,
+    username VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_item_id` FOREIGN KEY (`item_id`) REFERENCES `inventory` (`item_id`) ON DELETE CASCADE,
+     CONSTRAINT `fk_username` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE
+);
