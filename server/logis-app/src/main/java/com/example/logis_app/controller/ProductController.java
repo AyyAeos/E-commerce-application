@@ -1,11 +1,16 @@
 package com.example.logis_app.controller;
 
 import com.example.logis_app.pojo.PageResult.Product.ProductPage;
+import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
+import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
 import com.example.logis_app.pojo.Result;
 import com.example.logis_app.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,5 +30,25 @@ public class ProductController {
         log.info("Query of Product List");
         List<ProductPage> list = productService.getProductList();
         return Result.success(list);
+    }
+
+    @GetMapping("/{id}")
+    public Result getSpecificProduct(@PathVariable Integer id) {
+        log.info("Querying specific product ... ");
+        ProductPage product = productService.getSpecificProduct(id);
+        return Result.success(product);
+    }
+
+    @PostMapping
+    public Result addToCart(@RequestBody AddItemToCartQueryParam addItemToCartQueryParam) {
+        log.info("Add item to card : {}" , addItemToCartQueryParam);
+        productService.addToCard(addItemToCartQueryParam);
+        return Result.success();
+    }
+
+    @GetMapping("/cart")
+    public Result checkCart() {
+        log.info("Checking Cart . . . ");
+        
     }
 }

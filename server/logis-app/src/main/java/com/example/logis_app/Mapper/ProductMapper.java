@@ -12,4 +12,8 @@ public interface ProductMapper {
 
 
     List<Map<String, Object>> getProductList();
+
+    List<Map<String,Object>> getSpecificProduct(Integer id);
+
+    void addToCard();
 }
