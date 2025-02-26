@@ -341,7 +341,7 @@ INSERT INTO `logis`.`user_driver_details` (`user_id`, `driver_license_number`, `
 
 CREATE TABLE cart_item (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED NULL,  -- NULL for guest users
+    user_id INT UNSIGNED NOT NULL,  
     item_id INT unsigned NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
     size VARCHAR(20) NOT NULL,

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.logis_app.Mapper.CartMapper">
+   
+       <select id="checkCart" resultType="java.util.HashMap">
+     select isz.stock, c.user_id,i.item_name, i.description, c.item_id, c.quantity, c.size, isz.price
+    FROM cart_item c
+    LEFT JOIN inventory_sizes isz ON c.size = isz.size
+    LEFT JOIN inventory i ON i.item_id = c.item_id
+    WHERE c.item_id = isz.item_id AND c.user_id = #{id} AND i.on_sale = 1;
+    </select>
+</mapper>

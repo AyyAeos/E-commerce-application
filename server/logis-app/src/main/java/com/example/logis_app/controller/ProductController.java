@@ -1,5 +1,6 @@
 package com.example.logis_app.controller;
 
+import com.example.logis_app.pojo.PageResult.Product.CartPage;
 import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
 import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
@@ -45,11 +46,5 @@ public class ProductController {
         log.info("Add item to card : {}" , addItemToCartQueryParam);
         productService.addToCard(addItemToCartQueryParam);
         return Result.success();
-    }
-
-    @GetMapping("/cart")
-    public Result checkCart() {
-        log.info("Checking Cart . . . ");
-        return null;
     }
 }
