@@ -1,37 +1,12 @@
-import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuIndicator,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    NavigationMenuViewport,
-  } from "@/components/ui/navigation-menu"
-  
+
 
 
 
 export default function NavBar() {
     return (
-        <NavigationMenu>
-        <NavigationMenuList>
-
-          <NavigationMenuItem>
-          <NavigationMenuTrigger className="bg-red-500">Item Two</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <NavigationMenuLink>Link</NavigationMenuLink>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Item Two</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <NavigationMenuLink></NavigationMenuLink>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-
-        </NavigationMenuList>
-      </NavigationMenu>
+      //left right for left right fix top
+      <div className=" p-5 bg-red-500 text-white text-center text-2xl rounded-lg fixed top-0 left-0 right-0">
+      Tailwind is working! 🎉
+    </div>
     )
 }
