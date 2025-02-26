@@ -1,43 +1,4 @@
 
-    //     "code": 1,
-    //     "msg": "success",
-    //     "data": [
-    //         {
-    //             "itemId": 1,
-    //             "itemName": "Laptop",
-    //             "description": "High-performance laptop",
-    //             "variants": [
-    //                 {
-    //                     "size": "30",
-    //                     "stock": 40,
-    //                     "price": 50.00
-    //                 },
-    //                 {
-    //                     "size": "20",
-    //                     "stock": 30,
-    //                     "price": 40.00
-    //                 },
-    //                 {
-    //                     "size": "16GB RAM, 512GB SSD",
-    //                     "stock": 10,
-    //                     "price": 1200.00
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "itemId": 2,
-    //             "itemName": "Headphones",
-    //             "description": "Noise-cancelling headphones",
-    //             "variants": [
-    //                 {
-    //                     "size": "Over-Ear",
-    //                     "stock": 20,
-    //                     "price": 200.00
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // }
     import axios from 'axios';
 import useSWR from 'swr'
 import { Button } from "@/components/ui/button"
