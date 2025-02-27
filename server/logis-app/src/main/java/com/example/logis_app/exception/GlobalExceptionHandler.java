@@ -1,5 +1,6 @@
 package com.example.logis_app.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,13 +19,22 @@ public class GlobalExceptionHandler {
         return Result.error("System error, Please contact developer");
     }
 
-    public Result handleDuplicateKeyException (DuplicateKeyException e) {
-        log.error("System error", e);
-        String message = e.getMessage();
-        int i = message.indexOf("Duplicate entry");
-        String errMsg = message.substring(i);
-        String [] arr = errMsg.split(" ");
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public Result handleDuplicateKeyException(DataIntegrityViolationException ex) {
+        String message = "A database error occurred.";
 
-        return Result.error(arr[2] + " is exist");
+        if (ex.getCause() instanceof java.sql.SQLIntegrityConstraintViolationException) {
+            String errorMessage = ex.getCause().getMessage();
+
+            if (errorMessage.contains("username_UNIQUE")) {
+                message = "Username already exists. Please choose a different one.";
+            } else if (errorMessage.contains("userPhone_UNIQUE")) {
+                message = "Phone number is already registered. Use a different number.";
+            } else if (errorMessage.contains("email_UNIQUE")) {
+                message = "Email is already registered. Try logging in.";
+            }
+        }
+
+        return Result.error(message);
     }
 }

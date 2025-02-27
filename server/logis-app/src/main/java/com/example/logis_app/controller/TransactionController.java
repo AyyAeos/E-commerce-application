@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/transactions")
+@RequestMapping("admins/transaction")
 public class TransactionController {
 
     @Autowired

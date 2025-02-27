@@ -17,5 +17,5 @@ public class InventoryPage {
     private String description;
     private String size;
     private BigDecimal price;
-    private String stock;
+    private Integer stock;
 }

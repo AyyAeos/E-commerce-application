@@ -6,6 +6,7 @@ import com.example.logis_app.pojo.Result;
 import com.example.logis_app.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,11 @@ public class LoginController {
     @PostMapping("/register")
     public Result register(@RequestBody RegisterParam registerParam) {
         log.info("Register . . . ");
-        boolean status = loginService.register(registerParam);
-        return Result.success(status);
+        try {
+            boolean status = loginService.register(registerParam);
+            return Result.success(status);
+        } catch (DataIntegrityViolationException ex) {
+           throw ex;
+        }
     }
 }

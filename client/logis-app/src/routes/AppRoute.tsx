@@ -4,12 +4,23 @@ import Home from "../pages/Home";
 
 import PageNotFound from "../routes/PageNotFound";
 import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+import ProductList from "@/components/ProductList/ProductList";
+import AdminPage from "@/pages/AdminPage";
+import Inventory from "@/pages/Inventory";
+import Transaction from "@/pages/Transaction";
 
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/logins" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/admins" element={<AdminPage />} />
+      <Route path="/products" element={<ProductList />} />
+      <Route path="/logins/admin" element={<ProductList />} />
+      <Route path="/admins/inventory" element={<Inventory />} />
+      <Route path="/admins/transaction" element={<Transaction />} />
 
       {/* Invalid Path */}
       <Route path="*" element={<PageNotFound />} />

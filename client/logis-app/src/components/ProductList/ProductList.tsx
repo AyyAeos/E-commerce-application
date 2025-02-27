@@ -43,8 +43,7 @@ import { Button } from "@/components/ui/button"
         })
     })
 
-    //fake data
-    const test = Array(100).fill(0).map((_, i) => i)
+    
     
     return (
         //overflow y = scroll bar
@@ -66,7 +65,7 @@ import { Button } from "@/components/ui/button"
                             priceMap.get(product.itemId).min + "..." + priceMap.get(product.itemId).max }
                         </li>
                         <li>
-                            <Button variant="outline">Button</Button>
+                            <Button variant="outline" className='h:over-red'>Check Details</Button>
                         </li>
 
                     </ul>
@@ -75,12 +74,7 @@ import { Button } from "@/components/ui/button"
 
                 )
             }
-            )}
-            {/* fake data when pass js variable to html  use this format and map*/}
-           
-            {
-                test.map((i) => (<div>{i}</div>))
-            }
+            )}    
         </div>
     </div>
     )
