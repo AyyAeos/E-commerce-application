@@ -1,6 +1,7 @@
 package com.example.logis_app.controller;
 
 import com.example.logis_app.pojo.PageResult.InventoryPage;
+import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
 import com.example.logis_app.pojo.Result;
 import com.example.logis_app.service.InventoryService;
@@ -20,7 +21,7 @@ public class InventoryController {
 
     @GetMapping
     public Result getAllItems() {
-         List<InventoryPage> list = inventoryService.getAllItems();
+         List<ProductPage> list = inventoryService.getAllItems();
          return Result.success(list);
     }
 
@@ -64,9 +65,9 @@ public class InventoryController {
     }
 
     @DeleteMapping("/{id}")
-    public Result deleteItem(@PathVariable Integer id) {
+    public Result deleteItem(@PathVariable Integer id, @RequestParam Integer sizeId) {
         log.info("Item id to  be deleted : {}" , id );
-        inventoryService.deleteItem(id);
+        inventoryService.deleteItem(id, sizeId);
         return Result.success();
     }
 }

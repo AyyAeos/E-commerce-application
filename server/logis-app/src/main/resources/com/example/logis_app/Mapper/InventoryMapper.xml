@@ -7,10 +7,10 @@
 
 
 
-    <select id="getAllItems" resultType="com.example.logis_app.pojo.PageResult.InventoryPage">
-        SELECT i.item_id, i.item_name, i.description, i.on_sale, isz.size, isz.price, isz.stock
+    <select id="getAllItems" resultType="java.util.HashMap">
+        SELECT i.item_id, i.item_name, i.description, isz.size, isz.stock, isz.price, isz.size_id
         FROM inventory i
-        JOIN inventory_sizes isz ON i.item_id = isz.item_id;
+        LEFT JOIN inventory_sizes isz ON i.item_id = isz.item_id
     </select>
 
     <select id="getItemBySelected" resultType="com.example.logis_app.pojo.PageResult.InventoryPage">
@@ -59,15 +59,16 @@
     <update id="updateInventorySize">
         UPDATE inventory_sizes
         <set>
+            <if test="size != null"> size = #{size}, </if>
             <if test="price != null"> price = #{price}, </if>
             <if test="stockQuantity != null"> stock = #{stockQuantity}, </if>
         </set>
-        WHERE item_id = #{itemId} AND size = #{size};
+        WHERE item_id = #{itemId} AND size_id = #{sizeId};
     </update>
 
 
     <delete id="deleteItem" >
-        DELETE FROM inventory WHERE item_id = #{itemId};
+        DELETE FROM inventory_sizes WHERE item_id = #{id} AND size_id = #{sizeId};
     </delete>
 
 

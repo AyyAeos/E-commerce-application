@@ -10,8 +10,8 @@ import Register from './pages/Register';
 import ProductList from './components/ProductList/ProductList';
 import AdminPage from './pages/AdminPage';
 import AdminLogin from './pages/AdminLogin';
-import Inventory from './pages/Inventory';
-import Transaction from './pages/Transaction';
+import Inventory from './components/Inventory/Inventory';
+import Transaction from './components/Transaction/Transaction';
 
 
 

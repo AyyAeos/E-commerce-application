@@ -14,6 +14,7 @@ public class InventoryQueryParam {
     private Boolean onSale;
     private String size;
     private Integer stockQuantity;
+    private Integer sizeId;
 
     private BigDecimal price;
 

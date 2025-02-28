@@ -14,5 +14,6 @@ public class Variants {
     private String size;
     private Integer stock;
     private BigDecimal price;
+    private Integer sizeId;
 
 }

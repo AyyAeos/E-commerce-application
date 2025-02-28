@@ -7,8 +7,8 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import ProductList from "@/components/ProductList/ProductList";
 import AdminPage from "@/pages/AdminPage";
-import Inventory from "@/pages/Inventory";
-import Transaction from "@/pages/Transaction";
+import Inventory from "@/components/Inventory/Inventory";
+import Transaction from "@/components/Transaction/Transaction";
 
 const AppRoutes: React.FC = () => {
   return (

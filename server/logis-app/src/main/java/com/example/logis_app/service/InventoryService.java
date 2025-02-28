@@ -1,12 +1,13 @@
 package com.example.logis_app.service;
 
 import com.example.logis_app.pojo.PageResult.InventoryPage;
+import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
 
 import java.util.List;
 
 public interface InventoryService {
-    List<InventoryPage> getAllItems();
+    List<ProductPage> getAllItems();
 
     List<InventoryPage>  getItemBySelected(InventoryQueryParam inventoryQueryParam);
 
@@ -14,5 +15,5 @@ public interface InventoryService {
 
     void updateItem(InventoryQueryParam item);
 
-    void deleteItem(Integer id);
+    void deleteItem(Integer id, Integer sizeId);
 }

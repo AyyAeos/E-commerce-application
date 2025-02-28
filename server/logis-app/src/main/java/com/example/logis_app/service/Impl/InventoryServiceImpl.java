@@ -2,14 +2,18 @@ package com.example.logis_app.service.Impl;
 
 import com.example.logis_app.Mapper.InventoryMapper;
 import com.example.logis_app.pojo.PageResult.InventoryPage;
+import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
 import com.example.logis_app.service.InventoryService;
+import com.example.logis_app.util.ProductPageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+
 @Transactional
 @Service
 @Slf4j
@@ -19,8 +23,9 @@ public class InventoryServiceImpl implements InventoryService {
 
 
     @Override
-    public List<InventoryPage> getAllItems() {
-        return inventoryMapper.getAllItems();
+    public List<ProductPage> getAllItems() {
+        List<Map<String, Object>> productList = inventoryMapper.getAllItems();
+        return ProductPageUtil.transformToProductPage(productList);
     }
 
     @Override
@@ -42,7 +47,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public void deleteItem(Integer id) {
-        inventoryMapper.deleteItem(id);
+    public void deleteItem(Integer id, Integer sizeId) {
+        inventoryMapper.deleteItem(id, sizeId);
     }
 }

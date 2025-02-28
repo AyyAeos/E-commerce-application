@@ -23,7 +23,8 @@ public class ProductPageUtil {
             String size = (String) data.get("size");
             Integer stock = (Integer) data.get("stock");
             BigDecimal price = (BigDecimal) data.get("price");
-            Variants variant = new Variants(size, stock, price);
+            Integer sizeId = (Integer) data.get("size_id");
+            Variants variant = new Variants(size, stock, price, sizeId);
 
             //if key exist add the exisiting list
             //if no new a productpage

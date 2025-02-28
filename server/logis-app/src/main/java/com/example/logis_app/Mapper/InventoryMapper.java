@@ -5,10 +5,11 @@ import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface InventoryMapper {
-    List<InventoryPage> getAllItems();
+    List<Map<String, Object>> getAllItems();
 
     List<InventoryPage> getItemBySelected(InventoryQueryParam inventoryQueryParam);
 
@@ -16,7 +17,7 @@ public interface InventoryMapper {
 
     void updateItem(InventoryQueryParam item);
 
-    void deleteItem(Integer id);
+    void deleteItem(Integer id, Integer sizeId);
 
     void insertItemSize(InventoryQueryParam inventoryQueryParam);
 

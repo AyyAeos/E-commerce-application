@@ -8,16 +8,6 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-  } from "@/components/ui/pagination"
   
 import axios from "axios"
 import useSWR from "swr"
@@ -25,6 +15,7 @@ import { useState } from "react";
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
+import { CiSquarePlus } from "react-icons/ci";
 
   
  
@@ -56,6 +47,10 @@ const Transaction : React.FC =  () => {
                 totalCount: number;
             };
         };
+       
+       
+
+        const [editForm, setEditForm] = useState< {transaction: Transaction} | null >(null);
 
     
       const fetcher = async(url: string) => {
@@ -75,52 +70,27 @@ const Transaction : React.FC =  () => {
 
       const {data, error, isLoading} = useSWR<TransactionResponse>("http://localhost:8080/admins/transaction", fetcher)
 
-      const[currentPage, setCurrentPage] = useState(1);
-      const totalPages = data?.data ? Math.ceil(data.data.totalCount / data.data.pageLimit) : 1;
-
- 
-      
         return (
             <>
                 <div className="pt-8 overflow-y-scroll min-h-screen bg-primary text-primary-foreground">
-                    <div className="flex justify-center text-2xl py-3 text-bold">
-                        Transaction
-                    </div>
-                    <div className="flex flex-col space-y-6 md:flex-row flex-nowrap space-x-6  ">
-                        
-                        <select name="transactionType" className="w-40">
-                            <option value="SALE">SALE</option>
-                            <option value="EXPENSE">EXPENSE</option>
-                            <option value="SUPPLIER_PAYMENT">SUPPLIER PAYMENT</option>
-                            <option value="SALARY">SALARY</option>
-                        </select>
 
-                        {/* w-40 size  */}
-                        <Input type="number" placeholder="Item Id" className="w-40"/>
-                        <Input type="date" placeholder="Start Date" className="w-40" />
-                        <Input type="date" placeholder="End Date" className="w-40" />
-                        <Button className="ml-auto w-24" type="submit">Search</Button>
-                    </div>
 
                     {isLoading && <p>Loading...</p>}
                     {error && <p className="text-red-500">Failed to fetch transactions</p>}
 
                     <Table>
                             <TableCaption>A list of Transaction.</TableCaption>
-                           
-
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="w-[100px]">Transaction ID</TableHead>
+                                    <TableHead>Transaction ID</TableHead>
                                     <TableHead>Transaction Type</TableHead>
                                     <TableHead>Item ID</TableHead>
                                     <TableHead>Amount</TableHead>
                                     <TableHead>Transaction Date</TableHead>
                                     <TableHead>Description</TableHead>
+                                    <TableHead>Action</TableHead>
                                 </TableRow>
                             </TableHeader>
-
-                            
 
                         
                             <TableBody>
@@ -135,29 +105,31 @@ const Transaction : React.FC =  () => {
                                                 {new Date(item.transactionDate).toLocaleString()}
                                             </TableCell>
                                             <TableCell>{item.description}</TableCell>
+
+                                            <div className="space-x-6  ">
+                                            <button 
+                                            className=" border-2 px-2 py-2 border-black m-2 hover:bg-red-500 "
+                                            onClick={() => { 
+                                                console.log(`Edit transaction id : ${item.itemId} `);
+                                               setEditForm({transaction: item});
+                                                
+                                            }}
+                                            
+                                            >Edit
+
+                                            </button>
+
+                                            <button 
+                                            className="border-2 px-2 py-2 border-black hover:bg-red-500"
+                                            
+                                            >Delete
+
+                                            </button>
+                                            </div>
                                         </TableRow>
                                 ))}
                             </TableBody>
                     </Table>
-
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                            <PaginationPrevious href="#" />
-                            </PaginationItem>
-                            <PaginationItem>
-                            <PaginationLink href="#">1</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                            <PaginationEllipsis />
-                            </PaginationItem>
-                            <PaginationItem>
-                            <PaginationNext href="#" />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
-
-
                 </div>
 
             </>

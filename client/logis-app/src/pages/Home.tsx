@@ -2,7 +2,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";
-import { ChevronRight } from "lucide-react"
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
 
 
