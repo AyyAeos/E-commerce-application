@@ -12,7 +12,7 @@ export default function NavBar() {
 
 
       <>
-      <div className=" flex p-5 justify-between  bg-black bg-opacity-70 text-white text-center text-2xl rounded-lg fixed top-0 left-0 right-0">
+      <div className=" flex p-5 justify-between  bg-black text-white text-center text-2xl rounded-lg fixed top-0 left-0 right-0">
       <p className="px-4 py-2">Tailwind is working! 🎉</p>
 
   

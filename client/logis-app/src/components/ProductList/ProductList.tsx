@@ -4,6 +4,7 @@ import useSWR from 'swr'
 import { Button } from "@/components/ui/button"
 import Product from './Product';
 import { Navigate, useNavigate } from 'react-router-dom';
+import Cart from '../CartBar/Cart';
 
     export default function ProductList() {
         type Product = {
@@ -48,48 +49,53 @@ import { Navigate, useNavigate } from 'react-router-dom';
     ///hooks cannot oput in side function
     const navigate = useNavigate();
     const handleClick = (itemId: number) => {
-        
         navigate(`/products/${itemId}`);
     };
 
     
     return (
-        //overflow y = scroll bar
-        <div className="p-5 overflow-y-scroll">
-        <h1 className="text-2xl font-bold mb-4">Products</h1>
+      
+        <>
+        <Cart />
+            //overflow y = scroll bar
+            <div className="p-5 overflow-y-scroll">
+                <h1 className="text-2xl font-bold mb-4">Products</h1>
 
-        {isLoading && <p>Loading...</p>}
-        {error && <p className="text-red-500">Failed to fetch products</p>}
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
+                {isLoading && <p>Loading...</p>}
+                {error && <p className="text-red-500">Failed to fetch products</p>}
+                <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
 
-            {data && data.map((product: Product) =>  {
-                
-                return (
-                    <div key={product.itemId} className="border p-4 rounded-lg shadow">
-                    <h2 className="text-xl font-bold">{product.itemName}</h2>
-                    <p className="text-sm mb-2">{product.description}</p>
-                    <ul className="text-sm space-y-2 flex gap-3 justify-around items-center">
-                        <li className='mt-3 text-2xl'>
-                            ${priceMap.get(product.itemId).min == priceMap.get(product.itemId).max ? 
-                            priceMap.get(product.itemId).min  :
-                            priceMap.get(product.itemId).min + "..." + priceMap.get(product.itemId).max }
-                        </li>
-                        <li>
-                            <Button variant="outline" className='h:over-red'
-                            onClick={() => handleClick(product.itemId)}
-                            >Check Details
-                            
-                            </Button>
-                        </li>
+                    {data && data.map((product: Product) => {
 
-                    </ul>
+                        return (
+                            <div key={product.itemId} className="border p-4 rounded-lg shadow flex flex-col">
+                                <h2 className="text-xl font-bold">{product.itemName}</h2>
+                                <p className="text-sm mb-2">{product.description}</p>
+                                {/* mt flex auto = push it self to bottom */}
+                                <div className='mt-auto flex '>
+                                    <ul className="flex justify-between items-center text-sm space-y-2 space-x-24 ">
+                                        <li className='mt-3 text-2xl'>
+                                            ${priceMap.get(product.itemId).min == priceMap.get(product.itemId).max ?
+                                                priceMap.get(product.itemId).min :
+                                                priceMap.get(product.itemId).min + "..." + priceMap.get(product.itemId).max}
+                                        </li>
+                                        <li>
+                                            <Button variant="outline" className='hover:bg-red-500'
+                                                onClick={() => handleClick(product.itemId)}
+                                            >Check Details
+                                            </Button>
+                                        </li>
 
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                        );
+                    }
+                    )}
                 </div>
-
-                )
-            }
-            )}    
-        </div>
-    </div>
+            </div>
+            </>
     )
 }

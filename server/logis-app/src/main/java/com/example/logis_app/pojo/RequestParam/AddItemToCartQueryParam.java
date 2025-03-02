@@ -14,5 +14,4 @@ public class AddItemToCartQueryParam {
     private String size;
     private Integer quantity;
     private Integer userId;
-    private String username; 
 }

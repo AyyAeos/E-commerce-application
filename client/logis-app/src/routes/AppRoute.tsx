@@ -10,6 +10,8 @@ import AdminPage from "@/pages/AdminPage";
 import Inventory from "@/components/Inventory/Inventory";
 import Transaction from "@/components/Transaction/Transaction";
 import Product from "@/components/ProductList/Product";
+import Cart from "@/components/CartBar/Cart";
+import CartPage from "@/components/CartBar/CartPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -19,10 +21,11 @@ const AppRoutes: React.FC = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/admins" element={<AdminPage />} />
       <Route path="/products" element={<ProductList />} />
-      <Route path="/logins/admin" element={<ProductList />} />
+      <Route path="/logins/admin" element={<AdminPage />} />
       <Route path="/admins/inventory" element={<Inventory />} />
       <Route path="/admins/transaction" element={<Transaction />} />
-      <Route path="/products/:id" element={<Product />} />
+      <Route path="/products/:itemId" element={<Product />} />
+      <Route path="/carts/:userId" element={<CartPage />} />
 
       {/* Invalid Path */}
       <Route path="*" element={<PageNotFound />} />
