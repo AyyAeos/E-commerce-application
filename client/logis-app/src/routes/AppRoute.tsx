@@ -9,6 +9,7 @@ import ProductList from "@/components/ProductList/ProductList";
 import AdminPage from "@/pages/AdminPage";
 import Inventory from "@/components/Inventory/Inventory";
 import Transaction from "@/components/Transaction/Transaction";
+import Product from "@/components/ProductList/Product";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/logins/admin" element={<ProductList />} />
       <Route path="/admins/inventory" element={<Inventory />} />
       <Route path="/admins/transaction" element={<Transaction />} />
+      <Route path="/products/:id" element={<Product />} />
 
       {/* Invalid Path */}
       <Route path="*" element={<PageNotFound />} />

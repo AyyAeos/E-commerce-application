@@ -15,6 +15,7 @@ const SearchForm = () => {
 
     const handleSubmit = () => {
         console.log("Submitting Form:", formData);
+
     };
 
     return (

@@ -1,6 +1,7 @@
 package com.example.logis_app.service.Impl;
 
 import com.example.logis_app.Mapper.LoginMapper;
+import com.example.logis_app.pojo.PageResult.LoginPage;
 import com.example.logis_app.pojo.RequestParam.LoginQueryParam;
 import com.example.logis_app.pojo.RequestParam.RegisterParam;
 import com.example.logis_app.service.LoginService;
@@ -17,15 +18,15 @@ public class LoginServiceImpl implements LoginService {
     private LoginMapper loginMapper;
 
     @Override
-    public Boolean login(LoginQueryParam loginQueryParam) {
-        String storedPassword =  loginMapper.login(loginQueryParam);
+    public LoginPage login(LoginQueryParam loginQueryParam) {
+        LoginPage loginPage=  loginMapper.login(loginQueryParam);
 
-        if (storedPassword == null) {
-            return false;
+        if (loginPage.getPassword() == null) {
+            loginPage.setCredentails(false);
         }
-        log.info(storedPassword);
+        log.info(loginPage.getPassword() );
         log.info(loginQueryParam.getPassword());
-        return storedPassword.equals(loginQueryParam.getPassword());
+        return new LoginPage(loginPage.getCredentails(), loginPage.getUserId(), loginPage.getPassword());
 
     }
 

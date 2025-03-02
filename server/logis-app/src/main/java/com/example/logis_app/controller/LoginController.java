@@ -1,5 +1,6 @@
 package com.example.logis_app.controller;
 
+import com.example.logis_app.pojo.PageResult.LoginPage;
 import com.example.logis_app.pojo.RequestParam.LoginQueryParam;
 import com.example.logis_app.pojo.RequestParam.RegisterParam;
 import com.example.logis_app.pojo.Result;
@@ -23,8 +24,8 @@ public class LoginController {
     @PostMapping
     public Result login(@RequestBody LoginQueryParam loginQueryParam) {
     log.info("Log in", loginQueryParam);
-    Boolean credentails = loginService.login(loginQueryParam) ;
-    return Result.success(credentails);
+    LoginPage loginPage = loginService.login(loginQueryParam) ;
+    return Result.success(loginPage.getUserId());
     }
 
     @PostMapping("/register")

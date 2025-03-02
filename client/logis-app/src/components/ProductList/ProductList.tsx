@@ -1,7 +1,9 @@
 
-    import axios from 'axios';
+import axios from 'axios';
 import useSWR from 'swr'
 import { Button } from "@/components/ui/button"
+import Product from './Product';
+import { Navigate, useNavigate } from 'react-router-dom';
 
     export default function ProductList() {
         type Product = {
@@ -43,15 +45,23 @@ import { Button } from "@/components/ui/button"
         })
     })
 
-    
+    ///hooks cannot oput in side function
+    const navigate = useNavigate();
+    const handleClick = (itemId: number) => {
+        
+        navigate(`/products/${itemId}`);
+    };
+
     
     return (
         //overflow y = scroll bar
         <div className="p-5 overflow-y-scroll">
         <h1 className="text-2xl font-bold mb-4">Products</h1>
+
         {isLoading && <p>Loading...</p>}
         {error && <p className="text-red-500">Failed to fetch products</p>}
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
+
             {data && data.map((product: Product) =>  {
                 
                 return (
@@ -59,13 +69,17 @@ import { Button } from "@/components/ui/button"
                     <h2 className="text-xl font-bold">{product.itemName}</h2>
                     <p className="text-sm mb-2">{product.description}</p>
                     <ul className="text-sm space-y-2 flex gap-3 justify-around items-center">
-                        <li className='mt-3'>
+                        <li className='mt-3 text-2xl'>
                             ${priceMap.get(product.itemId).min == priceMap.get(product.itemId).max ? 
                             priceMap.get(product.itemId).min  :
                             priceMap.get(product.itemId).min + "..." + priceMap.get(product.itemId).max }
                         </li>
                         <li>
-                            <Button variant="outline" className='h:over-red'>Check Details</Button>
+                            <Button variant="outline" className='h:over-red'
+                            onClick={() => handleClick(product.itemId)}
+                            >Check Details
+                            
+                            </Button>
                         </li>
 
                     </ul>
