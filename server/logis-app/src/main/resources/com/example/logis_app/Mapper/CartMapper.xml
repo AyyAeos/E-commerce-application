@@ -5,11 +5,15 @@
 
 <mapper namespace="com.example.logis_app.Mapper.CartMapper">
    
-       <select id="checkCart" resultType="java.util.HashMap">
-     select isz.stock, c.user_id,i.item_name, i.description, c.item_id, c.quantity, c.size, isz.price
+       <select id="checkCart" resultType="com.example.logis_app.pojo.PageResult.Product.CartPage">
+     select c.cart_id, c.item_id, c.quantity, c.size_id, c.updated_at, isz.size, i.item_name,isz.price
     FROM cart_item c
-    LEFT JOIN inventory_sizes isz ON c.size = isz.size
-    LEFT JOIN inventory i ON i.item_id = c.item_id
-    WHERE c.item_id = isz.item_id AND c.user_id = #{id} AND i.on_sale = 1;
+    LEFT JOIN inventory_sizes isz on isz.size_id = c.size_id
+           LEFT JOIN inventory i on i.item_id = c.item_id
+           WHERE user_id = #{id}
+    ORDER BY item_id
     </select>
+
+
+
 </mapper>

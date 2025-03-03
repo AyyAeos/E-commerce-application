@@ -3,10 +3,7 @@ package com.example.logis_app.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.logis_app.pojo.Result;
 import com.example.logis_app.pojo.PageResult.Product.CartPage;
@@ -23,10 +20,10 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping
-    public Result checkCart(@RequestParam Integer id) {
+    @GetMapping("/{id}")
+    public Result checkCart(@PathVariable Integer id) {
         log.info("Querying user cart");
-        List<ProductPage> list = cartService.checkCart(id);
+        List<CartPage> list = cartService.checkCart(id);
         return Result.success(list);
     }
 }

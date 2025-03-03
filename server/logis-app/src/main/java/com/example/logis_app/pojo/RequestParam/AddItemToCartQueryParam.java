@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class AddItemToCartQueryParam {
     private Integer itemId;
     private String itemName;
-    private String size;
+    private Integer sizeId;
     private Integer quantity;
     private Integer userId;
 }

@@ -24,7 +24,26 @@
 
     
         <insert id="addToCard">
-            INSERT INTO cart_item ( user_id, item_id, quantity, size)
-            VALUES (#{userId}, #{itemId}, #{quantity}, #{size})
+            INSERT INTO cart_item ( user_id, item_id, quantity, size_id)
+            VALUES (#{userId}, #{itemId}, #{quantity}, #{sizeId})
         </insert>
+
+        <select id="checkPrice" resultType="java.math.BigDecimal">
+            SELECT price
+            FROM inventory_sizes
+            WHERE size_id = ${sizeId}
+        </select>
+
+    <select id="checkProductExist" resultType="java.lang.Boolean">
+        select COUNT(*) > 0
+        FROM cart_item
+        WHERE size_id= #{sizeId}
+    </select>
+
+    <update id="updateQuantity">
+        update cart_item
+        SET quantity = quantity + #{quantity} , updated_at = NOW()
+        WHERE item_id = #{itemId} AND size_id = #{sizeId}
+    </update>
+
 </mapper>

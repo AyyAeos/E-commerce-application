@@ -26,15 +26,10 @@ type SelectedProduct = {
 
 
 const Product = () =>{
-    
- 
-
-
-
 
     const { itemId } = useParams();
 
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("userId") ?? "";
     
     const fetcher = async (url :string) => {
         try {
@@ -58,24 +53,52 @@ const Product = () =>{
    const [addItem, setAddItem] = useState({
     itemId : itemId,
     itemName : "",
-    size : "",
+    sizeId : 0,
     quantity: 1,
     userId :userId,
+    itemPrice : 0,
     })
 
-    const addButton = () => {
+    
+
+    const checkPrice = async (sizeId : number) => {
+        
+        try {
+            const response = await axios.get(`http://localhost:8080/products/${itemId}/${sizeId}`) ;
+
+            if(response.data.msg === 'success' && response.data.code === 1) {
+                console.log("Get Price Successfully . . .");
+                setAddItem(prevState => ({
+                    ...prevState,
+                    itemPrice: response.data.data
+                }));
+               
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
+
+    const price = addItem.itemPrice;
+
+     const addButton = () => {
+        console.log(addItem.itemPrice);
+        
         setAddItem(prevState => ({
             ...prevState,
-            quantity: prevState.quantity + 1
+            quantity: prevState.quantity + 1,
+            itemPrice : prevState.itemPrice + price
         }));
 
         
     };
 
-    const minusButton = () => {
+     const minusButton = () => {
         setAddItem(prevState => ({
             ...prevState,
-            quantity: Math.max(1, prevState.quantity - 1)
+            quantity: Math.max(1, prevState.quantity - 1),
+            itemPrice: Math.max(0, prevState.itemPrice - (prevState.itemPrice / prevState.quantity))
         }));
     };
 
@@ -95,16 +118,11 @@ const Product = () =>{
             console.log(error);
             
         }
-        
-
-
-     
     }
-   
    
    return (
     <>
-    <Cart />
+    <Cart userId= {userId} />
     {/* Useswr */}
     {isLoading && <p>Loading...</p>}
     {error && <p className="text-red-500">Failed to fetch products</p>}
@@ -124,11 +142,18 @@ const Product = () =>{
                             {data?.variants && data.variants.map((variant : Variants) => (
                                 // small  and up = w-14 smaller u full
                                 <button key={variant.sizeId} className="m-2 p-4 border rounded w-full sm:w-14"
-                                onClick={()=> setAddItem({
+                                onClick={()=> {
+
+                                    //ask neo with the top prev state
+                                    setAddItem( ({
                                     ...addItem,
                                     itemName : data.itemName,
-                                    size : variant.size,
-                                    })}> 
+                                    sizeId : variant.sizeId,
+                                    }));
+
+                                    checkPrice(variant.sizeId);
+                                }
+                                    }> 
                                     {variant.size}
                                 </button>
                         ))}
@@ -143,11 +168,18 @@ const Product = () =>{
             </div>
         </div>
 
-        <div className="flex flex-col  sticky bottom-0 w-full mt-auto  p-4  bg-white">    
+
+        <div className="flex flex-col  sticky bottom-0 w-full mt-auto  p-4  bg-white">  
+
+            <div className="flex justify-end text-4xl m-4">
+                <h2>RM {addItem.itemPrice}</h2>
+            </div>  
+           
             <div className="flex justify-end space-x-4">
+                
                 <button className="border px-4 mb-2"
-                onClick={()=> {minusButton()}}
-                    disabled={addItem.quantity <= 0}>
+                onClick={()=> {minusButton()} }
+                disabled={addItem.quantity <= 0}>
                     -
                 </button>
               

@@ -37,10 +37,18 @@ public class ProductServiceImpl  implements ProductService {
 
     @Override
     public void addToCard(AddItemToCartQueryParam addItemToCartQueryParam) {
-         productMapper.addToCard(addItemToCartQueryParam);
-        
+         //check product exist
+        if(productMapper.checkProductExist(addItemToCartQueryParam)) {
+            log.info("Product exist");
+            productMapper.updateQuantity(addItemToCartQueryParam);
+        } else {
+            log.info("Product not exist. Creating new product . . .");
+            productMapper.addToCard(addItemToCartQueryParam);
+        }
     }
-    
 
-    
+    @Override
+    public BigDecimal checkPrice(Integer sizeId) {
+        return productMapper.checkPrice(sizeId);
+    }
 }

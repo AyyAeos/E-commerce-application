@@ -52,12 +52,12 @@ import Cart from '../CartBar/Cart';
         navigate(`/products/${itemId}`);
     };
 
+    const userId = localStorage.getItem("userId") ?? "";
     
     return (
       
         <>
-        <Cart />
-            //overflow y = scroll bar
+        <Cart userId={userId} />
             <div className="p-5 overflow-y-scroll">
                 <h1 className="text-2xl font-bold mb-4">Products</h1>
 

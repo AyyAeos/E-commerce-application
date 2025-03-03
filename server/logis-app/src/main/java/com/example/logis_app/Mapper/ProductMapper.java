@@ -6,6 +6,7 @@ import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +19,11 @@ public interface ProductMapper {
     List<Map<String,Object>> getSpecificProduct(Integer id);
 
     void addToCard(AddItemToCartQueryParam addItemToCartQueryParam);
+
+    BigDecimal checkPrice(Integer sizeId);
+
+    boolean checkProductExist(AddItemToCartQueryParam addItemToCartQueryParam);
+
+
+    void updateQuantity(AddItemToCartQueryParam addItemToCartQueryParam);
 }

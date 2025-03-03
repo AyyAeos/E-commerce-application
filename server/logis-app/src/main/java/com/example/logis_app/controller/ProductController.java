@@ -8,13 +8,9 @@ import com.example.logis_app.pojo.Result;
 import com.example.logis_app.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -46,5 +42,12 @@ public class ProductController {
         log.info("Add item to card : {}" , addItemToCartQueryParam);
         productService.addToCard(addItemToCartQueryParam);
         return Result.success();
+    }
+
+    @GetMapping("/{id}/{sizeId}")
+    public Result checkPrice(@PathVariable Integer id, @PathVariable Integer sizeId){
+        log.info("Querying size price with id . . .");
+        BigDecimal price =  productService.checkPrice(sizeId);
+        return Result.success(price);
     }
 }
