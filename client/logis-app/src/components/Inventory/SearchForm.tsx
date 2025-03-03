@@ -1,20 +1,20 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { Input } from "@/components/ui/input"; // Ensure you're importing the Input component correctly
 
+type SearchFormDataType = {
+    itemName: string
+    status: string
+    startPrice: string
+    endPrice: string
+}
 
 
-const SearchForm = () => {
-    const [formData, setFormData] = useState({
-        itemName: "",
-        status: "",
-        startPrice: "",
-        endPrice: "",
-    });
-
-
-
+const SearchForm = ({ searchFormData, setSearchFormData } : {
+    searchFormData: SearchFormDataType
+    setSearchFormData: React.Dispatch<SetStateAction<SearchFormDataType>>
+}) => {
     const handleSubmit = () => {
-        console.log("Submitting Form:", formData);
+        console.log("Submitting Form:", searchFormData);
 
     };
 
@@ -24,29 +24,29 @@ const SearchForm = () => {
             <Input
                 type="text"
                 placeholder="Item Name"
-                value={formData.itemName}
-                onChange={(e) => setFormData({ ...formData, itemName: e.target.value })}
+                value={searchFormData.itemName}
+                onChange={(e) => setSearchFormData({ ...searchFormData, itemName: e.target.value })}
                  className="w-1/4"
             />
             <Input
                 type="text"
                 placeholder="Status"
-                value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                value={searchFormData.status}
+                onChange={(e) => setSearchFormData({ ...searchFormData, status: e.target.value })}
                   className="w-1/4"
             />
             <Input
                 type="number"
                 placeholder="Start Price"
-                value={formData.startPrice}
-                onChange={(e) => setFormData({ ...formData, startPrice: e.target.value })}
+                value={searchFormData.startPrice}
+                onChange={(e) => setSearchFormData({ ...searchFormData, startPrice: e.target.value })}
                   className="w-1/4"
             />
             <Input
                 type="number"
                 placeholder="End Price"
-                value={formData.endPrice}
-                onChange={(e) => setFormData({ ...formData, endPrice: e.target.value })}
+                value={searchFormData.endPrice}
+                onChange={(e) => setSearchFormData({ ...searchFormData, endPrice: e.target.value })}
                   className="w-1/4"
             />
 

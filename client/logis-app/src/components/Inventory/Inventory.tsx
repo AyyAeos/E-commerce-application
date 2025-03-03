@@ -20,6 +20,13 @@ import SearchForm from "./SearchForm";
   
 const Inventory : React.FC =  () => {
 
+    const [searchForm, setSearchForm] = useState({
+        itemName: "",
+        status: "",
+        startPrice: "",
+        endPrice: "",
+    });
+
     type Variants = {
         size: string;
         price: number;
@@ -78,8 +85,8 @@ const Inventory : React.FC =  () => {
                 {/* Display add form */}
                 { AddPage && <AddButton onClose={() => SetAddPage(false)} />}
 
-                <SearchForm  />
-
+                <SearchForm  searchFormData={searchForm} setSearchFormData={setSearchForm} />
+                
                     {isLoading && <p>Loading...</p>}
                     {error && <p className="text-red-500">Failed to fetch inventory</p>}
                     <Table>
