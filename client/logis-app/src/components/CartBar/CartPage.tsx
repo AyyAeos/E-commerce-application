@@ -8,6 +8,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 
 
+//means cause i change the state of datadata react re-render every thing again
 type Item =  {
     cartId  : number,
     itemId : number,
