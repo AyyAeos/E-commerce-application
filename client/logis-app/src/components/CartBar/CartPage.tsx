@@ -16,10 +16,8 @@ type Item =  {
     updatedAt : string,
     itemName : string,
     price : number,
+    selected: boolean
 }
-
-
-
 
 
 
@@ -57,37 +55,45 @@ const CartPage = () => {
       console.log("Fetched data: " ,datadata);
 
         //   tick box
-        const [selectedItems, setSelectedItems] = useState<Item[]>([]);
+        // const [selectedItems, setSelectedItems] = useState<Item[]>([]);
 
         const handleCheckboxClick = (item : Item) => {
-            setSelectedItems((prev) => {
+            setDataData((prevData) => {
                 // return a new array that exclude id
-                const isSelected = prev.find(prev => prev.sizeId === item.sizeId)
+                const isSelected = prevData.find(prev => prev.sizeId === item.sizeId && prev.selected === true)
 
                 if(isSelected) {
                     setTotalPrice(prev => prev - item.price * item.quantity)
-                    return prev.filter(prev => prev.sizeId !== item.sizeId)
+                    return prevData.map(prev => {
+                        if(prev.sizeId === item.sizeId) {
+                            return {...prev, selected: false}
+                        }
+
+                        return prev
+                    })
                 } else {
                     setTotalPrice(prev => prev + item.price * item.quantity)
-                    return [...prev, item ]
+                    return prevData.map(prev => {
+                        if(prev.sizeId === item.sizeId) {
+                            return {...prev, selected: true}
+                        }
+                        return prev
+                    })
                 } 
             }
-
         );
     };
+   
 
     const addQuantity = (sizeId: number) => {
         setDataData(prevData => {
             return prevData.map(item => {
+                //modify item
                 if (item.sizeId === sizeId) {
                     const updatedItem = { ...item, quantity: item.quantity + 1 };
-    
-                    setSelectedItems(prevSelected =>
-                        prevSelected.map(selectedItem =>
-                            selectedItem.sizeId === sizeId ? updatedItem : selectedItem
-                        )
-                    );
-    
+                    if(item.selected) {
+                        setTotalPrice(prev => prev + item.price)
+                    }
                     return updatedItem;
                 }
                 return item;
@@ -100,31 +106,26 @@ const CartPage = () => {
             return prevData.map(item => {
                 if (item.sizeId === sizeId && item.quantity > 1) {
                     const updatedItem = { ...item, quantity: item.quantity - 1 };
-    
-                    setSelectedItems(prevSelected =>
-                        prevSelected.map(selectedItem =>
-                            selectedItem.sizeId === sizeId ? updatedItem : selectedItem
-                        )
-                    );
-    
+                    if(item.selected) {
+                        setTotalPrice(prev => prev - item.price)
+                    }
                     return updatedItem;
                 }
                 return item;
             });
         });
     };
-    console.log(selectedItems);
 
     const navigate = useNavigate();
 
-        useEffect(() => {
-            const newTotalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            setTotalPrice(newTotalPrice);
-        }, [selectedItems]);
+        // useEffect(() => {
+        //     const newTotalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        //     setTotalPrice(newTotalPrice);
+        // }, [selectedItems]);
 
         const handleCheckOut = () => {
             navigate(`/checkouts/${userId}`, {
-                state: { selectedItems, totalPrice },
+                state: { selectedItems: datadata.filter(prev => prev.selected === true), totalPrice },
             });
         }; 
 
@@ -141,7 +142,7 @@ const CartPage = () => {
                 </div>
 
                 {datadata && datadata.map( (item : Item, index : number) => {
-                    const isSelected = selectedItems.find(prev => prev.sizeId === item.sizeId);
+                    const isSelected = datadata.find(prev => prev.sizeId === item.sizeId && prev.selected === true);
 
                     return (
                     
@@ -189,12 +190,14 @@ const CartPage = () => {
                     <span className="mb-16"></span>
                     
                     
-            {selectedItems.length > 0 && 
+            {datadata && datadata.filter(prev => {
+                return prev.selected === true;
+            }) .length > 0 && 
                 (
                          <>
                         <div className="flex flex-col fixed bottom-0 w-full mt-4  p-4  bg-white opacity-40  ">
                             <div className="w-full text-end font-bold text-2xl">
-                                Total Price : {totalPrice}
+                                Total Price : {totalPrice.toFixed(2)}
                             </div>
 
                             <div className="w-full mt-2">

@@ -46,7 +46,7 @@ const Product = () =>{
             const response = await axios.get(url);
 
             if (response.data.msg === 'success' && response.data.code === 1) {
-                console.log("Fetched data: response.data.data");
+                console.log(`Fetched data: ${response.data.data}`);
                 
                 return response.data.data;
             }
@@ -70,17 +70,17 @@ const Product = () =>{
    })
 
     useEffect(() => {
-        if(data && !isLoading) {
+        if(!isLoading && data) {
             setAddItem((prev) => (
                 {
                     ...prev,
-                sizeId : data?.variants[0].sizeId,
+                sizeId : data.variants[0].sizeId,
                 quantity: 1,
                 userId :userId,
-                itemPrice : data?.variants[0].price
+                itemPrice : data.variants[0].price
                 }
-            )  
-    )
+                    )  
+                )
         }
     }, [isLoading, data])
 

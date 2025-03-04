@@ -37,7 +37,7 @@
     <select id="checkProductExist" resultType="java.lang.Boolean">
         select COUNT(*) > 0
         FROM cart_item
-        WHERE size_id= #{sizeId}
+        WHERE size_id= #{sizeId} AND user_id = #{userId}
     </select>
 
     <update id="updateQuantity">
