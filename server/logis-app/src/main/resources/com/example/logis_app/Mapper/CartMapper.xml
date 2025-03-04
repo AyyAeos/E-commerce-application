@@ -14,6 +14,12 @@
     ORDER BY item_id
     </select>
 
+    <update id="modifyQuantity">
+        update cart_item
+        SET quantity = #{quantity} , updated_at = NOW()
+        WHERE cart_id = #{cartId} AND size_id = #{sizeId}
+    </update>
+
 
 
 </mapper>

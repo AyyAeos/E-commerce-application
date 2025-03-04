@@ -2,9 +2,10 @@ import axios from "axios";
 import useSWR from "swr";
 import { Button } from "../ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AddButton from "../Inventory/AddForm";
 import { Navigate, useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
 
 type Item =  {
@@ -57,71 +58,86 @@ const CartPage = () => {
         //   tick box
         // const [selectedItems, setSelectedItems] = useState<Item[]>([]);
 
-        const handleCheckboxClick = (item : Item) => {
-            setDataData((prevData) => {
-                // return a new array that exclude id
-                const isSelected = prevData.find(prev => prev.sizeId === item.sizeId && prev.selected === true)
+    //     const handleCheckboxClick = useCallback(item : Item) => {
+    //         setDataData((prevData) => {
+    //             // return a new array that exclude id
+    //             const isSelected = prevData.find(prev => prev.sizeId === item.sizeId && prev.selected === true)
 
-                if(isSelected) {
-                    setTotalPrice(prev => prev - item.price * item.quantity)
-                    return prevData.map(prev => {
-                        if(prev.sizeId === item.sizeId) {
-                            return {...prev, selected: false}
-                        }
+    //             if(isSelected) {
+    //                 setTotalPrice(prev => prev - item.price * item.quantity)
+    //                 return prevData.map(prev => {
+    //                     if(prev.sizeId === item.sizeId) {
+    //                         return {...prev, selected: false}
+    //                     }
 
-                        return prev
-                    })
-                } else {
-                    setTotalPrice(prev => prev + item.price * item.quantity)
-                    return prevData.map(prev => {
-                        if(prev.sizeId === item.sizeId) {
-                            return {...prev, selected: true}
-                        }
-                        return prev
-                    })
-                } 
-            }
-        );
-    };
-   
+    //                     return prev
+    //                 })
+    //             } else {
+    //                 setTotalPrice(prev => prev + item.price * item.quantity)
+    //                 return prevData.map(prev => {
+    //                     if(prev.sizeId === item.sizeId) {
+    //                         return {...prev, selected: true}
+    //                     }
+    //                     return prev
+    //                 })
+    //             } 
+    //         }
+    //     );
+    // };
 
-    const addQuantity = (sizeId: number) => {
+    const handleCheckboxClick = useCallback((item: Item) => {
+        setDataData((prevData) => {
+            return prevData.map(prev => {
+                if (prev.sizeId === item.sizeId) {
+                    const isSelected = !prev.selected;
+                    setTotalPrice(prevTotal => prevTotal + (isSelected ? item.price * item.quantity : -item.price * item.quantity));
+                    return { ...prev, selected: isSelected };
+                }
+                return prev;
+            });
+        });
+    }, []);
+
+    const updateCartToServer = debounce(async (cartId: number, newQuantity: number, sizeId: number) => {
+        try {
+            await axios.put(`http://localhost:8080/carts/${userId}`, {
+                cartId,
+                quantity: newQuantity,
+                sizeId
+            });
+        } catch (error) {
+            console.error("Failed to update cart:", error);
+        }
+    }, 500); 
+    // wait 500 sec after last button is hit , if hit = reset 
+    
+    const updateQuantity = (cartId : number, sizeId: number, increment: number) => {
         setDataData(prevData => {
             return prevData.map(item => {
-                //modify item
                 if (item.sizeId === sizeId) {
-                    const updatedItem = { ...item, quantity: item.quantity + 1 };
-                    if(item.selected) {
-                        setTotalPrice(prev => prev + item.price)
+                    const newQuantity = item.quantity + increment;
+                    if (newQuantity < 1) return item; 
+
+                    // setTimeout(() => updateCartToServer(cartId, newQuantity, sizeId));
+                     updateCartToServer(cartId, newQuantity, sizeId)
+                    
+                    if (item.selected) {
+                        setTotalPrice(prev => prev + item.price * increment);
                     }
-                    return updatedItem;
+                    
+                    return { ...item, quantity: newQuantity }; //update to data data afterwards
                 }
                 return item;
             });
         });
     };
     
-    const minusQuantity = (sizeId: number) => {
-        setDataData(prevData => {
-            return prevData.map(item => {
-                if (item.sizeId === sizeId && item.quantity > 1) {
-                    const updatedItem = { ...item, quantity: item.quantity - 1 };
-                    if(item.selected) {
-                        setTotalPrice(prev => prev - item.price)
-                    }
-                    return updatedItem;
-                }
-                return item;
-            });
-        });
-    };
+    const addQuantity = (cartId : number, sizeId: number ) => updateQuantity(cartId, sizeId, 1);
+    const minusQuantity = (cartId : number, sizeId: number) => updateQuantity(cartId,sizeId, -1);
+    
 
+ 
     const navigate = useNavigate();
-
-        // useEffect(() => {
-        //     const newTotalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        //     setTotalPrice(newTotalPrice);
-        // }, [selectedItems]);
 
         const handleCheckOut = () => {
             navigate(`/checkouts/${userId}`, {
@@ -129,7 +145,8 @@ const CartPage = () => {
             });
         }; 
 
-        
+
+
     return (
         <>
         <div className="flex min-h-screen bg-primary text-primary-foreground overflow-y-scroll">
@@ -173,12 +190,14 @@ const CartPage = () => {
 
                                 <div className="flex items-center justify-end">
                                     <Button
-                                    onClick={() => minusQuantity(item.sizeId)}
+                                    onClick={() => {
+                                        minusQuantity(item.cartId, item.sizeId)
+                                    }}
                                     > - 
                                     </Button>
                                     <h2 className="text-2xl m-2 px-2 py-2">{item.quantity}</h2>
                                     <Button
-                                     onClick={() => addQuantity(item.sizeId)}
+                                     onClick={() => addQuantity(item.cartId, item.sizeId)}
                                      > + </Button>
                                 </div>
                             </div>
