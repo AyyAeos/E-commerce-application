@@ -1,17 +1,18 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Home from "../pages/Home";
+import Home from "../components/Login/Home";
 
 import PageNotFound from "../routes/PageNotFound";
-import Login from "@/pages/Login";
-import Register from "@/pages/Register";
+import Login from "@/components/Login/Login";
+import Register from "@/components/Login/Register";
 import ProductList from "@/components/ProductList/ProductList";
-import AdminPage from "@/pages/AdminPage";
+import AdminPage from "@/components/Admin/AdminPage";
 import Inventory from "@/components/Inventory/Inventory";
 import Transaction from "@/components/Transaction/Transaction";
 import Product from "@/components/ProductList/Product";
 import Cart from "@/components/CartBar/Cart";
 import CartPage from "@/components/CartBar/CartPage";
+import Checkout from "@/components/CheckOut/CheckOut";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/admins/transaction" element={<Transaction />} />
       <Route path="/products/:itemId" element={<Product />} />
       <Route path="/carts/:userId" element={<CartPage />} />
+      <Route path="/checkouts/:userId" element={<Checkout />} />
 
       {/* Invalid Path */}
       <Route path="*" element={<PageNotFound />} />

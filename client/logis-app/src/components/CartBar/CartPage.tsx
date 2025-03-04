@@ -2,7 +2,9 @@ import axios from "axios";
 import useSWR from "swr";
 import { Button } from "../ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import AddButton from "../Inventory/AddForm";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 type Item =  {
@@ -19,9 +21,13 @@ type Item =  {
 
 
 
-const CartPage = () => {
 
+
+const CartPage = () => {
+    
     const userId = localStorage.getItem("userId")
+    //calculate total price
+    const [totalPrice, setTotalPrice] = useState<number>(0);
 
     //Get Cart data
     const fetcher = async(url: string) => {
@@ -36,20 +42,92 @@ const CartPage = () => {
             
         }
       }
-      
-      const {data, error, isLoading} = useSWR(`http://localhost:8080/carts/${userId}`, fetcher)
 
-      console.log("Fetched data: " ,data);
+      const[datadata, setDataData] = useState<Item[]>([])
+      
+      const {data, error, isLoading} = useSWR<Item[]>(`http://localhost:8080/carts/${userId}`, fetcher)
+
+      useEffect(() => {
+        if (data) {
+            setDataData(data);
+        }
+    }, [data]);
+     
+
+      console.log("Fetched data: " ,datadata);
 
         //   tick box
-        const [selectedItems, setSelectedItems] = useState<number[]>([]);
+        const [selectedItems, setSelectedItems] = useState<Item[]>([]);
 
-        const handleCheckboxClick = (sizeId: number) => {
-            setSelectedItems((prev) =>
+        const handleCheckboxClick = (item : Item) => {
+            setSelectedItems((prev) => {
                 // return a new array that exclude id
-                prev.includes(sizeId) ? prev.filter((id) => id !== sizeId) : [...prev, sizeId]
-            );
-        };
+                const isSelected = prev.find(prev => prev.sizeId === item.sizeId)
+
+                if(isSelected) {
+                    setTotalPrice(prev => prev - item.price * item.quantity)
+                    return prev.filter(prev => prev.sizeId !== item.sizeId)
+                } else {
+                    setTotalPrice(prev => prev + item.price * item.quantity)
+                    return [...prev, item ]
+                } 
+            }
+
+        );
+    };
+
+    const addQuantity = (sizeId: number) => {
+        setDataData(prevData => {
+            return prevData.map(item => {
+                if (item.sizeId === sizeId) {
+                    const updatedItem = { ...item, quantity: item.quantity + 1 };
+    
+                    setSelectedItems(prevSelected =>
+                        prevSelected.map(selectedItem =>
+                            selectedItem.sizeId === sizeId ? updatedItem : selectedItem
+                        )
+                    );
+    
+                    return updatedItem;
+                }
+                return item;
+            });
+        });
+    };
+    
+    const minusQuantity = (sizeId: number) => {
+        setDataData(prevData => {
+            return prevData.map(item => {
+                if (item.sizeId === sizeId && item.quantity > 1) {
+                    const updatedItem = { ...item, quantity: item.quantity - 1 };
+    
+                    setSelectedItems(prevSelected =>
+                        prevSelected.map(selectedItem =>
+                            selectedItem.sizeId === sizeId ? updatedItem : selectedItem
+                        )
+                    );
+    
+                    return updatedItem;
+                }
+                return item;
+            });
+        });
+    };
+    console.log(selectedItems);
+
+    const navigate = useNavigate();
+
+        useEffect(() => {
+            const newTotalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            setTotalPrice(newTotalPrice);
+        }, [selectedItems]);
+
+        const handleCheckOut = () => {
+            navigate(`/checkouts/${userId}`, {
+                state: { selectedItems, totalPrice },
+            });
+        }; 
+
         
     return (
         <>
@@ -62,8 +140,8 @@ const CartPage = () => {
                         Carts
                 </div>
 
-                {data && data.map( (item : Item, index : number) => {
-                    const isSelected = selectedItems.includes(item.sizeId);
+                {datadata && datadata.map( (item : Item, index : number) => {
+                    const isSelected = selectedItems.find(prev => prev.sizeId === item.sizeId);
 
                     return (
                     
@@ -84,18 +162,23 @@ const CartPage = () => {
                             <div className="flex flex-col space-y-3">
 
                                 <div>
-                                <Checkbox onClick={() => handleCheckboxClick(item.sizeId)}   />
+                                <Checkbox onClick={() => handleCheckboxClick(item)}   />
                                 </div>
                                 
-                                <h2 className="opacity-50">{item.updatedAt }</h2>
+                                <h2 className="opacity-50">Last Updated Date : {item.updatedAt }</h2>
                                 
                             
-                                <h2 className="font-bold">RM {item.price}</h2>
+                                <h2 className="font-bold"> Price per Item : RM {item.price}</h2>
 
                                 <div className="flex items-center justify-end">
-                                    <Button> - </Button>
+                                    <Button
+                                    onClick={() => minusQuantity(item.sizeId)}
+                                    > - 
+                                    </Button>
                                     <h2 className="text-2xl m-2 px-2 py-2">{item.quantity}</h2>
-                                    <Button> + </Button>
+                                    <Button
+                                     onClick={() => addQuantity(item.sizeId)}
+                                     > + </Button>
                                 </div>
                             </div>
                         </div>
@@ -103,9 +186,28 @@ const CartPage = () => {
                     </div>
                     );
                     })}
-                <div className="flex flex-col  sticky bottom-0 w-full mt-auto  p-4  bg-white ">
+                    <span className="mb-16"></span>
+                    
+                    
+            {selectedItems.length > 0 && 
+                (
+                         <>
+                        <div className="flex flex-col fixed bottom-0 w-full mt-4  p-4  bg-white opacity-40  ">
+                            <div className="w-full text-end font-bold text-2xl">
+                                Total Price : {totalPrice}
+                            </div>
 
-                </div>
+                            <div className="w-full mt-2">
+                                <Button className="w-full bg-blue-500 text-3xl p-2 hover:bg-red-500"
+                                onClick={handleCheckOut}>
+                                    Check Out
+                                </Button>
+                            </div>
+                        </div>
+                        </>
+                )
+
+            }
             </div>
         </div>
             

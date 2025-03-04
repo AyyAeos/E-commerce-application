@@ -24,15 +24,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<CartPage> checkCart(Integer id) {
 
-        List<CartPage> list =  cartMapper.checkCart(id);
-
-         for(CartPage cartPage: list) {
-             cartPage.setPrice(cartPage
-                     .getPrice()
-                     .multiply(BigDecimal.valueOf(cartPage.getQuantity())));
-         }
-
-         return list;
+        return  cartMapper.checkCart(id);
 
 
     }

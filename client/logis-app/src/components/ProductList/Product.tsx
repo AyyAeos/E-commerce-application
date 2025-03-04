@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useSWR from "swr";
 import { set } from "zod";
 import Cart from "../CartBar/Cart";
+import { cn } from "@/lib/utils";
 
 
 type Variants = {
@@ -19,6 +20,15 @@ type SelectedProduct = {
    itemName : string
     description: string
     variants : Variants[]
+}
+
+type AddItemType = {
+    itemId: string,
+    itemName : string,
+    sizeId : number,
+    quantity: number,
+    userId :string,
+    itemPrice : number
 }
 
     
@@ -46,20 +56,33 @@ const Product = () =>{
         }
     };
 
-   const { data, error, isLoading } = useSWR(`http://localhost:8080/products/${itemId}`, fetcher)
+   const { data, error, isLoading } = useSWR<SelectedProduct>(`http://localhost:8080/products/${itemId}`, fetcher)
 
    
 
-   const [addItem, setAddItem] = useState({
-    itemId : itemId,
+   const [addItem, setAddItem] = useState<AddItemType>({
+    itemId: itemId ?? "",
     itemName : "",
     sizeId : 0,
-    quantity: 1,
-    userId :userId,
-    itemPrice : 0,
-    })
+    quantity: 0,
+    userId :userId ?? "",
+    itemPrice : 0
+   })
 
-    
+    useEffect(() => {
+        if(data && !isLoading) {
+            setAddItem((prev) => (
+                {
+                    ...prev,
+                sizeId : data?.variants[0].sizeId,
+                quantity: 1,
+                userId :userId,
+                itemPrice : data?.variants[0].price
+                }
+            )  
+    )
+        }
+    }, [isLoading, data])
 
     const checkPrice = async (sizeId : number) => {
         
@@ -80,7 +103,7 @@ const Product = () =>{
         
     }
 
-    const price = addItem.itemPrice;
+    const price = addItem?.itemPrice;
 
      const addButton = () => {
         console.log(addItem.itemPrice);
@@ -139,9 +162,10 @@ const Product = () =>{
                         <p className="m-3">{data.description}</p>
                         {/* wrap to the next row if exceed container */}
                         <div className="flex flex-wrap gap-2">
-                            {data?.variants && data.variants.map((variant : Variants) => (
+                            {data?.variants && data.variants.map((variant : Variants) => 
+                            (
                                 // small  and up = w-14 smaller u full
-                                <button key={variant.sizeId} className="m-2 p-4 border rounded w-full sm:w-14"
+                                <button key={variant.sizeId} className={cn("m-2 p-4 border rounded w-full sm:w-14 min-w-fit", addItem.sizeId === variant.sizeId && "border-red-500")}
                                 onClick={()=> {
 
                                     //ask neo with the top prev state
