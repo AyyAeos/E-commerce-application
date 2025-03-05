@@ -352,3 +352,17 @@ CREATE TABLE cart_item (
     CONSTRAINT `fk_item_id` FOREIGN KEY (`item_id`) REFERENCES `inventory` (`item_id`) ON DELETE CASCADE,
      CONSTRAINT `fk_username` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE
 );
+
+CREATE TABLE order_table (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    cart_id INT NOT NULL,
+    item_id INT UNSIGNED NOT NULL,
+    quantity INT NOT NULL,
+    size_id INT NOT NULL,
+    user_id INT unsigned NOT NULL,
+    placed_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (cart_id) REFERENCES cart_item(cart_id),
+    FOREIGN KEY (item_id) REFERENCES inventory(item_id),
+    FOREIGN KEY (size_id) REFERENCES inventory_sizes(size_id),
+    FOREIGN KEY (user_id) REFERENCES user(user_id)
+);

@@ -70,14 +70,14 @@ const Register: React.FC = () => {
 
 
     return (
-        <div className="flex flex-col justify-center items-center bg-primary min-h-screen">
-            <div className="border-6 bg-white p-10">
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                        <div className="flex justify-center mb-4">
-                            <p>REGISTER</p>
-                        </div>
+        <div className="flex flex-col justify-center items-center bg-primary min-h-screen px-4">
+            <div className="border-6 bg-white p-4 w-full max-w-3xl">
 
+            <div className="text-center text-bold text-2xl">
+                            <p>REGISTER</p>
+                </div>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                         {['name', 'userPhone', 'username', 'email', 'password'].map((field) => (
                             <FormField
                                 key={field}

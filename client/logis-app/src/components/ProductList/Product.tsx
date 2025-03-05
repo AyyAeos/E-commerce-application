@@ -150,25 +150,28 @@ const Product = () =>{
     {isLoading && <p>Loading...</p>}
     {error && <p className="text-red-500">Failed to fetch products</p>}
     <div className="flex flex-col bg-primary text-primary-foreground min-h-screen ">
-        <div className="flex-1 flex">
-            <div className=" mt-2 w-1/2 bg-red-500">
+        {/* here wrap will make sure it fit the screen not overflow and cut off */}
+        <div className="flex-1 flex flex-wrap">
+            {/* small = w-full  small > = w1/2  */}
+            {/* use w-full become even thought now is horizontal but each element takes one row so its vertically */}
+            <div className="w-full  sm:w-1/2 bg-red-500 min-h-[200px]">
             </div>
 
-            <div className="mt-2 flex-1 p-5">
+            <div className="w-full sm:flex-1 p-5">
                 {/* && must have div */}
                 {data && (
                     <div>
                         <h2 className="m-3 text-4xl font-bold">{data.itemName}</h2>
-                        <p className="m-3">{data.description}</p>
+                        <p className="m-3 max-w-screen-md mx-auto break-words">{data.description}</p>
                         {/* wrap to the next row if exceed container */}
                         <div className="flex flex-wrap gap-2">
                             {data?.variants && data.variants.map((variant : Variants) => 
                             (
                                 // small  and up = w-14 smaller u full
-                                <button key={variant.sizeId} className={cn("m-2 p-4 border rounded w-full sm:w-14 min-w-fit", addItem.sizeId === variant.sizeId && "border-red-500")}
+                                <button key={variant.sizeId} className={cn("ronded-lg m-2 p-4 border rounded w-full sm:w-14 min-w-fit", addItem.sizeId === variant.sizeId && "border-red-500")}
                                 onClick={()=> {
 
-                                    //ask neo with the top prev state
+                            
                                     setAddItem( ({
                                     ...addItem,
                                     itemName : data.itemName,
@@ -214,7 +217,7 @@ const Product = () =>{
                     +
                 </button>
             </div>
-            <button className="py-4 px-6 bg-blue-500 text-white text-lg rounded-lg"
+            <button className="bg-blue-500 hover:bg-red-500 py-4 px-6 text-white text-lg rounded-lg "
             onClick={addToCart}>
                 Proceed to Checkout
             </button>
