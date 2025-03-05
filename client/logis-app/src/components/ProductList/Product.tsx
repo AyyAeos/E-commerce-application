@@ -69,6 +69,7 @@ const Product = () =>{
     itemPrice : 0
    })
 
+   //Default additem become first
     useEffect(() => {
         if(!isLoading && data) {
             setAddItem((prev) => (
@@ -85,7 +86,6 @@ const Product = () =>{
     }, [isLoading, data])
 
     const checkPrice = async (sizeId : number) => {
-        
         try {
             const response = await axios.get(`http://localhost:8080/products/${itemId}/${sizeId}`) ;
 
@@ -146,9 +146,11 @@ const Product = () =>{
    return (
     <>
     <Cart userId= {userId} />
+
     {/* Useswr */}
     {isLoading && <p>Loading...</p>}
     {error && <p className="text-red-500">Failed to fetch products</p>}
+
     <div className="flex flex-col bg-primary text-primary-foreground min-h-screen ">
         {/* here wrap will make sure it fit the screen not overflow and cut off */}
         <div className="flex-1 flex flex-wrap">
@@ -205,7 +207,7 @@ const Product = () =>{
             <div className="flex justify-end space-x-4">
                 
                 <button className="border px-4 mb-2"
-                onClick={()=> {minusButton()} }
+                onClick={()=> {minusButton} }
                 disabled={addItem.quantity <= 0}>
                     -
                 </button>
@@ -213,7 +215,7 @@ const Product = () =>{
                 <p>{addItem.quantity}</p>
 
                 <button className="border px-4 mb-2"
-                onClick={()=> {addButton()}}>
+                onClick={()=> {addButton}}>
                     +
                 </button>
             </div>

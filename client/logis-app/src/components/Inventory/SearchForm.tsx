@@ -13,6 +13,8 @@ const SearchForm = ({ searchFormData, setSearchFormData } : {
     searchFormData: SearchFormDataType
     setSearchFormData: React.Dispatch<SetStateAction<SearchFormDataType>>
 }) => {
+
+    
     const handleSubmit = () => {
         console.log("Submitting Form:", searchFormData);
 

@@ -101,7 +101,7 @@ const Login: React.FC = () => {
                                                 <Input
                                                     type="text"
                                                     placeholder="Please enter your name"
-                                                    {...field} // Spread the username field here
+                                                    {...field} 
                                                     className="ml-3"
                                                 />
                                             </FormControl>
@@ -126,7 +126,7 @@ const Login: React.FC = () => {
                                                 <Input
                                                     type="password"
                                                     placeholder="Please enter your password"
-                                                    {...field} // Spread the password field here
+                                                    {...field} 
                                                     className="ml-3"
                                                 />
                                             </FormControl>
