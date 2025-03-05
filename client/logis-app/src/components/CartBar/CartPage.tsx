@@ -3,7 +3,6 @@ import useSWR from "swr";
 import { Button } from "../ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
 import { useCallback, useEffect, useState } from "react";
-import AddButton from "../Inventory/AddForm";
 import { Navigate, useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 
@@ -52,39 +51,6 @@ const CartPage = () => {
             setDataData(data);
         }
     }, [data]);
-     
-
-      console.log("Fetched data: " ,datadata);
-
-        //   tick box
-        // const [selectedItems, setSelectedItems] = useState<Item[]>([]);
-
-    //     const handleCheckboxClick = useCallback(item : Item) => {
-    //         setDataData((prevData) => {
-    //             // return a new array that exclude id
-    //             const isSelected = prevData.find(prev => prev.sizeId === item.sizeId && prev.selected === true)
-
-    //             if(isSelected) {
-    //                 setTotalPrice(prev => prev - item.price * item.quantity)
-    //                 return prevData.map(prev => {
-    //                     if(prev.sizeId === item.sizeId) {
-    //                         return {...prev, selected: false}
-    //                     }
-
-    //                     return prev
-    //                 })
-    //             } else {
-    //                 setTotalPrice(prev => prev + item.price * item.quantity)
-    //                 return prevData.map(prev => {
-    //                     if(prev.sizeId === item.sizeId) {
-    //                         return {...prev, selected: true}
-    //                     }
-    //                     return prev
-    //                 })
-    //             } 
-    //         }
-    //     );
-    // };
 
     const handleCheckboxClick = useCallback((item: Item) => {
         setDataData((prevData) => {
