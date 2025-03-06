@@ -116,6 +116,14 @@ const CartPage = () => {
 
     return (
         <>
+
+        <button
+          className="fixed mt-4 right-4 bg-red-500 text-white p-3 rounded-full shadow-lg hover:bg-red-600"
+          onClick={() => navigate(`/products`)}
+        >
+          EXIT
+        </button>
+
         <div className="flex min-h-screen bg-primary text-primary-foreground overflow-y-scroll">
 
             {/* column take full screen */}
@@ -130,8 +138,8 @@ const CartPage = () => {
 
                     return (
                     
-                    <div key={index}  className={`flex border border-gray rounded p-4 m-2 transition-colors ${
-                        isSelected ? "bg-yellow-300" : "bg-blue-500"
+                    <div key={index}  className={`flex border border-gray rounded p-4 m-2 transition-colors text-white ${
+                        isSelected ? "bg-red-300" : "bg-blue-500"
                     }`}>
 
                         {/* left container  */}
@@ -150,7 +158,7 @@ const CartPage = () => {
                                 <Checkbox onClick={() => handleCheckboxClick(item)}   />
                                 </div>
                                 
-                                <h2 className="opacity-50">Last Updated Date : {item.updatedAt }</h2>
+                                {/* <h2 className="opacity-50">Last Updated Date : {item.updatedAt }</h2> */}
                                 
                             
                                 <h2 className="font-bold"> Price per Item : RM {item.price}</h2>
@@ -173,7 +181,7 @@ const CartPage = () => {
                     </div>
                     );
                     })}
-                    <span className="mb-16"></span>
+                    <span className="mb-24"></span>
                     
                     
             {datadata && datadata.filter(prev => {
@@ -181,13 +189,13 @@ const CartPage = () => {
             }) .length > 0 && 
                 (
                          <>
-                        <div className="flex flex-col fixed bottom-0 w-full mt-4  p-4  bg-white opacity-40  ">
+                        <div className="flex flex-col fixed bottom-0 w-full mt-4  p-4  bg-white opacity-80  ">
                             <div className="w-full text-end font-bold text-2xl">
                                 Total Price : {totalPrice.toFixed(2)}
                             </div>
 
                             <div className="w-full mt-2">
-                                <Button className="w-full bg-blue-500 text-3xl p-2 hover:bg-red-500"
+                                <Button className="w-full bg-blue-500 text-3xl py-4 hover:bg-red-500 h-16"
                                 onClick={handleCheckOut}>
                                     Check Out
                                 </Button>

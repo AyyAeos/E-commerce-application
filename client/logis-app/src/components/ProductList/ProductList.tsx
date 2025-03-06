@@ -83,7 +83,7 @@ export default function ProductList() {
                         
                                 <Button
                                     variant="outline"
-                                    className="hover:bg-red-500 w-auto px-4 py-2 text-sm"
+                                    className="hover:bg-red-500 hover:text-white w-auto px-4 py-2 text-sm"
                                     onClick={() => handleClick(product.itemId)}
                                 >
                                     Check Details

@@ -8,12 +8,14 @@ type CartProps = {
 const Cart : React.FC<CartProps> = ({userId}) => {
     const navigate = useNavigate();
     return (
+      <>
         <button
           className="fixed mt-4 right-4 bg-red-500 text-white p-3 rounded-full shadow-lg hover:bg-red-600"
           onClick={() => navigate(`/carts/${userId}`)}
         >
           <ShoppingCart />
         </button>
+        </>
       );
     };
 

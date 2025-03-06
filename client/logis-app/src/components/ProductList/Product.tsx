@@ -103,7 +103,6 @@ const Product = () =>{
         
     }
 
-    const price = addItem?.itemPrice;
 
      const addButton = () => {
         console.log(addItem.itemPrice);
@@ -111,7 +110,7 @@ const Product = () =>{
         setAddItem(prevState => ({
             ...prevState,
             quantity: prevState.quantity + 1,
-            itemPrice : prevState.itemPrice + price
+            itemPrice : prevState.itemPrice + (prevState.itemPrice / prevState.quantity)
         }));
 
         
@@ -121,7 +120,7 @@ const Product = () =>{
         setAddItem(prevState => ({
             ...prevState,
             quantity: Math.max(1, prevState.quantity - 1),
-            itemPrice: Math.max(0, prevState.itemPrice - (prevState.itemPrice / prevState.quantity))
+            itemPrice: Math.max(0, prevState.itemPrice - (prevState.itemPrice / prevState.quantity ))
         }));
     };
 
@@ -171,11 +170,13 @@ const Product = () =>{
                                 <button key={variant.sizeId} className={cn("ronded-lg m-2 p-4 border rounded w-full sm:w-14 min-w-fit", addItem.sizeId === variant.sizeId && "border-red-500")}
                                 onClick={()=> {
 
+
                             
                                     setAddItem( ({
                                     ...addItem,
                                     itemName : data.itemName,
                                     sizeId : variant.sizeId,
+                                    quantity : 1,
                                     }));
 
                                     checkPrice(variant.sizeId);
@@ -199,14 +200,14 @@ const Product = () =>{
         <div className="flex flex-col  sticky bottom-0 w-full mt-auto  p-4  bg-white">  
 
             <div className="flex justify-end text-4xl m-4">
-                <h2>RM {addItem.itemPrice}</h2>
+                <h2>RM {addItem.itemPrice.toFixed(2)}</h2>
             </div>  
            
             <div className="flex justify-end space-x-4">
                 
                 <button className="border px-4 mb-2"
                 onClick={()=> {minusButton()} }
-                disabled={addItem.quantity <= 0}>
+                disabled={addItem.quantity < 2}>
                     -
                 </button>
               
