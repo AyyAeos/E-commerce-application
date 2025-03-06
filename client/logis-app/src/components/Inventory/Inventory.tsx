@@ -65,8 +65,6 @@ const Inventory : React.FC =  () => {
 
       const[AddPage, SetAddPage] = useState(false);
 
-    
-
         return (
             <>
                 <div className="pt-8 overflow-y-scroll min-h-screen bg-primary text-primary-foreground">

@@ -184,9 +184,7 @@ const CartPage = () => {
                     <span className="mb-24"></span>
                     
                     
-            {datadata && datadata.filter(prev => {
-                return prev.selected === true;
-            }) .length > 0 && 
+            {datadata && datadata.filter(prev =>  prev.selected === true ) .length > 0 && 
                 (
                          <>
                         <div className="flex flex-col fixed bottom-0 w-full mt-4  p-4  bg-white opacity-80  ">
