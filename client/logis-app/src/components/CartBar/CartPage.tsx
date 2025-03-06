@@ -127,82 +127,90 @@ const CartPage = () => {
         <div className="flex min-h-screen bg-primary text-primary-foreground overflow-y-scroll">
 
             {/* column take full screen */}
-            <div className="flex flex-col w-full">
+                                        ``            <div className="flex flex-col w-full lg:max-w-7xl mx-auto p-2 sm:p-4 ">
 
-                <div className="w-full text-center font-bold text-4xl m-4 p-4">
-                        Carts
-                </div>
+                    <div className="text-center font-bold text-2xl sm:text-4xl m-4 p-4">
+                            Carts
+                    </div>
 
+                    <div className="flex rounded bg-white text-sm sm:text-2xl mb-6 sm:font-bold items-center">
+                        <p className="w-1/6 text-center">Item Name</p>
+                        <p className="w-1/6 text-center">Size</p>
+                        <p className="w-1/6 text-center">Price</p>
+                        <p className="w-1/6 text-center">Quantity</p>
+                        <p className="w-1/6 text-center">Total</p>
+                        <p className="w-1/6 text-center">Select</p>
+                    </div>
+
+              
                 {datadata && datadata.map( (item : Item, index : number) => {
                     const isSelected = datadata.find(prev => prev.sizeId === item.sizeId && prev.selected === true);
 
                     return (
                     
-                    <div key={index}  className={`flex border border-gray rounded p-4 m-2 transition-colors text-white ${
-                        isSelected ? "bg-red-300" : "bg-blue-500"
-                    }`}>
+                <div key={index}  className={`flex text-xs sm:text-2xl sm:font-bold items-center justify-between rounded mb-2 py-2 transition-colors text-white ${
+                                isSelected ? "bg-red-300" : "bg-blue-500"
+                                }`}>
+                                <span className="w-1/6 text-center">{item.itemName}</span>
+                                <span className="w-1/6 text-center">{item.size}</span>
+                                <span className="w-1/6 text-center"> {item.price}</span>
 
-                        {/* left container  */}
-                        <div className="w-1/2">
-                            <div className="flex flex-col justify-between h-full">
-                                <h2 className=" text-4xl font-bold">{item.itemName}</h2>
-                                <p className="">{item.size}</p>
-                            </div>
-                        </div>
-
-                        {/* right container */}
-                        <div className="w-1/2 text-right items-end">
-                            <div className="flex flex-col space-y-3">
-
-                                <div>
-                                <Checkbox onClick={() => handleCheckboxClick(item)}   />
-                                </div>
-                                
-                                {/* <h2 className="opacity-50">Last Updated Date : {item.updatedAt }</h2> */}
-                                
-                            
-                                <h2 className="font-bold"> Price per Item : RM {item.price}</h2>
-
-                                <div className="flex items-center justify-end">
+                                <div className="w-1/6 flex justify-center items-center">
                                     <Button
+                                    className=" w-6 h-6 text-xs px-1 py-0.5 sm:w-8 sm:h-8"
                                     onClick={() => {
                                         minusQuantity(item.cartId, item.sizeId)
                                     }}
                                     > - 
                                     </Button>
-                                    <h2 className="text-2xl m-2 px-2 py-2">{item.quantity}</h2>
+
+                                    <h2 className="text-center w-10 ">{item.quantity}</h2>
+
                                     <Button
+                                    className="w-6 h-6 text-xs px-1 py-0.5 sm:w-8 sm:h-8"
                                      onClick={() => addQuantity(item.cartId, item.sizeId)}
                                      > + </Button>
                                 </div>
-                            </div>
-                        </div>
 
+                                <div className="w-1/6 text-center">
+                                     {item.price * item.quantity}
+                                </div>
+
+                                <div className="w-1/6 flex justify-center">
+                                <Checkbox onClick={() => handleCheckboxClick(item)}  />
+                                </div>
                     </div>
                     );
-                    })}
-                    <span className="mb-24"></span>
+                })}
+                <span className="mb-24"></span>
                     
                     
             {datadata && datadata.filter(prev =>  prev.selected === true ) .length > 0 && 
                 (
-                         <>
-                        <div className="flex flex-col fixed bottom-0 w-full mt-4  p-4  bg-white opacity-80  ">
-                            <div className="w-full text-end font-bold text-2xl">
-                                Total Price : {totalPrice.toFixed(2)}
-                            </div>
 
-                            <div className="w-full mt-2">
-                                <Button className="w-full bg-blue-500 text-3xl py-4 hover:bg-red-500 h-16"
-                                onClick={handleCheckOut}>
-                                    Check Out
-                                </Button>
-                            </div>
+                    <div className="fixed bottom-0 rounded left-1/2 transform -translate-x-1/2 bg-white opacity-80 w-full max-w-7xl p-2 sm:p-4">
+                    <div className="flex flex-col">
+                        <div className="text-end font-bold text-sm sm:text-2xl p-2">
+                            Total Price : RM {totalPrice.toFixed(2)}
                         </div>
-                        </>
+                
+                       
+                            <Button className="bg-blue-500 text-lg hover:bg-red-500"
+                            onClick={handleCheckOut}>
+                                Check Out
+                            </Button>
+                        
+                    </div>
+                </div>
+                
+                       
+
+                      
+                    
                 )
 
             }
+           
             </div>
         </div>
             

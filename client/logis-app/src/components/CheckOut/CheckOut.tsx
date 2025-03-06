@@ -45,10 +45,10 @@ const Checkout = () => {
     }
 
     return (
-        <div className='flex justify-center min-h-screen bg-primary text-foreground px-4 overflow-x-hidden'>
+        <div className='flex justify-center min-h-screen bg-primary text-foreground px-4 overflow-x-hidden '>
 
             {/* max witdth is 3xl */}
-            <div className='w-full max-w-3xl flex flex-col justify-center items-center '>
+            <div className='w-full max-w-7xl flex flex-col justify-center items-center '>
                 <h1 className=' text-4xl m-4 text-center'>Checkout Page</h1>
                 <div className='border bg-cyan-500 w-full p-4 rounded-lg text-white '>
                     <ul>
@@ -59,7 +59,7 @@ const Checkout = () => {
                                     <span className='text-2xl font-bold '>{item.itemName}</span>
                                     <span className='text-center'>{item.size}</span>
                                     <span className='text-right'>RM {item.price} *  {item.quantity} = 
-                                        <div className='text-end'>
+                                        <div className='text-end rounded'>
                                             <span> RM {(item.price * item.quantity).toFixed(2)}</span>
                                         </div>
 
@@ -72,9 +72,9 @@ const Checkout = () => {
                 </div>
 
                 
-                 <h2 className='border border-black bg-orange-500 w-full text-3xl text-right p-2 rounded text-white'>Total Price: RM {totalPrice}</h2>
+                 <h2 className='border border-black bg-orange-500 w-full text-3xl text-right p-2 rounded text-white'>Total Price: RM {(totalPrice).toFixed(2)}</h2>
 
-                <div className='flex m-4 px-2 py-2 justify-center gap-4'>
+                <div className='flex m-4 px-2 py-2 justify-center gap-4 sm:gap-36 '>
                     <Button className='w-48'
                     onClick={()=> {
                         navigate(`/carts/${userId})`)

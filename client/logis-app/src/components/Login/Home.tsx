@@ -11,7 +11,7 @@ const Home: React.FC = () => {
   return (
     <>
     <div className="flex flex-col justify-center items-center min-h-screen bg-primary text-primary-foreground" >
-        <div>
+  
           <p className="text-4xl md:text-6xl lg:text-8xl mb-40 text-center">Tusla</p>
           <p className="text-4xl font-bold mb-6 text-center">🏠 Welcome to Tusla</p>
             <div className="flex justify-center items-center gap-2">
@@ -24,7 +24,6 @@ const Home: React.FC = () => {
             </Button>
             </Link>
             </div>
-        </div>
     </div>
     </>
   );

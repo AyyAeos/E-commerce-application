@@ -14,7 +14,7 @@ function App() {
         <Router>
               <NavBar />
               <div className='pt-20'>
-              <AppRoutes />
+              <AppRoutes/>
               </div>
             </Router>
 
