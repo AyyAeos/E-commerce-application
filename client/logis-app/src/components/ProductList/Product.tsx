@@ -162,7 +162,8 @@ const Product = () =>{
 
     <div className="flex flex-col bg-primary text-primary-foreground min-h-screen">
         {/* here wrap will make sure it fit the screen not overflow and cut off */}
-        <div className="max-w-7xl mx-auto sm:min-w-[1024px] flex flex-1 flex-wrap min-w-7xl">
+        <div className=" w-1/2 border-b-4 bg-black h-4">
+        <div className="max-w-7xl mx-auto sm:min-w-[1024px] flex flex-1 flex-wrap sm:min-w-7xl">
             {/* small = w-full  small > = w1/2  */}
             {/* use w-full become even thought now is horizontal but each element takes one row so its vertically */}
             <div className="w-full  sm:w-1/2 bg-red-500 min-h-[200px]">
@@ -170,16 +171,18 @@ const Product = () =>{
 
             <div className="w-full bg-white sm:flex-1 p-5">
                 {/* && must have div */}
-                {data && (
+                {data && 
+                (
+
                     <div>
                         <h2 className="m-3 text-4xl font-bold">{data.itemName}</h2>
-                        <p className="m-3 max-w-screen-md break-words">{data.description}</p>
                         {/* wrap to the next row if exceed container */}
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-4">
+                            <span className="flex items-center ml-6 text-xl sm:text-2xl">Size : </span>
                             {data?.variants && data.variants.map((variant : Variants) => 
                             (
                                 // small  and up = w-14 smaller u full
-                                <button key={variant.sizeId} className={cn("ronded-lg m-2 p-4 border rounded w-full sm:w-14 min-w-fit", 
+                                <button key={variant.sizeId} className={cn("ronded-lg m-2 p-4 border rounded w-full sm:w-14 min-w-fit ml-6", 
                                     addItem.sizeId === variant.sizeId && "border-red-500")}
                                 onClick={()=> {
                             
@@ -192,31 +195,24 @@ const Product = () =>{
 
                                     checkPrice(variant.sizeId)
                                 }
-                                    }> 
+                                    }>
                                     {variant.size}
                                 </button>
+                                
                         ))}
                         </div>
                         
                     </div>
+                   
                 )
+                
             
                 }
 
-                
-            </div>
-        </div>
 
-
-        <div className="flex flex-col  sticky bottom-0 w-full mt-auto  p-4  bg-white">  
-
-            <div className="flex justify-end text-4xl m-4">
-                <h2>RM {addItem.itemPrice.toFixed(2)}</h2>
-            </div>  
-           
-            <div className="flex justify-end space-x-4">
-                
-                <button className="border px-4 mb-2"
+            <div className="flex gap-4 m-4 items-center ml-6">
+            <span className="flex items-center text-xl sm:text-2xl">Quantity : </span>
+                <button className="border px-4 m-2"
                 onClick={minusButton}
                 disabled={addItem.quantity < 2}>
                     -
@@ -224,18 +220,40 @@ const Product = () =>{
               
                 <p>{addItem.quantity}</p>
 
-                <button className="border px-4 mb-2"
+                <button className="border px-4 m-2"
                 onClick={addButton}>
                     +
                 </button>
             </div>
-            <button className="bg-blue-500 hover:bg-red-500 py-4 px-6 text-white text-lg rounded-lg "
+
+<           div className="text-4xl m-4 ml-6">
+                <h2>Total Price : RM {addItem.itemPrice.toFixed(2)}</h2>
+            </div>  
+         
+            <button className="bg-blue-500 hover:bg-red-500 py-4 px-6 text-white text-lg rounded-lg ml-6 "
             onClick={addToCart}>
                 Proceed to Checkout
             </button>
+
+                
+            </div>
+            </div>
+        <div className="w-1/2  p-4 m-4">
+            {data?.description};
+            dnawdnaonaiowdnaoidniandioandiawndwaodnwad
+        </div>      
         </div>
 
-    </div>
+
+  
+        
+
+      
+
+         
+        </div>
+
+    
     </>
    );
 }  

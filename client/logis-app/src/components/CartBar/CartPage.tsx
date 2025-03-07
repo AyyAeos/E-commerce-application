@@ -173,7 +173,7 @@ const CartPage = () => {
                                 </div>
 
                                 <div className="w-1/6 text-center">
-                                     {item.price * item.quantity}
+                                     {(item.price * item.quantity).toFixed(2)}
                                 </div>
 
                                 <div className="w-1/6 flex justify-center">
