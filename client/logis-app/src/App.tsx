@@ -13,7 +13,7 @@ function App() {
     <>
         <Router>
               <NavBar />
-              <div className='pt-20'>
+              <div className='pt-20 '>
               <AppRoutes/>
               </div>
             </Router>

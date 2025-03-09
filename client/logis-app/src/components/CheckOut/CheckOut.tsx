@@ -48,7 +48,7 @@ const Checkout = () => {
         <div className='flex justify-center min-h-screen bg-primary text-foreground px-4 overflow-x-hidden '>
 
             {/* max witdth is 3xl */}
-            <div className='w-full max-w-7xl flex flex-col justify-center items-center '>
+            <div className='w-full flex flex-col justify-center items-center p-5 sm:px-10 md:px-20'>
                 <h1 className=' text-4xl m-4 text-center'>Checkout Page</h1>
                 <div className='border bg-cyan-500 w-full p-4 rounded-lg text-white '>
                     <ul>

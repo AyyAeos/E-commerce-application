@@ -127,13 +127,13 @@ const CartPage = () => {
         <div className="flex min-h-screen bg-primary text-primary-foreground overflow-y-scroll">
 
             {/* column take full screen */}
-                                        ``            <div className="flex flex-col w-full lg:max-w-7xl mx-auto p-2 sm:p-4 ">
+                     <div className="flex flex-col w-full px-5 sm:px-10 md:px-20">
 
                     <div className="text-center font-bold text-2xl sm:text-4xl m-4 p-4">
                             Carts
                     </div>
 
-                    <div className="flex rounded bg-white text-sm sm:text-2xl mb-6 sm:font-bold items-center">
+                    <div className="flex rounded bg-white text-sm xl:text-2xl mb-6 xl:font-bold items-center">
                         <p className="w-1/6 text-center">Item Name</p>
                         <p className="w-1/6 text-center">Size</p>
                         <p className="w-1/6 text-center">Price</p>
@@ -148,7 +148,7 @@ const CartPage = () => {
 
                     return (
                     
-                <div key={index}  className={`flex text-xs sm:text-2xl sm:font-bold items-center justify-between rounded mb-2 py-2 transition-colors text-white ${
+                <div key={index}  className={`flex text-xs md:text-xl xl:font-bold items-center justify-between rounded mb-2 py-2 transition-colors text-white ${
                                 isSelected ? "bg-red-300" : "bg-blue-500"
                                 }`}>
                                 <span className="w-1/6 text-center">{item.itemName}</span>

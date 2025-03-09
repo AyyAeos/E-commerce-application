@@ -59,7 +59,7 @@ export default function ProductList() {
             <Cart userId={userId} />
             <div className="flex flex-col bg-primary text-primary-foreground min-h-screen p-5 overflow-y-scroll">
             <h1 className="text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold mb-4 text-center">Products</h1>
-                <div className=" max-w-7xl mx-auto sm:min-w-[1024px]  min-h-screen p-4 ">
+                <div className=" p-5 sm:px-10 md:px-20">
 
                 
                
