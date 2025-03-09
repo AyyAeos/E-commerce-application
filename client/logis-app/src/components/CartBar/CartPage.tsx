@@ -124,12 +124,20 @@ const CartPage = () => {
           EXIT
         </button>
 
+        {isLoading ? (
+        <p>Loading orders...</p>
+        ) : error ? (
+            <p className="text-red-500"> Please refresh the page or Click exit on top right !</p>
+        ) : data && data.length === 0 ? (
+            <p className="text-red-500">No orders found. Please Click Exit on top right !</p>
+        ) : (
+
         <div className="flex min-h-screen bg-primary text-primary-foreground overflow-y-scroll">
 
             {/* column take full screen */}
-                     <div className="flex flex-col w-full px-5 sm:px-10 md:px-20">
+                     <div className="flex flex-col w-full px-5  sm:px-10 md:px-20">
 
-                    <div className="text-center font-bold text-2xl sm:text-4xl m-4 p-4">
+                    <div className="text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold px-2 mb-4 text-center">
                             Carts
                     </div>
 
@@ -149,7 +157,7 @@ const CartPage = () => {
                     return (
                     
                 <div key={index}  className={`flex text-xs md:text-xl xl:font-bold items-center justify-between rounded mb-2 py-2 transition-colors text-white ${
-                                isSelected ? "bg-red-300" : "bg-blue-500"
+                                isSelected ? "bg-red-300" : "bg-slate-500"
                                 }`}>
                                 <span className="w-1/6 text-center">{item.itemName}</span>
                                 <span className="w-1/6 text-center">{item.size}</span>
@@ -188,7 +196,7 @@ const CartPage = () => {
             {datadata && datadata.filter(prev =>  prev.selected === true ) .length > 0 && 
                 (
 
-                    <div className="fixed bottom-0 rounded left-1/2 transform -translate-x-1/2 bg-white opacity-80 w-full max-w-7xl p-2 sm:p-4">
+                    <div className="fixed bottom-0 rounded` left-1/2 transform -translate-x-1/2 bg-white opacity-80 w-full max-w-7xl p-2 sm:p-4">
                     <div className="flex flex-col">
                         <div className="text-end font-bold text-sm sm:text-2xl p-2">
                             Total Price : RM {totalPrice.toFixed(2)}
@@ -214,7 +222,7 @@ const CartPage = () => {
             </div>
         </div>
             
-     
+        )}
         </>
     );
 }

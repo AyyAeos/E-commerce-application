@@ -1,80 +1,127 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
+import Cart from "../CartBar/Cart";
+import OrderIcon from "./OrderIcon";
 
 type OrderItem = {
-  itemName: string;
-  size: string;
+  cartId: number;
+  itemId: number;
   quantity: number;
-  price: number;
+  sizeId: number;
+  itemName: string;
+  sizeName: string;
 };
 
+
 type Order = {
-  orderId: number;
-  orderDate: string;
-  totalAmount: number;
+  orderId: string;
+  userId: number;
+  placedAt: string;
+  updatedAt: string;
   status: string;
   items: OrderItem[];
 };
 
-
 const CheckOrder = () => {
   const userId = localStorage.getItem("userId") ?? "";
-  const [orders, setOrders] = useState<Order[]>([]);
+ 
+  const navigate = useNavigate();
 
-  const fetcher = async (url :string) => {
-       const response = await axios.get(url);
-
-      if(response.data.msg === 'success' && response.data.code === 1) {
+  const fetcher = async (url: string) => {
+    try {
+      const response = await axios.get(url);
+      if (response.data.msg === "success" && response.data.code === 1) {
+        console.log(response.data.data);
         return response.data.data;
       }
+    } catch (error) {
+      return [];
+    }
+  };
 
-  }
-
-  const {data, error, isLoading} = useSWR(`http://localhost:8080/orders/${userId}`, fetcher);
+  const { data: orders = [], error, isLoading } = useSWR(
+    `http://localhost:8080/orders/${userId}`,
+    fetcher
+  );
 
   return (
     <div className="bg-primary text-primary-foreground min-h-screen">
-      <div className="px-20">
-        <h1 className="text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold px-2 mb-4 text-center">Your Orders</h1>
+      <Cart userId={userId} />
+      <button
+        className="fixed mt-4 right-20 bg-red-500 text-white p-3 rounded-full shadow-lg hover:bg-red-600"
+        onClick={() => navigate(`/products`)}
+      >
+        EXIT
+      </button>
+      <OrderIcon userId={userId} />
 
-        {isLoading ? (
-          <p>Loading orders...</p>
-        ) : orders.length === 0 ? (
-          <p className="text-red-500">No orders found.</p>
-        ) : (
+      {isLoading ? (
+        <p>Loading orders...</p>
+      ) : error ? (
+        <p className="text-red-500">
+          Please refresh the page or click EXIT on the top right!
+        </p>
+      ) : orders.length === 0 ? (
+        <p className="text-red-500">
+          No orders found. Please click EXIT on the top right!
+        </p>
+      ) : (
+        <div className="px-5 sm:px-10 md:px-20">
+          <h1 className="text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold px-2 mb-4 text-center">
+            Your Orders
+          </h1>
           <div className="flex flex-col gap-5">
-            {orders.map((order) => (
-              <div key={order.orderId} className="bg-white shadow-lg rounded-lg p-5 border">
-                <h2 className="text-xl font-bold">Order ID: {order.orderId}</h2>
-                <p className="text-gray-600">Date: {new Date(order.orderDate).toLocaleDateString()}</p>
-                <p className="text-gray-600">Status: {order.status}</p>
+            {orders.map((order : Order) => (
+              <div
+                key={order.orderId}
+                className="bg-white shadow-lg rounded-lg p-5 border" >
+
+                <p className="font-semibold text-xl text-end">Status : {order.status}</p>
+
+                <p className="text-gray-600 text-end text-md">
+                  Last Updated Date: {new Date(order.updatedAt).toLocaleString()}
+                </p>
+               
 
                 <div className="mt-4">
-                  {order.items.map((item, index) => (
-                    <div key={index} className="border p-3 rounded-lg mb-2 bg-gray-100">
+                  {order.items.map((item : OrderItem , index : number) => (
+                    <div
+                      key={index}
+                      className="border p-3 rounded-lg mb-2 bg-gray-100"
+                    >
                       <p>
-                        <span className="font-semibold">Item:</span> {item.itemName}
+                        <span className="font-semibold">Item:</span>{" "}
+                        {item.itemName}
                       </p>
                       <p>
-                        <span className="font-semibold">Size:</span> {item.size}
+                        <span className="font-semibold">Size:</span>{" "}
+                        {item.sizeName}
                       </p>
                       <p>
-                        <span className="font-semibold">Qty:</span> {item.quantity}
-                      </p>
-                      <p>
-                        <span className="font-semibold">Price:</span> RM {item.price.toFixed(2)}
+                        <span className="font-semibold">Qty:</span>{" "}
+                        {item.quantity}
                       </p>
                     </div>
                   ))}
                 </div>
 
-                <p className="text-lg font-bold mt-4">Total: RM {order.totalAmount.toFixed(2)}</p>
+                <p className="text-lg font-bold mt-4">
+                  Total Items: {order.items.length}
+                </p>
+
+                <p className="text-gray-600">
+                  Created Date: {new Date(order.placedAt).toLocaleString()}
+                </p>
+
+                <p className="text-gray-600">
+                  Order id: {order.orderId}
+                </p>
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

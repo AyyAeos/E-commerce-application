@@ -14,6 +14,7 @@ import Cart from "@/components/CartBar/Cart";
 import CartPage from "@/components/CartBar/CartPage";
 import Checkout from "@/components/CheckOut/CheckOut";
 import OrderPage from "@/components/Order/Order";
+import CheckOrder from "@/components/Order/Order";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -29,7 +30,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/products/:itemId" element={<Product />} />
       <Route path="/carts/:userId" element={<CartPage />} />
       <Route path="/checkouts/:userId" element={<Checkout />} />
-      <Route path="/orders/:userId" element={<OrderPage />} />
+      <Route path="/orders/:userId" element={<CheckOrder />} />
 
       {/* Invalid Path */}
       <Route path="*" element={<PageNotFound />} />

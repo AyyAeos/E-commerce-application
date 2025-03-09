@@ -76,7 +76,7 @@ const Login: React.FC = () => {
 
     return (
         <>
-            <div className="flex flex-col justify-center items-center bg-primary min-h-screen">
+            <div className="flex flex-col justify-center items-center bg-primary min-h-screen text-black">
                 <div className="border-6 bg-white p-10 shadow-lg rounded-lg">
                     {/* ..form = get all prop of form and pass in between <FOrm></FOrm> */}
                     <Form {...form}>

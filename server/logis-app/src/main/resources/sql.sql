@@ -359,11 +359,13 @@ CREATE TABLE order_table (
     item_id INT UNSIGNED NOT NULL,
     quantity INT NOT NULL,
     size_id INT NOT NULL,
-    user_id INT unsigned NOT NULL,
-    placed_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
+    user_id INT UNSIGNED NOT NULL,
+    placed_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,   
+    status ENUM('Pending', 'Confirmed', 'Shipped', 'Delivered') NOT NULL DEFAULT 'Pending',
     FOREIGN KEY (cart_id) REFERENCES cart_item(cart_id),
     FOREIGN KEY (item_id) REFERENCES inventory(item_id),
     FOREIGN KEY (size_id) REFERENCES inventory_sizes(size_id),
     FOREIGN KEY (user_id) REFERENCES user(user_id)
 );
+

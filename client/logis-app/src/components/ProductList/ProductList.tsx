@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import axios from "axios";
 import Cart from "../CartBar/Cart";
 import { useNavigate } from "react-router-dom";
+import OrderIcon from "../Order/OrderIcon";
 
 export default function ProductList() {
     type Product = {
@@ -55,10 +56,10 @@ export default function ProductList() {
 
     return (
         <>
-            
+            <OrderIcon userId= {userId} />
             <Cart userId={userId} />
-            <div className="flex flex-col bg-primary text-primary-foreground min-h-screen p-5 overflow-y-scroll">
-            <h1 className="text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold mb-4 text-center">Products</h1>
+            <div className="flex flex-col bg-primary text-black min-h-screen p-5 overflow-y-scroll">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold px-2 mb-4 text-center">Products</h1>
                 <div className=" p-5 sm:px-10 md:px-20">
 
                 
@@ -73,7 +74,7 @@ export default function ProductList() {
                         data.map((product: Product) => (
                             <div 
                             key={product.itemId} 
-                            className="bg-white border p-4 rounded-lg shadow flex flex-col w-full max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+                            className="bg-white border p-5 rounded-lg shadow-lg flex flex-col w-full max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
                         >
                             <h2 className="text-xl font-bold">{product.itemName}</h2>
                             <p className="text-sm mb-2">{product.description}</p>

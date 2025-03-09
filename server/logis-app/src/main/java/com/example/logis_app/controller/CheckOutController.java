@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Slf4j
@@ -20,10 +21,13 @@ public class CheckOutController {
     @PostMapping
     public Result placeOrder(@PathVariable Integer userId,
                              @RequestBody List<SelectedItem> selectedItems ) {
+        String orderId = new String(UUID.randomUUID().toString());
+        log.info("1");
         for(SelectedItem selectedItem : selectedItems) {
+            selectedItem.setOrderId(orderId);
             selectedItem.setUserId(userId);
         }
-        log.info(" total price = {}", selectedItems);
+        log.info(" Selected item  = {}", selectedItems);
         checkOutService.placeOrder(selectedItems);
         return Result.success();
 

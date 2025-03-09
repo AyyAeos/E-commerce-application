@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useSWR from "swr";
 import Cart from "../CartBar/Cart";
 import { cn } from "@/lib/utils";
+import OrderIcon from "../Order/OrderIcon";
 
 
 type Variants = {
@@ -144,6 +145,8 @@ const Product = () =>{
    return (
     <>
     <Cart userId= {userId} />
+    <OrderIcon userId= {userId} />
+    
     <button
           className="fixed mt-4 right-20 bg-red-500 text-white p-3 rounded-full shadow-lg hover:bg-red-600"
           onClick={() => navigate(`/products`)}
@@ -155,14 +158,14 @@ const Product = () =>{
     {isLoading && <p>Loading...</p>}
     {error && <p className="text-red-500">Failed to fetch products</p>}
 
-    <div className="flex flex-col bg-primary text-primary-foreground min-h-screen overflow-x-hidden p-20">
+    <div className="flex flex-col bg-primary text-primary-foreground min-h-screen overflow-x-hidden px-5 pt-20 sm:px-10 md:px-20">
         {/* here wrap will make sure it fit the screen not overflow and cut off */}
         <div className="w-full border-b-4 bg-black h-4">
            
          <div className="w-full flex flex-wrap">
             {/* small = w-full  small > = w1/2  */}
             {/* use w-full become even thought now is horizontal but each element takes one row so its vertically */}
-            <div className="w-full md:w-1/2 min-h-[200px] bg-red-500">
+            <div className="w-full md:w-1/2 min-h-[400px] bg-red-500">
             </div>
 
             <div className="w-full bg-white sm:flex-1 p-5">
@@ -233,7 +236,8 @@ const Product = () =>{
                 
             </div>
          </div>
-        <div className="w-1/2  p-4 m-4">
+        <div className="w-1/2  p-4 mt-6 bg-white w-full p-5">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl mb-4">Description</h2>
             {data?.description};
             dnawdnaonaiowdnaoidniandioandiawndwaodnwad
         </div>      

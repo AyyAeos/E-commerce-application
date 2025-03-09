@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.logis_app.Mapper.OrderMapper">
+
+    <select id="getOrderList" resultType="java.util.HashMap">
+      select o.order_id, o.cart_id, o.item_id, o.quantity, o.size_id, o.user_id, o.placed_at, isz.size, i.item_name, o.updated_at, o.status
+        from order_table o
+        LEFT JOIN inventory_sizes isz on o.size_id = isz.size_id
+        LEFT JOIN inventory i on o.item_id = i.item_id
+        where user_id = #{userId};
+
+    </select>
+
+
+
+
+
+</mapper>

@@ -45,12 +45,21 @@ const Checkout = () => {
     }
 
     return (
-        <div className='flex justify-center min-h-screen bg-primary text-foreground px-4 overflow-x-hidden '>
+        <>
+       {selectedItems?.length > 0 ? (
+        <p>Loading orders...</p>
+        ) : (
+        <p>No items selected!</p>
+        )}
+
+        
+
+        <div className='flex justify-center min-h-screen bg-primary text-black px-4 overflow-x-hidden '>
 
             {/* max witdth is 3xl */}
             <div className='w-full flex flex-col justify-center items-center p-5 sm:px-10 md:px-20'>
-                <h1 className=' text-4xl m-4 text-center'>Checkout Page</h1>
-                <div className='border bg-cyan-500 w-full p-4 rounded-lg text-white '>
+                <h1 className='font-bold text-white text-4xl m-4 text-center'>Checkout Page</h1>
+                <div className='border bg-slate-500 w-full p-4 rounded-lg text-white '>
                     <ul>
                         {selectedItems.map((item : Item) => (
                             // gap = good for all screen
@@ -72,7 +81,7 @@ const Checkout = () => {
                 </div>
 
                 
-                 <h2 className='border border-black bg-orange-500 w-full text-3xl text-right p-2 rounded text-white'>Total Price: RM {(totalPrice).toFixed(2)}</h2>
+                 <h2 className='rounded border border-black bg-lime-500 w-full text-3xl text-right p-2 rounded text-white'>Total Price: RM {(totalPrice).toFixed(2)}</h2>
 
                 <div className='flex m-4 px-2 py-2 justify-center gap-4 sm:gap-36 '>
                     <Button className='w-48'
@@ -106,7 +115,7 @@ const Checkout = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center p-4">
                     <div className="bg-white p-6 rounded-lg w-full max-w-md text-center">
                         <p className="text-2xl">Your order has been placed!</p>
-                        <Button className="text-xl mt-6 w-full" onClick={() => navigate("/")}>
+                        <Button className="text-xl mt-6 w-full" onClick={() => navigate("/products")}>
                             Back to home page
                         </Button>
                     </div>
@@ -115,6 +124,8 @@ const Checkout = () => {
                 
         </div>
     </div>
+    </>
+        
     );
 };
 
