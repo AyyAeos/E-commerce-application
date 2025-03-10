@@ -12,7 +12,7 @@ const OrderIcon: React.FC<OrderProps> = ({ userId }) => {
   return (
     <>
       <button
-        className="fixed mt-4 right-4 mt-20 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600"
+        className="fixed left-4 mt-4 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600"
         onClick={() => navigate(`/orders/${userId}`)}
       >
         <IoMdPeople  />

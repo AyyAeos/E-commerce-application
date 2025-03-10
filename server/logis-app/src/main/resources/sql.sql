@@ -354,15 +354,15 @@ CREATE TABLE cart_item (
 );
 
 CREATE TABLE order_table (
-    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id VARCHAR(255) AUTO_INCREMENT PRIMARY KEY,
     cart_id INT NOT NULL,
     item_id INT UNSIGNED NOT NULL,
     quantity INT NOT NULL,
     size_id INT NOT NULL,
     user_id INT UNSIGNED NOT NULL,
-    placed_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+    status ENUM('PENDING', 'CONFIRMED', 'SHIPPING', 'DELIVERED') DEFAULT 'PENDING',
+    placed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,   
-    status ENUM('Pending', 'Confirmed', 'Shipped', 'Delivered') NOT NULL DEFAULT 'Pending',
     FOREIGN KEY (cart_id) REFERENCES cart_item(cart_id),
     FOREIGN KEY (item_id) REFERENCES inventory(item_id),
     FOREIGN KEY (size_id) REFERENCES inventory_sizes(size_id),

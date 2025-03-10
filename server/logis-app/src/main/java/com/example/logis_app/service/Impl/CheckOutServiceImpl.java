@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 @Service
 @Slf4j
 public class CheckOutServiceImpl implements CheckOutService {

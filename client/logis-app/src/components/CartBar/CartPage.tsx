@@ -137,7 +137,7 @@ const CartPage = () => {
             {/* column take full screen */}
                      <div className="flex flex-col w-full px-5  sm:px-10 md:px-20">
 
-                    <div className="text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold px-2 mb-4 text-center">
+                    <div className="text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold px-2 m-4 text-center">
                             Carts
                     </div>
 

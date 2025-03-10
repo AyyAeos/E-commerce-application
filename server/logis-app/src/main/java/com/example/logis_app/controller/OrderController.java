@@ -27,6 +27,7 @@ public class OrderController {
     public Result getOrderList(@PathVariable Integer userId) {
         log.info("Get order list of user id {} . . .", userId);
         List<Order> list = orderService.getOrderList(userId);
+        log.info("2");
         return Result.success(list);
     }
 }

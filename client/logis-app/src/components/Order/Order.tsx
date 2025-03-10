@@ -21,6 +21,7 @@ type Order = {
   updatedAt: string;
   status: string;
   items: OrderItem[];
+  isExpired: boolean;
 };
 
 const CheckOrder = () => {
@@ -40,10 +41,35 @@ const CheckOrder = () => {
     }
   };
 
+
   const { data: orders = [], error, isLoading } = useSWR(
     `http://localhost:8080/orders/${userId}`,
     fetcher
   );
+
+  const DeleteOrder = ({ placeDate }: { placeDate: Order }) => {
+    const currentDate = new Date();
+    const targetDate = new Date(placeDate.placedAt)
+    const timeDifference = currentDate.getTime() - targetDate.getTime();
+
+    const twoDays = 2 * 24 * 60 * 60 * 1000;
+
+      const expired = timeDifference > twoDays;
+  
+      if (!expired) {
+        placeDate.isExpired = false;
+      }
+  
+      return (
+        <>
+          {placeDate.isExpired === false && (
+            <button className="font semi-bold border border-black md:px-4 md:py-2 mt-4 hover:bg-slate-500 hover:text-white">
+              Delete Order
+            </button>
+          )}
+        </>
+      );
+    };
 
   return (
     <div className="bg-primary text-primary-foreground min-h-screen">
@@ -68,7 +94,7 @@ const CheckOrder = () => {
         </p>
       ) : (
         <div className="px-5 sm:px-10 md:px-20">
-          <h1 className="text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold px-2 mb-4 text-center">
+          <h1 className="py-4 text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold px-2 mb-4 text-center">
             Your Orders
           </h1>
           <div className="flex flex-col gap-5">
@@ -106,6 +132,13 @@ const CheckOrder = () => {
                   ))}
                 </div>
 
+
+               
+
+                  <div className="flex flex-wrap justify-between">
+                    <div className="w-1/2">
+           
+
                 <p className="text-lg font-bold mt-4">
                   Total Items: {order.items.length}
                 </p>
@@ -117,6 +150,22 @@ const CheckOrder = () => {
                 <p className="text-gray-600">
                   Order id: {order.orderId}
                 </p>
+                    </div>
+                  
+                  <DeleteOrder placeDate={order} />
+          
+               
+                  <button
+                    className="border border-black px-4 py-2 mt-4 hover:bg-slate-500 hover:text-white">
+                    Write A Review !
+                  </button>
+
+
+              
+                  
+              
+                  </div>
+                
               </div>
             ))}
           </div>
