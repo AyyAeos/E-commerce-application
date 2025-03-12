@@ -23,8 +23,12 @@ const Inventory : React.FC =  () => {
     const [searchForm, setSearchForm] = useState({
         itemName: "",
         status: "",
-        startPrice: "",
-        endPrice: "",
+        startPrice: 0,
+        endPrice: 0,
+        totalCounts: 30 ,
+        page: 1,
+        pageLimits: 20,
+
     });
 
     type Variants = {
@@ -55,7 +59,7 @@ const Inventory : React.FC =  () => {
         }
       }
 
-      const {data, error, isLoading} = useSWR("http://localhost:8080/admins/inventory", fetcher)
+      const {data, error, isLoading} = useSWR("http://localhost:8080/admins/inventory", fetcher)     
 
       // Display the edit box
       const[EditItem, SetEditItem] = useState< { item: Item; variant: Variants} | null>(null); 
@@ -65,9 +69,20 @@ const Inventory : React.FC =  () => {
 
       const[AddPage, SetAddPage] = useState(false);
 
+      const handleSubmit = () => {
+      
+        const fetcher = (url : string) => {
+
+        }
+
+        const {data, error, isLoading} = useSWR
+       
+       
+      };
+
         return (
             <>
-                <div className="pt-8 overflow-y-scroll min-h-screen bg-primary text-primary-foreground">
+                <div className="pt-8 overflow-y-scroll min-h-screen bg-white text-primary-foreground">
                 <div className="flex justify-center text-2xl font-bold">
                     {/*  let inventory take all space and other pull to right */}
                     <span className="flex-1 text-center">Inventory</span>
@@ -83,7 +98,10 @@ const Inventory : React.FC =  () => {
                 {/* Display add form */}
                 { AddPage && <AddButton onClose={() => SetAddPage(false)} />}
 
-                <SearchForm  searchFormData={searchForm} setSearchFormData={setSearchForm} />
+                <SearchForm  searchFormData={searchForm} setSearchFormData={setSearchForm} handleSubmit={handleSubmit} />
+
+                
+                     
                 
                     {isLoading && <p>Loading...</p>}
                     {error && <p className="text-red-500">Failed to fetch inventory</p>}
