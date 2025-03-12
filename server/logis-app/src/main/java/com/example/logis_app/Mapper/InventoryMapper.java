@@ -1,6 +1,5 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.PageResult.InventoryPage;
 import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,7 +10,7 @@ import java.util.Map;
 public interface InventoryMapper {
     List<Map<String, Object>> getAllItems();
 
-    List<InventoryPage> getItemBySelected(InventoryQueryParam inventoryQueryParam);
+    List<Map<String, Object>> getItemBySelected(InventoryQueryParam inventoryQueryParam);
 
     void insertItem(InventoryQueryParam inventoryQueryParam);
 
@@ -22,4 +21,6 @@ public interface InventoryMapper {
     void insertItemSize(InventoryQueryParam inventoryQueryParam);
 
     void updateInventorySize(InventoryQueryParam item);
+
+    Integer getSum(InventoryQueryParam inventoryQueryParam);
 }

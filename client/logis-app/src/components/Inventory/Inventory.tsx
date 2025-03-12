@@ -11,7 +11,7 @@ import {
   } from "@/components/ui/table"
 import axios from "axios"
 import {  useState } from "react";
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 import DeleteItem from "./DeleteForm";
 import { CiSquarePlus } from "react-icons/ci";
 import AddButton from "./AddForm";
@@ -19,20 +19,30 @@ import AddButton from "./AddForm";
 import SearchForm from "./SearchForm";
   
 const Inventory : React.FC =  () => {
+    type SearchFormDataType = {
+        itemName: string
+        size: string
+        onSale?: number | undefined
+        startPrice?: number
+        endPrice?: number
+        totalCounts?: number ,
+        page?: number,
+        pageLimits?: number,
+    }
 
-    const [searchForm, setSearchForm] = useState({
+    const [searchForm, setSearchForm] = useState<SearchFormDataType>({
         itemName: "",
-        status: "",
-        startPrice: 0,
-        endPrice: 0,
-        totalCounts: 30 ,
-        page: 1,
-        pageLimits: 20,
-
+        size:"",
+        onSale: undefined,
+        startPrice: undefined,
+        endPrice: undefined,
+        totalCounts: undefined,
+        page: undefined,
+        pageLimits: undefined,
     });
 
     type Variants = {
-        size: string;
+        size?: string;
         price: number;
         stock: number;
         sizeId: number;
@@ -41,26 +51,33 @@ const Inventory : React.FC =  () => {
     type Item = {
         itemId: number
         itemName: string
-        onSale : boolean
+        onSale : number
         description: string
         variants: Variants[]
       }
+
     
-      const fetcher = async(url: string) => {
-        try{
-            const res = await axios.get(url)
-            if(res.data.msg === 'success') {
-                return res.data.data
+      const fetcher = async (url: string) => {
+        try {
+            const res = await axios.get(url, { params: searchForm });
+            if (res.data.msg === 'success') {
+                setSearchForm({
+                    ...searchForm,
+                    totalCounts: res.data.data.itemCounts,
+                    page: res.data.data.page,
+                    pageLimits: res.data.data.pageLimits,
+
+                })
+                return res.data.data.list;
             }
         } catch (error) {
-            console.log(error);
-            return []
-            
+            console.error(error);
+            return [];
         }
-      }
-
-      const {data, error, isLoading} = useSWR("http://localhost:8080/admins/inventory", fetcher)     
-
+    };
+    //auto refetch when searchForm changed
+    const { data, error, isLoading } = useSWR( "http://localhost:8080/admins/inventory/search" , fetcher );
+    
       // Display the edit box
       const[EditItem, SetEditItem] = useState< { item: Item; variant: Variants} | null>(null); 
 
@@ -70,19 +87,13 @@ const Inventory : React.FC =  () => {
       const[AddPage, SetAddPage] = useState(false);
 
       const handleSubmit = () => {
-      
-        const fetcher = (url : string) => {
-
-        }
-
-        const {data, error, isLoading} = useSWR
-       
-       
-      };
+        console.log(searchForm);
+        mutate("http://localhost:8080/admins/inventory/search");
+    };
 
         return (
             <>
-                <div className="pt-8 overflow-y-scroll min-h-screen bg-white text-primary-foreground">
+                <div className="pt-8 overflow-y-scroll min-h-screen bg-white text-primary-foreground  px-5 sm:px-10 md:px-20">
                 <div className="flex justify-center text-2xl font-bold">
                     {/*  let inventory take all space and other pull to right */}
                     <span className="flex-1 text-center">Inventory</span>
@@ -101,9 +112,8 @@ const Inventory : React.FC =  () => {
                 <SearchForm  searchFormData={searchForm} setSearchFormData={setSearchForm} handleSubmit={handleSubmit} />
 
                 
-                     
-                
-                    {isLoading && <p>Loading...</p>}
+                     <div className="overflow-x-auto">
+                     {isLoading && <p>Loading...</p>}
                     {error && <p className="text-red-500">Failed to fetch inventory</p>}
                     <Table>
                             <TableCaption>A list of Inventory.</TableCaption>
@@ -135,7 +145,7 @@ const Inventory : React.FC =  () => {
                                         <>
                                         <TableCell rowSpan={item.variants.length}>{item.itemId}</TableCell>
                                         <TableCell rowSpan={item.variants.length}>{item.itemName}</TableCell>
-                                        <TableCell rowSpan={item.variants.length}>{item.onSale ? "On Sale" : "Not On Sale"}</TableCell>
+                                        <TableCell rowSpan={item.variants.length}>{item.onSale === 0 ? "Not On Sale" : "On Sale"}</TableCell>
                                         <TableCell rowSpan={item.variants.length}>{item.description}</TableCell>
                                         </>
                                     )}
@@ -171,6 +181,9 @@ const Inventory : React.FC =  () => {
                     {EditItem && <EditForm item = {EditItem.item} variant={EditItem.variant} onClose={() => SetEditItem(null) }/>} 
                     {DeleteComfirmation && <DeleteItem item = {DeleteComfirmation.item} variant = {DeleteComfirmation.variant} onClose={() => SetDeleteComfirmation(null)} />}
                     </Table>
+                     </div>
+                
+                  
                 </div>
 
             </>

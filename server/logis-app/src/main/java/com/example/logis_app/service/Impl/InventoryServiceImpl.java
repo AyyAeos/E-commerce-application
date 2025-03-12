@@ -21,16 +21,19 @@ public class InventoryServiceImpl implements InventoryService {
     @Autowired
     private InventoryMapper inventoryMapper;
 
-
     @Override
-    public List<ProductPage> getAllItems() {
-        List<Map<String, Object>> productList = inventoryMapper.getAllItems();
-        return ProductPageUtil.transformToProductPage(productList);
-    }
+    public InventoryPage getItemBySelected(InventoryQueryParam inventoryQueryParam) {
+        inventoryQueryParam.setBegin((inventoryQueryParam.getPage() - 1) * inventoryQueryParam.getPageLimits());
+        List<Map<String, Object>> productList =  inventoryMapper.getItemBySelected(inventoryQueryParam);
+        Integer itemCounts = inventoryMapper.getSum(inventoryQueryParam);
+        Integer page = inventoryQueryParam.getPage();
+        Integer pageLimits = inventoryQueryParam.getPageLimits();
 
-    @Override
-    public List<InventoryPage>  getItemBySelected(InventoryQueryParam inventoryQueryParam) {
-        return  inventoryMapper.getItemBySelected(inventoryQueryParam);
+        List<ProductPage> list =  ProductPageUtil.transformToProductPage(productList);
+
+        return new InventoryPage(list, itemCounts, page, pageLimits );
+
+
     }
 
     @Override

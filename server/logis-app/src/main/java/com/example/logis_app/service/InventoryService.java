@@ -7,9 +7,8 @@ import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
 import java.util.List;
 
 public interface InventoryService {
-    List<ProductPage> getAllItems();
 
-    List<InventoryPage>  getItemBySelected(InventoryQueryParam inventoryQueryParam);
+    InventoryPage getItemBySelected(InventoryQueryParam inventoryQueryParam);
 
     void insertNewItem(InventoryQueryParam inventoryQueryParam);
 

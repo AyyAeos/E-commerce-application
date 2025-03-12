@@ -3,29 +3,31 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 
 
-type SearchFormDataType = {
-    itemName: string
-    status: string
-    startPrice: number
-    endPrice: number
-    totalCounts: number ,
-    page: number,
-    pageLimits: number,
-}
+    type SearchFormDataType = {
+        itemName: string
+        onSale?: number
+        startPrice?: number
+        endPrice?: number
+        size?: string
+        totalCounts?: number ,
+        page?: number,
+        pageLimits?: number,
+    }
 
 
-const SearchForm = ({ searchFormData, setSearchFormData, handleSubmit } : {
-    searchFormData: SearchFormDataType
-    setSearchFormData: React.Dispatch<SetStateAction<SearchFormDataType>>
-    handleSubmit: () => void
-}) => {
+    const SearchForm = ({ searchFormData, setSearchFormData, handleSubmit } : {
+        searchFormData: SearchFormDataType
+        setSearchFormData: React.Dispatch<SetStateAction<SearchFormDataType>>
+        handleSubmit: () => void
+    }) => {
 
 
 
     return (
         <>
             <div className="sm:flex items-center space-x-4 py-2">
-                <div className="w-full sm:w-1/4 space-y-2">
+
+                <div className="w-full sm:w-1/5 space-y-2">
                     <Label htmlFor="itemName">Item Name : </Label>
                     <Input
                         id="itemName"
@@ -36,18 +38,34 @@ const SearchForm = ({ searchFormData, setSearchFormData, handleSubmit } : {
                     />
                 </div>
 
-                <div className="w-full sm:w-1/4 space-y-2">
-                    <Label htmlFor="itemStatus">Item Status : </Label>
+                <div className="w-full sm:w-1/5 space-y-2">
+                <Label htmlFor="itemStatus">Item Status:</Label>
+                <select
+                    id="itemStatus"
+                    value={searchFormData.onSale}
+                    onChange={(e) =>
+                    setSearchFormData({ ...searchFormData, onSale: Number(e.target.value) })
+                    }
+                    className="border border-gray-300 rounded px-2 py-1 w-full"
+                >
+                    <option value="">Select Status</option>
+                    <option value="1">On Sale</option>
+                    <option value="0">Not On Sale</option>
+                </select>
+                </div>
+
+                <div className="w-full sm:w-1/5 space-y-2">
+                    <Label htmlFor="itemSize">Item Size : </Label>
                     <Input
-                        id="itemStatus"
+                        id="itemSize"
                         type="text"
-                        placeholder="Status"
-                        value={searchFormData.status}
-                        onChange={(e) => setSearchFormData({ ...searchFormData, status: e.target.value })}
+                        placeholder="Size"
+                        value={searchFormData.size}
+                        onChange={(e) => setSearchFormData({ ...searchFormData, size: e.target.value })}
                     />
                 </div>
 
-                <div className="w-full sm:w-1/4 space-y-2">
+                <div className="w-full sm:w-1/5 space-y-2">
                     <Label htmlFor="startPrice">Start Price : </Label>
                     <Input
                         id="startPrice"
@@ -58,7 +76,7 @@ const SearchForm = ({ searchFormData, setSearchFormData, handleSubmit } : {
                     />
                 </div>
 
-                <div className="w-full sm:w-1/4 space-y-2">
+                <div className="w-full sm:w-1/5 space-y-2">
                     <Label htmlFor="endPrice">End Price : </Label>
                     <Input
                         id="endPrice"
@@ -77,7 +95,7 @@ const SearchForm = ({ searchFormData, setSearchFormData, handleSubmit } : {
                         id="totalCounts"
                         type="number"
                         value={searchFormData.totalCounts}
-                        onChange={(e) => setSearchFormData({ ...searchFormData, totalCounts: Number(e.target.value) })}
+                        onChange={(e) => setSearchFormData({ ...searchFormData, totalCounts: Number(e.target.value) < 0 ? 0 :Number(e.target.value) })}
                     />
                 </div>
 
@@ -87,7 +105,7 @@ const SearchForm = ({ searchFormData, setSearchFormData, handleSubmit } : {
                         id="page"
                         type="number"
                         value={searchFormData.page}
-                        onChange={(e) => setSearchFormData({ ...searchFormData, page: Number(e.target.value) })}
+                        onChange={(e) => setSearchFormData({ ...searchFormData, page:  Number(e.target.value) < 0 ? 0 :Number(e.target.value) })}
                     />
                 </div>
 
@@ -97,7 +115,7 @@ const SearchForm = ({ searchFormData, setSearchFormData, handleSubmit } : {
                         id="pageLimits"
                         type="number"
                         value={searchFormData.pageLimits}
-                        onChange={(e) => {setSearchFormData({ ...searchFormData, pageLimits: Number(e.target.value) })}}
+                        onChange={(e) => {setSearchFormData({ ...searchFormData, pageLimits: Number(e.target.value) < 0 ? 0 :Number(e.target.value) })}}
                     />
                 </div>
 

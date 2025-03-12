@@ -11,7 +11,7 @@ type Variants = {
 type Item = {
     itemId: number
     itemName: string
-    onSale : boolean
+    onSale : number
     description: string
     variants: Variants[]
   }

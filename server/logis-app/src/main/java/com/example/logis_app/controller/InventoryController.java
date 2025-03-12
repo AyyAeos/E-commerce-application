@@ -19,16 +19,15 @@ public class InventoryController {
     @Autowired
     private InventoryService inventoryService;
 
-    @GetMapping
-    public Result getAllItems() {
-         List<ProductPage> list = inventoryService.getAllItems();
-         return Result.success(list);
-    }
-
-
     @GetMapping("/search")
     public Result getItemByParam(@ModelAttribute InventoryQueryParam inventoryQueryParam) {
-        List<InventoryPage> list = inventoryService.getItemBySelected(inventoryQueryParam);
+
+        log.info("Searched item : {} ", inventoryQueryParam);
+
+
+        InventoryPage list = inventoryService.getItemBySelected(inventoryQueryParam);
+       log.info("Selected list : {}", list);
+
          return Result.success(list);
     }
 

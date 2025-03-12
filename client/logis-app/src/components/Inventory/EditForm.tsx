@@ -12,7 +12,7 @@ type Variants = {
 type Item = {
     itemId: number
     itemName: string
-    onSale : boolean
+    onSale : number
     description: string
     variants: Variants[]
   }
@@ -21,7 +21,7 @@ const EditForm = ( {item, variant, onClose} : {item: Item; variant: Variants; on
     const[FormData, setFormData] = useState( {
         itemName: "",
         price: 0,
-        onSale: false,
+        onSale: 0,
         description: "",
         stock: 0,
         size: "",
@@ -43,14 +43,14 @@ const EditForm = ( {item, variant, onClose} : {item: Item; variant: Variants; on
 }, [item, variant]);
 
 const handleSubmit = async (item :Item) => {
-        console.log("Form Submitted", item);
+        console.log("Form Submitted", FormData);
         try {
             const response = await axios.put(`http://localhost:8080/admins/inventory/${item.itemId}`, FormData);
             if(response.data.msg === 'success' && response.data.code === 1 ) {
                 console.log( "Updated");
 
-                //rerender page
-                mutate("http://localhost:8080/admins/inventory"); 
+                //refresh page
+                window.location.reload(); 
                 
                 onClose()
                 
@@ -60,11 +60,9 @@ const handleSubmit = async (item :Item) => {
         }
 };
 
-//because setFormDFata is tied to useeffect so everytime item change will rerender the page
-
-    return (                   //stretch over whole screen fixed + inset = take up full screen
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+    return (                   
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
         <h2 className="text-2xl font-bold mb-4">Edit Item</h2>
             <p className="mb-4">Editing: 
                 <span className="text-cyan-300 pl-4">{FormData.itemName}</span>
@@ -75,23 +73,32 @@ const handleSubmit = async (item :Item) => {
                 <label className="mr-4 w-1/2 text-left"> Item Name: </label>
                 <input 
                 type="text"
-                value={FormData.itemName} //current value
+                value={FormData.itemName}
                 className="border-4 border-slate-500 text-center w-1/2"
-                onChange={(e) => setFormData({ ...FormData, itemName: e.target.value})}  //e.target.value = new value
+                onChange={(e) => setFormData({ ...FormData, itemName: e.target.value})}
+                />
+            </div>
+
+            <div className="mb-4 flex">
+                <label className="mr-4 w-1/2 text-left"> Item Status: </label>
+                <select
+                    value={FormData.onSale}
+                    className="border-4 border-slate-500 text-center w-1/2"
+                    onChange={(e) => setFormData({ ...FormData, onSale: parseInt(e.target.value) })}
                 >
-                </input>
+                    <option value={1}>On Sale</option>
+                    <option value={0}>Not On Sale</option>
+                </select>
             </div>
 
             {/* Modify Description */}
             <div className="mb-4 flex">
                 <label className="mr-4 w-1/2 text-left"> Description: </label>
-                <input 
-                type="text"
-                value={FormData.description} //current value
-                className="border-4 border-slate-500 text-center w-1/2"
-                onChange={(e) => setFormData({ ...FormData, description: e.target.value})}  //e.target.value = new value
-                >
-                </input>
+                <textarea 
+                    value={FormData.description}
+                    className="border-4 border-slate-500 text-center w-1/2 resize-y h-28 p-2"
+                    onChange={(e) => setFormData({ ...FormData, description: e.target.value})}
+                />
             </div>
 
             {/* Modify Size */}
@@ -99,39 +106,33 @@ const handleSubmit = async (item :Item) => {
                 <label className="mr-4 w-1/2 text-left"> Size: </label>
                 <input 
                 type="text"
-                value={FormData.size} //current value
-                className="border-4 border-slate-500 text-center  w-1/2"
-                onChange={(e) => setFormData({ ...FormData, size: e.target.value})}  //e.target.value = new value
-                >
-                </input>
+                value={FormData.size}
+                className="border-4 border-slate-500 text-center w-1/2"
+                onChange={(e) => setFormData({ ...FormData, size: e.target.value})}
+                />
             </div>
 
             {/* Modify Price */}
             <div className="mb-4 flex">
                 <label className="mr-4 w-1/2 text-left"> Price : </label>
-                <input  // this is string so need change to number
+                <input 
                 type="number"
-                value={FormData.price} //current value
+                value={FormData.price}
                 className="border-4 border-slate-500 text-center w-1/2"
-                onChange={(e) => setFormData({ ...FormData, price: Number(e.target.value)})}  //e.target.value = new value
-                >
-                </input>
+                onChange={(e) => setFormData({ ...FormData, price: Number(e.target.value)})}
+                />
             </div>
-
             
-            {/* Modify Price */}
+            {/* Modify Stock */}
             <div className="mb-4 flex">
                 <label className="mr-4 w-1/2 text-left"> Stock : </label>
                 <input 
                 type="number"
-                value={FormData.stock} //current value
+                value={FormData.stock}
                 className="border-4 border-slate-500 text-center w-1/2"
-                onChange={(e) => setFormData({ ...FormData, stock: Number(e.target.value) })}  //e.target.value = new value
-                >
-                </input>
+                onChange={(e) => setFormData({ ...FormData, stock: Number(e.target.value) })}
+                />
             </div>
-
-
 
                  <div className="flex justify-between" >
                     <button
@@ -142,16 +143,14 @@ const handleSubmit = async (item :Item) => {
                         </button>
                         <button
                             className="mt-4  px-8 py-2 bg-blue-500 text-white rounded"
-                            onClick={() => {handleSubmit (item)}}
+                            onClick={() => {handleSubmit(item)}}
                         >
                             Save Changes
                         </button>
                 </div>
     </div>
 </div>
-
 )
-
 };
 
 export default EditForm;

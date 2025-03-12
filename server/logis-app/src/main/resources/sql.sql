@@ -369,3 +369,8 @@ CREATE TABLE order_table (
     FOREIGN KEY (user_id) REFERENCES user(user_id)
 );
 
+ALTER TABLE cart_item
+DROP FOREIGN KEY fk_cart_item_user,
+ADD CONSTRAINT fk_cart_item_size 
+FOREIGN KEY (size_id) REFERENCES inventory_sizes(size_id)
+ON DELETE SET NULL;

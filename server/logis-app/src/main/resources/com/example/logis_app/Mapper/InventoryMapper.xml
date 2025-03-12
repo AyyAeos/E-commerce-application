@@ -13,8 +13,8 @@
         LEFT JOIN inventory_sizes isz ON i.item_id = isz.item_id
     </select>
 
-    <select id="getItemBySelected" resultType="com.example.logis_app.pojo.PageResult.InventoryPage">
-        SELECT i.item_id, i.item_name,i.description, i.on_sale, isz.size, isz.price, isz.stock
+    <select id="getSum" resultType="java.lang.Integer">
+        SELECT count(*)
         FROM inventory i
         JOIN inventory_sizes isz ON i.item_id = isz.item_id
         <where>
@@ -34,6 +34,32 @@
                 AND i.on_sale = #{onSale}
             </if>
         </where>
+    </select>
+
+
+    <select id="getItemBySelected" resultType="java.util.HashMap">
+        SELECT i.item_id, i.item_name,i.description, i.on_sale, isz.size, isz.price, isz.stock, isz.size_id
+        FROM inventory i
+        JOIN inventory_sizes isz ON i.item_id = isz.item_id
+
+        <where>
+            <if test="itemName != null and itemName != ''">
+                AND i.item_name LIKE CONCAT('%', #{itemName}, '%')
+            </if>
+
+            <if test="size != null and size != ''">
+                AND isz.size = #{size}
+            </if>
+
+            <if test="minPrice != null and maxPrice != null">
+                AND isz.price BETWEEN #{minPrice} AND #{maxPrice}
+            </if>
+
+            <if test="onSale != null">
+                AND i.on_sale = #{onSale}
+            </if>
+        </where>
+        LIMIT #{pageLimits} OFFSET #{begin}
     </select>
 
         <insert id="insertItem" useGeneratedKeys="true" keyProperty="itemId">

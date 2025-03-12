@@ -11,9 +11,10 @@ import java.math.BigDecimal;
 public class InventoryQueryParam {
     private Integer itemId;
     private String itemName;
-    private Boolean onSale;
+    private Integer onSale;
     private String size;
     private Integer stockQuantity;
+
     private Integer sizeId;
 
     private BigDecimal price;
@@ -22,7 +23,13 @@ public class InventoryQueryParam {
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
 
+    private Integer begin;
+
     private String description;
+
+    private Integer totalCounts;
+    private Integer page = 1;
+    private Integer pageLimits = 10;
 
 
 

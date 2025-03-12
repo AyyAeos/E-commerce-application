@@ -20,10 +20,12 @@ import java.util.*;
 @Service
 @Transactional
 public class ProductServiceImpl  implements ProductService {
+
     @Autowired
     private ProductMapper productMapper;
        @Override
     public List<ProductPage> getProductList() {
+        
         List<Map<String, Object>> productList = productMapper.getProductList();
         return ProductPageUtil.transformToProductPage(productList);
     }
