@@ -1,27 +1,29 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
-
+import { Button } from "../ui/button";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../ui/pagination";
 
     type SearchFormDataType = {
         itemName: string
         onSale?: number
-        startPrice?: number
-        endPrice?: number
+        minPrice?: number
+        maxPrice?: number
         size?: string
         totalCounts?: number ,
         page?: number,
         pageLimits?: number,
     }
 
-
     const SearchForm = ({ searchFormData, setSearchFormData, handleSubmit } : {
         searchFormData: SearchFormDataType
         setSearchFormData: React.Dispatch<SetStateAction<SearchFormDataType>>
         handleSubmit: () => void
     }) => {
-
-
+        const handlePageChange = (newPage: number) => {
+            setSearchFormData((prev) => ({ ...prev, page: newPage }));
+            setTimeout(handleSubmit, 0);  
+        };
 
     return (
         <>
@@ -46,7 +48,7 @@ import { Label } from "@radix-ui/react-label";
                     onChange={(e) =>
                     setSearchFormData({ ...searchFormData, onSale: Number(e.target.value) })
                     }
-                    className="border border-gray-300 rounded px-2 py-1 w-full"
+                    className="border border-gray-300 rounded px-2 py-1 w-full h-9"
                 >
                     <option value="">Select Status</option>
                     <option value="1">On Sale</option>
@@ -71,8 +73,8 @@ import { Label } from "@radix-ui/react-label";
                         id="startPrice"
                         type="number"
                         placeholder="Start Price"
-                        value={searchFormData.startPrice}
-                        onChange={(e) => setSearchFormData({ ...searchFormData, startPrice: Number(e.target.value) < 0 ? 0 : Number(e.target.value) })}
+                        value={searchFormData.minPrice}
+                        onChange={(e) => setSearchFormData({ ...searchFormData, minPrice: Number(e.target.value) < 0 ? 0 : Number(e.target.value) })}
                     />
                 </div>
 
@@ -82,8 +84,8 @@ import { Label } from "@radix-ui/react-label";
                         id="endPrice"
                         type="number"
                         placeholder="End Price"
-                        value={searchFormData.endPrice}
-                        onChange={(e) => setSearchFormData({ ...searchFormData, endPrice: Number(e.target.value) < 0 ? 0 : Number(e.target.value)})}
+                        value={searchFormData.maxPrice}
+                        onChange={(e) => setSearchFormData({ ...searchFormData, maxPrice: Number(e.target.value) < 0 ? 0 : Number(e.target.value)})}
                     />
                 </div>
             </div>
@@ -115,18 +117,64 @@ import { Label } from "@radix-ui/react-label";
                         id="pageLimits"
                         type="number"
                         value={searchFormData.pageLimits}
-                        onChange={(e) => {setSearchFormData({ ...searchFormData, pageLimits: Number(e.target.value) < 0 ? 0 :Number(e.target.value) })}}
+                        onChange={(e) => {setSearchFormData({ ...searchFormData, pageLimits: Number(e.target.value) <= 5  ? 5 :Number(e.target.value) })}}
                     />
                 </div>
 
-                <button
-                    type="button"
-                    className="mt-10 px-4 py-2 bg-blue-500 text-white rounded mb-2 w-full sm:w-1/4"
-                    onClick={handleSubmit}
-                >
-                    Search
-                </button>
+                <Button 
+                type="submit"
+                className="mt-10 px-4 py-2 hover:bg-red-500 text-white rounded mb-2 w-full sm:w-1/4"
+                onClick={handleSubmit}>    
+                    Subscribe</Button>
             </div>
+
+
+            <Pagination>
+  <PaginationContent className="flex items-center justify-between">
+    <PaginationItem>
+      <PaginationPrevious 
+        href="#" 
+        onClick={() => {
+          if (searchFormData.page! > 1) {
+            handlePageChange(searchFormData.page! - 1);
+          }
+        }}
+      />
+    </PaginationItem>
+
+    <div className="flex items-center space-x-2">
+      <span>Page:</span>
+      <Input 
+        type="number"
+        value={searchFormData.page}
+        onChange={(e) => {
+          const newPage = Number(e.target.value);
+          const maxPages = Math.ceil(searchFormData.totalCounts! / searchFormData.pageLimits!);
+          
+          if (newPage > 0 && newPage <= maxPages) {
+            handlePageChange(newPage);
+          }
+        }}
+        className="w-12 p-1 border border-gray-300 rounded text-center"
+      />
+      <span>of {Math.ceil(searchFormData.totalCounts! / searchFormData.pageLimits!)}</span>
+    </div>
+    
+    <PaginationItem>
+      <PaginationNext 
+        href="#" 
+        onClick={() => {
+          const maxPages = Math.ceil(searchFormData.totalCounts! / searchFormData.pageLimits!);
+          if (searchFormData.page! < maxPages) {
+            handlePageChange(searchFormData.page! + 1);
+          }
+        }}
+      />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+
+
         </>
     );
 };

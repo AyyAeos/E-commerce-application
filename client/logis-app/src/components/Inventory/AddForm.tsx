@@ -1,13 +1,11 @@
 import { useState } from "react";
-
-
-
-
+import { Button } from "../ui/button";
 
 
 const AddButton =({ onClose }: { onClose: () => void }) => {
 
     
+    const [addItem, setAddItem] = useState<boolean>(true);
     const[FormData, setFormData] = useState( {
         itemName: "",
         price: 0,
@@ -52,14 +50,31 @@ const AddButton =({ onClose }: { onClose: () => void }) => {
                     <option value="1">On Sale</option>
                     <option value="0">Not On Sale</option>
                 </select>
-                </div>
+                </div>        
+            
 
+            
 
             <div className="flex items-center justify-center ">
-                <p className="w-1/2 text-left ">Size : </p>
-            
+               <div className="w-1/2">
+
+                <Button onClick={() => setAddItem(true)}>
+                    +
+                </Button>
+
+                <span className="ml-4"> Size :</span>
+                
+
+               </div>
+
+               {addItem && (
+
+               
+
+               <div className="flex w-1/2">
+
                  {/* Modify Size */}
-            <div className="w-1/2 text-center ">
+                 <div className=" ">
                 <label className=""> Size: </label>
                 <input 
                 type="text"
@@ -68,7 +83,7 @@ const AddButton =({ onClose }: { onClose: () => void }) => {
                 onChange={(e) => setFormData({ ...FormData, size: e.target.value})}  
                 >
                 </input>
-            </div>
+                </div>
 
             {/* Modify Price */}
             <div className="">
@@ -94,9 +109,17 @@ const AddButton =({ onClose }: { onClose: () => void }) => {
                 >
                 </input>
             </div>
+               </div>
+               )
+              
+               }
+             
+            
 
             </div>
+          
 
+            
            
 
                     <div className="flex justify-between">

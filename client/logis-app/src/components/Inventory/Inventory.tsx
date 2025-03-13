@@ -23,8 +23,8 @@ const Inventory : React.FC =  () => {
         itemName: string
         size: string
         onSale?: number | undefined
-        startPrice?: number
-        endPrice?: number
+        minPrice?: number
+        maxPrice?: number
         totalCounts?: number ,
         page?: number,
         pageLimits?: number,
@@ -34,15 +34,15 @@ const Inventory : React.FC =  () => {
         itemName: "",
         size:"",
         onSale: undefined,
-        startPrice: undefined,
-        endPrice: undefined,
+        minPrice: undefined,
+        maxPrice: undefined,
         totalCounts: undefined,
         page: undefined,
         pageLimits: undefined,
     });
 
     type Variants = {
-        size?: string;
+        size: string;
         price: number;
         stock: number;
         sizeId: number;
@@ -153,7 +153,7 @@ const Inventory : React.FC =  () => {
                                     <TableCell>{variant.sizeId}</TableCell>
                                     <TableCell>{variant.size}</TableCell>
                                     <TableCell>{variant.price}</TableCell>
-                                    <TableCell>{variant.stock}</TableCell>
+                                    <TableCell className="">{variant.stock}</TableCell>
                                     <TableCell>
                                         <div className="flex space-x-6">
                                         <button
