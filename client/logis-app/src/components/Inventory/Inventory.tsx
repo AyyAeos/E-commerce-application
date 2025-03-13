@@ -1,193 +1,216 @@
-
 import EditForm from "@/components/Inventory/EditForm";
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
-import axios from "axios"
-import {  useState } from "react";
-import useSWR, { mutate } from "swr"
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import axios from "axios";
+import { useState } from "react";
+import useSWR, { mutate } from "swr";
 import DeleteItem from "./DeleteForm";
 import { CiSquarePlus } from "react-icons/ci";
 import AddButton from "./AddForm";
 
 import SearchForm from "./SearchForm";
-  
-const Inventory : React.FC =  () => {
-    type SearchFormDataType = {
-        itemName: string
-        size: string
-        onSale?: number | undefined
-        minPrice?: number
-        maxPrice?: number
-        totalCounts?: number ,
-        page?: number,
-        pageLimits?: number,
-    }
 
-    const [searchForm, setSearchForm] = useState<SearchFormDataType>({
-        itemName: "",
-        size:"",
-        onSale: undefined,
-        minPrice: undefined,
-        maxPrice: undefined,
-        totalCounts: undefined,
-        page: undefined,
-        pageLimits: undefined,
-    });
+const Inventory: React.FC = () => {
+  type SearchFormDataType = {
+    itemName: string;
+    size: string;
+    onSale?: number | undefined;
+    minPrice?: number;
+    maxPrice?: number;
+    totalCounts?: number;
+    page?: number;
+    pageLimits?: number;
+  };
 
-    type Variants = {
-        size: string;
-        price: number;
-        stock: number;
-        sizeId: number;
-    };
+  const [searchForm, setSearchForm] = useState<SearchFormDataType>({
+    itemName: "",
+    size: "",
+    onSale: undefined,
+    minPrice: undefined,
+    maxPrice: undefined,
+    totalCounts: undefined,
+    page: undefined,
+    pageLimits: undefined,
+  });
 
-    type Item = {
-        itemId: number
-        itemName: string
-        onSale : number
-        description: string
-        variants: Variants[]
+  type Variants = {
+    size: string;
+    price: number;
+    stock: number;
+    sizeId: number;
+    onSale: number;
+  };
+
+  type Item = {
+    itemId: number;
+    itemName: string;
+    description: string;
+    variants: Variants[];
+  };
+
+  const fetcher = async (url: string) => {
+    try {
+      const res = await axios.get(url, { params: searchForm });
+      if (res.data.msg === "success") {
+        setSearchForm({
+          ...searchForm,
+          totalCounts: res.data.data.itemCounts,
+          page: res.data.data.page,
+          pageLimits: res.data.data.pageLimits,
+        });
+        return res.data.data.list;
       }
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+  //auto refetch when searchForm changed
+  const { data, error, isLoading } = useSWR(
+    "http://localhost:8080/admins/inventory/search",
+    fetcher
+  );
 
-    
-      const fetcher = async (url: string) => {
-        try {
-            const res = await axios.get(url, { params: searchForm });
-            if (res.data.msg === 'success') {
-                setSearchForm({
-                    ...searchForm,
-                    totalCounts: res.data.data.itemCounts,
-                    page: res.data.data.page,
-                    pageLimits: res.data.data.pageLimits,
+  // Display the edit box
+  const [EditItem, SetEditItem] = useState<{
+    item: Item;
+    variant: Variants;
+  } | null>(null);
 
-                })
-                return res.data.data.list;
-            }
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    };
-    //auto refetch when searchForm changed
-    const { data, error, isLoading } = useSWR( "http://localhost:8080/admins/inventory/search" , fetcher );
-    
-      // Display the edit box
-      const[EditItem, SetEditItem] = useState< { item: Item; variant: Variants} | null>(null); 
+  //Display delete comfirmation box
+  const [DeleteComfirmation, SetDeleteComfirmation] = useState<{
+    item: Item;
+    variant: Variants;
+  } | null>(null);
 
-      //Display delete comfirmation box
-      const[DeleteComfirmation, SetDeleteComfirmation] = useState<{item : Item ;variant: Variants} | null >(null);
+  const [AddPage, SetAddPage] = useState(false);
 
-      const[AddPage, SetAddPage] = useState(false);
+  const handleSubmit = () => {
+    console.log(searchForm);
+    mutate("http://localhost:8080/admins/inventory/search");
+  };
 
-      const handleSubmit = () => {
-        console.log(searchForm);
-        mutate("http://localhost:8080/admins/inventory/search");
-    };
+  return (
+    <>
+      <div className="pt-8 overflow-y-scroll min-h-screen bg-white text-primary-foreground  px-5 sm:px-10 md:px-20">
+        <div className="flex justify-center text-2xl font-bold">
+          {/*  let inventory take all space and other pull to right */}
+          <span className="flex-1 text-center">Inventory</span>
+          <CiSquarePlus
+            className="ml-16 text-5xl "
+            onClick={() => {
+              console.log("Add button Pressed");
+              SetAddPage(true);
+            }}
+          />
+        </div>
 
-        return (
-            <>
-                <div className="pt-8 overflow-y-scroll min-h-screen bg-white text-primary-foreground  px-5 sm:px-10 md:px-20">
-                <div className="flex justify-center text-2xl font-bold">
-                    {/*  let inventory take all space and other pull to right */}
-                    <span className="flex-1 text-center">Inventory</span>
-                    <CiSquarePlus 
-                    className="ml-16 text-5xl "
-                    onClick={() =>{
-                        console.log("Add button Pressed");
-                        SetAddPage(true);
-                    } }
-                     /> 
-                </div>
+        {/* Display add form */}
+        {AddPage && <AddButton onClose={() => SetAddPage(false)} />}
 
-                {/* Display add form */}
-                { AddPage && <AddButton onClose={() => SetAddPage(false)} />}
+        <SearchForm
+          searchFormData={searchForm}
+          setSearchFormData={setSearchForm}
+          handleSubmit={handleSubmit}
+        />
 
-                <SearchForm  searchFormData={searchForm} setSearchFormData={setSearchForm} handleSubmit={handleSubmit} />
+        <div className="overflow-x-auto">
+          {isLoading && <p>Loading...</p>}
+          {error && <p className="text-red-500">Failed to fetch inventory</p>}
+          <Table>
+            <TableCaption>A list of Inventory.</TableCaption>
 
-                
-                     <div className="overflow-x-auto">
-                     {isLoading && <p>Loading...</p>}
-                    {error && <p className="text-red-500">Failed to fetch inventory</p>}
-                    <Table>
-                            <TableCaption>A list of Inventory.</TableCaption>
-                           
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Item Id</TableHead>
+                <TableHead>Item Name</TableHead>
+                <TableHead className="">Description</TableHead>
+                <TableHead className="">Size Id</TableHead>
+                <TableHead className="">Status</TableHead>
+                <TableHead className="">Stock</TableHead>
+                <TableHead className="">Price</TableHead>
+                <TableHead className="">Action</TableHead>
+              </TableRow>
+            </TableHeader>
 
-                            <TableHeader>
-                                <TableRow>
-                                <TableHead className="w-[100px]">Item Id</TableHead>
-                                <TableHead>Item Name</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead className="">Description</TableHead>
-                                <TableHead className="">Size Id</TableHead>
-                                <TableHead className="">Size</TableHead>
-                                <TableHead className="">Price</TableHead>
-                                <TableHead className="">Stock</TableHead>
-                                <TableHead className="">Action</TableHead>
-                                </TableRow>
-                            </TableHeader>
-
-                           
-
+            <TableBody>
+              {data &&
+                data.map((item: Item) =>
+                  item.variants.map((variant, index) => (
+                    <TableRow key={`${item.itemId}-${variant.sizeId}`}>
+                      {index === 0 && (
+                        <>
+                          <TableCell rowSpan={item.variants.length}>
+                            {item.itemId}
+                          </TableCell>
+                          <TableCell rowSpan={item.variants.length}>
+                            {item.itemName}
+                          </TableCell>
                         
-                            <TableBody>
-                            {data &&
-                                data.map((item: Item) => 
-                                item.variants.map((variant, index) => (
-                                    <TableRow key={`${item.itemId}-${variant.sizeId}`}>
-                                    {index === 0 && (
-                                        <>
-                                        <TableCell rowSpan={item.variants.length}>{item.itemId}</TableCell>
-                                        <TableCell rowSpan={item.variants.length}>{item.itemName}</TableCell>
-                                        <TableCell rowSpan={item.variants.length}>{item.onSale === 0 ? "Not On Sale" : "On Sale"}</TableCell>
-                                        <TableCell rowSpan={item.variants.length}>{item.description}</TableCell>
-                                        </>
-                                    )}
-                                    {/* Variant-specific columns */}
-                                    <TableCell>{variant.sizeId}</TableCell>
-                                    <TableCell>{variant.size}</TableCell>
-                                    <TableCell>{variant.price}</TableCell>
-                                    <TableCell className="">{variant.stock}</TableCell>
-                                    <TableCell>
-                                        <div className="flex space-x-6">
-                                        <button
-                                            className="border-2 border-black px-2 py-2 hover:bg-red-500"
-                                            onClick={() => SetEditItem({ item, variant })}
-                                        >
-                                            Edit
-                                        </button>
+                        
+                     
+                          <TableCell rowSpan={item.variants.length}>
+                            {item.description}
+                          </TableCell>
+                        </>
+                      )}
+                      {/* Variant-specific columns */}
+                      <TableCell>{variant.sizeId}</TableCell>
+                      <TableCell>{variant.onSale === 0 ? "Not On Sale" : "On Sale"}</TableCell>
+                      <TableCell>{variant.size}</TableCell>
+                      <TableCell>{variant.price}</TableCell>
+                      <TableCell className="">{variant.stock}</TableCell>
+                      <TableCell>
+                        <div className="flex space-x-6">
+                          <button
+                            className="border-2 border-black px-2 py-2 hover:bg-red-500"
+                            onClick={() => SetEditItem({ item, variant })}
+                          >
+                            Edit
+                          </button>
 
-                                        <button
-                                            className="border-2 border-black px-2 py-2 hover:bg-red-500"
-                                            onClick={() => SetDeleteComfirmation({variant, item})}
-                                        >
-                                            Delete
-                                        </button>
-                                        </div>
-                                    </TableCell>
-                                    </TableRow>
-                                ))
-                                )}
-                            </TableBody>
+                          <button
+                            className="border-2 border-black px-2 py-2 hover:bg-red-500"
+                            onClick={() =>
+                              SetDeleteComfirmation({ variant, item })
+                            }
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+            </TableBody>
 
-                   
-                    {/* Edit and delete page */}
-                    {EditItem && <EditForm item = {EditItem.item} variant={EditItem.variant} onClose={() => SetEditItem(null) }/>} 
-                    {DeleteComfirmation && <DeleteItem item = {DeleteComfirmation.item} variant = {DeleteComfirmation.variant} onClose={() => SetDeleteComfirmation(null)} />}
-                    </Table>
-                     </div>
-                
-                  
-                </div>
-
-            </>
-    );
-}
+            {/* Edit and delete page */}
+            {EditItem && (
+              <EditForm
+                item={EditItem.item}
+                variant={EditItem.variant}
+                onClose={() => SetEditItem(null)}
+              />
+            )}
+            {DeleteComfirmation && (
+              <DeleteItem
+                item={DeleteComfirmation.item}
+                variant={DeleteComfirmation.variant}
+                onClose={() => SetDeleteComfirmation(null)}
+              />
+            )}
+          </Table>
+        </div>
+      </div>
+    </>
+  );
+};
 
 export default Inventory;

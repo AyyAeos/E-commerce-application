@@ -13,7 +13,6 @@ type OrderItem = {
   sizeName: string;
 };
 
-
 type Order = {
   orderId: string;
   userId: number;
@@ -26,7 +25,7 @@ type Order = {
 
 const CheckOrder = () => {
   const userId = localStorage.getItem("userId") ?? "";
- 
+
   const navigate = useNavigate();
 
   const fetcher = async (url: string) => {
@@ -41,35 +40,35 @@ const CheckOrder = () => {
     }
   };
 
-
-  const { data: orders = [], error, isLoading } = useSWR(
-    `http://localhost:8080/orders/${userId}`,
-    fetcher
-  );
+  const {
+    data: orders = [],
+    error,
+    isLoading,
+  } = useSWR(`http://localhost:8080/orders/${userId}`, fetcher);
 
   const DeleteOrder = ({ placeDate }: { placeDate: Order }) => {
     const currentDate = new Date();
-    const targetDate = new Date(placeDate.placedAt)
+    const targetDate = new Date(placeDate.placedAt);
     const timeDifference = currentDate.getTime() - targetDate.getTime();
 
     const twoDays = 2 * 24 * 60 * 60 * 1000;
 
-      const expired = timeDifference > twoDays;
-  
-      if (!expired) {
-        placeDate.isExpired = false;
-      }
-  
-      return (
-        <>
-          {placeDate.isExpired === false && (
-            <button className="font semi-bold border border-black md:px-4 md:py-2 mt-4 hover:bg-slate-500 hover:text-white">
-              Delete Order
-            </button>
-          )}
-        </>
-      );
-    };
+    const expired = timeDifference > twoDays;
+
+    if (!expired) {
+      placeDate.isExpired = false;
+    }
+
+    return (
+      <>
+        {placeDate.isExpired === false && (
+          <button className="font semi-bold border border-black md:px-4 md:py-2 mt-4 hover:bg-slate-500 hover:text-white">
+            Delete Order
+          </button>
+        )}
+      </>
+    );
+  };
 
   return (
     <div className="bg-primary text-primary-foreground min-h-screen">
@@ -89,7 +88,7 @@ const CheckOrder = () => {
           Please refresh the page or click EXIT on the top right!
         </p>
       ) : orders.length === 0 ? (
-        <p className="text-red-500">
+        <p className="text-red-500 text-center pt-20 text-4xl">
           No orders found. Please click EXIT on the top right!
         </p>
       ) : (
@@ -98,20 +97,22 @@ const CheckOrder = () => {
             Your Orders
           </h1>
           <div className="flex flex-col gap-5">
-            {orders.map((order : Order) => (
+            {orders.map((order: Order) => (
               <div
                 key={order.orderId}
-                className="bg-white shadow-lg rounded-lg p-5 border" >
-
-                <p className="font-semibold text-xl text-end">Status : {order.status}</p>
+                className="bg-white shadow-lg rounded-lg p-5 border"
+              >
+                <p className="font-semibold text-xl text-end">
+                  Status : {order.status}
+                </p>
 
                 <p className="text-gray-600 text-end text-md">
-                  Last Updated Date: {new Date(order.updatedAt).toLocaleString()}
+                  Last Updated Date:{" "}
+                  {new Date(order.updatedAt).toLocaleString()}
                 </p>
-               
 
                 <div className="mt-4">
-                  {order.items.map((item : OrderItem , index : number) => (
+                  {order.items.map((item: OrderItem, index: number) => (
                     <div
                       key={index}
                       className="border p-3 rounded-lg mb-2 bg-gray-100"
@@ -132,40 +133,25 @@ const CheckOrder = () => {
                   ))}
                 </div>
 
+                <div className="flex flex-wrap justify-between">
+                  <div className="w-1/2">
+                    <p className="text-lg font-bold mt-4">
+                      Total Items: {order.items.length}
+                    </p>
 
-               
+                    <p className="text-gray-600">
+                      Created Date: {new Date(order.placedAt).toLocaleString()}
+                    </p>
 
-                  <div className="flex flex-wrap justify-between">
-                    <div className="w-1/2">
-           
+                    <p className="text-gray-600">Order id: {order.orderId}</p>
+                  </div>
 
-                <p className="text-lg font-bold mt-4">
-                  Total Items: {order.items.length}
-                </p>
-
-                <p className="text-gray-600">
-                  Created Date: {new Date(order.placedAt).toLocaleString()}
-                </p>
-
-                <p className="text-gray-600">
-                  Order id: {order.orderId}
-                </p>
-                    </div>
-                  
                   <DeleteOrder placeDate={order} />
-          
-               
-                  <button
-                    className="border border-black px-4 py-2 mt-4 hover:bg-slate-500 hover:text-white">
+
+                  <button className="border border-black px-4 py-2 mt-4 hover:bg-slate-500 hover:text-white">
                     Write A Review !
                   </button>
-
-
-              
-                  
-              
-                  </div>
-                
+                </div>
               </div>
             ))}
           </div>

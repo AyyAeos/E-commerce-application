@@ -29,11 +29,11 @@ public class ProductPageUtil {
             Integer stock = (Integer) data.get("stock");
             BigDecimal price = (BigDecimal) data.get("price");
             Integer sizeId = (Integer) data.get("size_id");
-            Variants variant = new Variants(size, stock, price, sizeId);
+            Variants variant = new Variants(size, stock, price, sizeId, onSale);
 
             //if key exist add the exisiting list
             //if no new a productpage
-            productMap.computeIfAbsent(itemId, id -> new ProductPage(id, itemName, description, onSale, new ArrayList<>()))
+            productMap.computeIfAbsent(itemId, id -> new ProductPage(id, itemName, description, new ArrayList<>()))
                       .getVariants()
                       .add(variant);
         });

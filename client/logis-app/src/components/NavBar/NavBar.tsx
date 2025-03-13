@@ -11,8 +11,6 @@ export default function NavBar() {
       // A desktop navigation menu (<nav>) that is hidden by default (hidden) but visible on medium-sized screens (md:flex).
       // A hamburger menu button (☰) for mobile, which is hidden on medium screens (md:hidden). 
       // when large screen hidden will be overrite by md:flex  and making visible
-
-
       <>
       <div className=" flex p-5 justify-between  bg-black text-white text-center text-2xl fixed top-0 left-0 right-0">
 

@@ -374,3 +374,11 @@ DROP FOREIGN KEY fk_cart_item_user,
 ADD CONSTRAINT fk_cart_item_size 
 FOREIGN KEY (size_id) REFERENCES inventory_sizes(size_id)
 ON DELETE SET NULL;
+
+alter table inventory
+drop column
+on_sale;
+
+alter table inventory_sizes
+add column 
+on_sale TINYINT(1) default 0;

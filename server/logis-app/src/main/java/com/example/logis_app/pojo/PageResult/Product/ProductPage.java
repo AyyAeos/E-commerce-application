@@ -13,6 +13,6 @@ public class ProductPage {
     private Long itemId;
     private String itemName;
     private String description;
-    private Integer onSale = 0;
+
     private List<Variants> variants;
 }

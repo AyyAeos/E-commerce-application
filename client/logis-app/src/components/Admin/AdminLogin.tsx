@@ -1,6 +1,5 @@
 
 
-
 const AdminLogin : React.FC =  () => {
     return (
         <div className="flex flex col justify-center min-h-screen bg-primary text-primary-foreground">

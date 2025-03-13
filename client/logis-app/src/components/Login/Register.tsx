@@ -70,7 +70,7 @@ const Register: React.FC = () => {
 
 
     return (
-        <div className="flex flex-col justify-center items-center bg-primary min-h-screen px-4">
+        <div className="flex flex-col justify-center items-center bg-primary min-h-screen text-black px-4">
             <div className="border-6 bg-white p-4 w-full max-w-3xl">
 
             <div className="text-center text-bold text-2xl">

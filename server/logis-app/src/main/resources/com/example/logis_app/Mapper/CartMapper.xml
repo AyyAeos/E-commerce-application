@@ -11,7 +11,7 @@
     LEFT JOIN inventory_sizes isz on isz.size_id = c.size_id
            LEFT JOIN inventory i on i.item_id = c.item_id
            WHERE user_id = #{id}
-    ORDER BY item_id
+    ORDER BY c.updated_at
     </select>
 
     <update id="modifyQuantity">

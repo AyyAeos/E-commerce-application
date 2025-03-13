@@ -32,38 +32,38 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartPage> checkCart(Integer userId) {
-        // String redisKey = "cart:" + userId;
-        // log.info(redisKey);
+        String redisKey = "cart:" + userId;
+        log.info(redisKey);
 
-        // long startTime = System.nanoTime();
+        long startTime = System.nanoTime();
 
-        // // check if userId have stored in redis
-        // List<CartPage> cachedCart = (List<CartPage>) redisTemplate.opsForValue().get(redisKey);
+        // check if userId have stored in redis
+        List<CartPage> cachedCart = (List<CartPage>) redisTemplate.opsForValue().get(redisKey);
 
-        // long endTime = System.nanoTime();
+        long endTime = System.nanoTime();
 
-        // log.info(" Time for redis = {} ", endTime - startTime);
-        // //Time for redis = 9 682 400ns
+        log.info(" Time for redis = {} ", endTime - startTime);
+        //Time for redis = 9 682 400ns
 
-        // if (cachedCart != null) {
-        //     System.out.println("Cart data fetched from Redis for user: " + userId);
-        //     return cachedCart;
-        // }
+        if (cachedCart != null) {
+            System.out.println("Cart data fetched from Redis for user: " + userId);
+            return cachedCart;
+        }
 
-        // // if not in redis
-        // startTime = System.nanoTime();
+        // if not in redis
+        startTime = System.nanoTime();
         List<CartPage> cartData = cartMapper.checkCart(userId);
-    //     endTime = System.nanoTime();
+        endTime = System.nanoTime();
 
-    //     log.info("Time for db = {} ms", (endTime - startTime) / 1_000_000);
-    //    // Time for db = 45 ms = 45 000 000ns
+        log.info("Time for db = {} ms", (endTime - startTime) / 1_000_000);
+       // Time for db = 45 ms = 45 000 000ns
 
 
-    //     // store in redis with expired time 10 min
-    //     redisTemplate.opsForValue().set(redisKey, cartData);
-    //     redisTemplate.expire(redisKey, 10, TimeUnit.MINUTES);
+        // store in redis with expired time 10 min
+        redisTemplate.opsForValue().set(redisKey, cartData);
+        redisTemplate.expire(redisKey, 10, TimeUnit.MINUTES);
 
-    //     log.info("Cart data fetched from DB and cached in Redis for user: " + userId);
+        log.info("Cart data fetched from DB and cached in Redis for user: " + userId);
         return cartData;
     }
 

@@ -15,5 +15,6 @@ public class Variants {
     private Integer stock;
     private BigDecimal price;
     private Integer sizeId;
+    private Integer onSale = 0;
 
 }
