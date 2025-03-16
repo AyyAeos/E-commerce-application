@@ -62,7 +62,7 @@ const CheckOrder = () => {
     return (
       <>
         {placeDate.isExpired === false && (
-          <button className="font semi-bold border border-black md:px-4 md:py-2 mt-4 hover:bg-slate-500 hover:text-white">
+          <button className="font semi-bold border border-black md:px-4 md:py-2 hover:bg-slate-500 hover:text-white">
             Delete Order
           </button>
         )}
@@ -146,11 +146,12 @@ const CheckOrder = () => {
                     <p className="text-gray-600">Order id: {order.orderId}</p>
                   </div>
 
-                  <DeleteOrder placeDate={order} />
-
-                  <button className="border border-black px-4 py-2 mt-4 hover:bg-slate-500 hover:text-white">
-                    Write A Review !
-                  </button>
+                  <div className="flex justify-end gap-4 mt-4">
+                    <DeleteOrder placeDate={order} />
+                    <button className="border border-black px-4 py-2 hover:bg-slate-500 hover:text-white">
+                      Write A Review !
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

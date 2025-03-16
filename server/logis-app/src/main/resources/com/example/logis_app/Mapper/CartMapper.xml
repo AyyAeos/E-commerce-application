@@ -10,7 +10,7 @@
     FROM cart_item c
     LEFT JOIN inventory_sizes isz on isz.size_id = c.size_id
            LEFT JOIN inventory i on i.item_id = c.item_id
-           WHERE user_id = #{id}
+           WHERE user_id = #{id} AND status = 'ACTIVE'
     ORDER BY c.updated_at DESC
     </select>
 

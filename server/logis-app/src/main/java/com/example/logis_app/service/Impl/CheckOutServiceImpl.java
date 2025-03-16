@@ -25,6 +25,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         for(SelectedItem selectedItem : selectedItems) {
             log.info("Placing order: {}", selectedItem);
         checkOutMapper.placeOrder(selectedItem);
+        checkOutMapper.updateOrderStatus(selectedItem.getCartId());
         }
 
     }

@@ -10,7 +10,11 @@
     VALUES (#{orderId}, #{cartId}, #{itemId}, #{quantity}, #{sizeId}, #{userId})
 </insert>
 
-
+<update id="updateOrderStatus" parameterType="int">
+    UPDATE cart_item
+    SET status = 'PROCESSED'
+    WHERE cart_id = #{cartId}
+</update>
 
 
 

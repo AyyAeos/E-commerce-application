@@ -7,4 +7,6 @@ import java.util.List;
 @Mapper
 public interface CheckOutMapper {
     void placeOrder(SelectedItem selectedItems);
+
+    void updateOrderStatus(Integer cartId);
 }
