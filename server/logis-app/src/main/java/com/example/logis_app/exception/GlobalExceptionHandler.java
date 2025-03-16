@@ -2,6 +2,8 @@ package com.example.logis_app.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -36,5 +38,11 @@ public class GlobalExceptionHandler {
         }
 
         return Result.error(message);
+    }
+
+    @ExceptionHandler(ItemAlreadyExistsException.class)
+    public ResponseEntity<String> handleItemAlreadyExistsException(ItemAlreadyExistsException ex) {
+        // Return an error response without terminating the backend
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

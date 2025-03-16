@@ -69,7 +69,7 @@
 
         <insert id="insertItemSize">
             INSERT INTO inventory_sizes (item_id, size, price, stock, on_sale)
-            VALUES (#{itemId}, #{size}, #{price}, #{stockQuantity}, #{onSale})
+            VALUES (#{itemId}, #{size}, #{price}, #{stock}, #{onSale})
         </insert>
 
     <update id="updateItem" >
@@ -91,6 +91,13 @@
         </set>
         WHERE item_id = #{itemId} AND size_id = #{sizeId};
     </update>
+
+    <select id="checkItem" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM inventory
+        WHERE item_name = #{itemName}
+    </select>
+
 
 
     <delete id="deleteItem" >

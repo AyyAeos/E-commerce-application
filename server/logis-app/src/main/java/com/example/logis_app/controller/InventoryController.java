@@ -2,6 +2,7 @@ package com.example.logis_app.controller;
 
 import com.example.logis_app.pojo.PageResult.InventoryPage;
 import com.example.logis_app.pojo.PageResult.Product.ProductPage;
+import com.example.logis_app.pojo.RequestParam.InventoryAddItem;
 import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
 import com.example.logis_app.pojo.Result;
 import com.example.logis_app.service.InventoryService;
@@ -41,9 +42,9 @@ public class InventoryController {
 }
   */
     @PostMapping("/create")
-    public Result addItem(@RequestBody InventoryQueryParam inventoryQueryParam) {
-        inventoryService.insertNewItem(inventoryQueryParam);
-        return Result.success();
+    public Result addItem(@RequestBody InventoryAddItem inventoryAddItem) {
+        Boolean result = inventoryService.insertNewItem(inventoryAddItem);
+        return Result.success(result);
     }
     /*
     http://localhost:8080/admins/inventory/9

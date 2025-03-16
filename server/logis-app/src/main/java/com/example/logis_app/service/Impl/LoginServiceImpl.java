@@ -21,13 +21,10 @@ public class LoginServiceImpl implements LoginService {
     public LoginPage login(LoginQueryParam loginQueryParam) {
         LoginPage loginPage=  loginMapper.login(loginQueryParam);
 
-        if (loginPage.getPassword() == null) {
+        if (loginPage == null || !loginQueryParam.getPassword().equals(loginPage.getPassword())) {
             loginPage.setCredentails(false);
         }
-        log.info(loginPage.getPassword() );
-        log.info(loginQueryParam.getPassword());
         return new LoginPage(loginPage.getCredentails(), loginPage.getUserId(), loginPage.getPassword());
-
     }
 
     @Override

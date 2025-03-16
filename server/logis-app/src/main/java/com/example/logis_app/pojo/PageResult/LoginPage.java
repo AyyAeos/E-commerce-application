@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginPage {
-    private Boolean credentails;
+    private Boolean credentails = true;
     private Integer userId;
 
     private String password;

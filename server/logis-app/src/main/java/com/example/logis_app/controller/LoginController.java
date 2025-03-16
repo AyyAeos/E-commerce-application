@@ -24,7 +24,10 @@ public class LoginController {
     @PostMapping
     public Result login(@RequestBody LoginQueryParam loginQueryParam) {
     log.info("Log in", loginQueryParam);
-    LoginPage loginPage = loginService.login(loginQueryParam) ;
+    LoginPage loginPage = loginService.login(loginQueryParam);
+    if(loginPage.getCredentails() == false) {
+        return Result.error("Login Failed");
+    }
     return Result.success(loginPage.getUserId());
     }
 

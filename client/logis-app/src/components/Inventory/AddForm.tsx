@@ -1,130 +1,199 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Button } from "../ui/button";
+import axios from "axios";
+
+// Define types for the form data
+interface Variant {
+  size: string;
+  price: number;
+  stock: number;
+  onSale: number;
+}
+
+interface FormData {
+  itemName: string;
+  description: string;
+  variants: Variant[];
+}
 
 const AddButton = ({ onClose }: { onClose: () => void }) => {
-  const [addItem, setAddItem] = useState<boolean>(true);
-  const [FormData, setFormData] = useState({
+  // State for managing the form data
+  const [formData, setFormData] = useState<FormData>({
     itemName: "",
     price: 0,
-    onSale: 0,
     description: "",
-    stock: 0,
-    size: "",
+    variants: [
+      {
+        size: "",
+        price: 0,
+        stock: 0,
+        onSale: 0,
+      },
+    ],
   });
 
-  const [display, setDisplay] = useState(false);
+  // Function to create the item and post to the server
+ // Function to create the item and post to the server
+const createItem = async () => {
+  try {
+    const response = await axios.post("http://localhost:8080/admins/inventory/create", formData);
+    console.log("Response:", response.data);
+
+    // Check if the response is successful
+    if (response.data.msg === "success" && response.data.data === true) {
+      // Close the modal first
+      onClose();
+
+      // Show the success message using alert
+      alert("Item successfully added!");
+    }  else {
+      alert ("Item already existed")
+    }
+  } catch (error) {
+    console.error("Error submitting data:", error);
+  }
+};
+
+
+  // Handle changes in variant fields
+  const handleVariantChange = (
+    index: number,
+    field: keyof Variant,
+    value: any
+  ) => {
+    const updatedVariants = [...formData.variants];
+    updatedVariants[index][field] = value;
+    setFormData({ ...formData, variants: updatedVariants });
+  };
+
+  // Add a new variant to the form
+  const addVariant = () => {
+    setFormData({
+      ...formData,
+      variants: [
+        ...formData.variants,
+        { size: "", price: 0, stock: 0, onSale: 0 },
+      ],
+    });
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full px-4 sm:w-[500px] ">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-6">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl px-4 sm:w-[500px] overflow-y-scroll">
         <h2 className="text-2xl font-bold mb-4">Add an item</h2>
 
-        {/* Modify Name */}
-        <div className="mb-4 flex">
-          <label className=" w-1/2 text-left"> Item Name : </label>
+        {/* Item Name */}
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center">
+          <label className="w-full sm:w-1/3 text-left mb-2 sm:mb-0">Item Name:</label>
           <input
             type="text"
-            value={FormData.itemName} //current value
-            className="border-4 border-slate-500 text-center w-1/2"
-            onChange={(e) =>
-              setFormData({ ...FormData, itemName: e.target.value })
-            } //e.target.value = new value
-          ></input>
-        </div>
-
-        {/* Modify Description */}
-        <div className="mb-4 flex">
-          <label className=" w-1/2 text-left"> Description : </label>
-          <textarea
-            value={FormData.description}
-            className="border-4 border-slate-500 text-center w-1/2 resize-y h-28 p-2"
-            onChange={(e) =>
-              setFormData({ ...FormData, description: e.target.value })
+            value={formData.itemName}
+            className="border-4 border-slate-500 text-center w-full sm:w-2/3"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setFormData({ ...formData, itemName: e.target.value })
             }
           />
         </div>
 
-        <div className="mb-4 flex">
-          <label className=" w-1/2 text-left"> Item Status : </label>
-          <select className="border border-gray-300 rounded px-2 py-1 w-1/2">
-            <option value="">Select Status</option>
-            <option value="1">On Sale</option>
-            <option value="0">Not On Sale</option>
-          </select>
+        {/* Description */}
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center">
+          <label className="w-full sm:w-1/3 text-left mb-2 sm:mb-0">Description:</label>
+          <textarea
+            value={formData.description}
+            className="border-4 border-slate-500 text-center w-full sm:w-2/3 resize-y h-28 p-2"
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+          />
         </div>
 
-        <div className="flex items-center justify-center ">
-          <div className="w-1/2">
-            <Button onClick={() => setAddItem(true)}>+</Button>
+        {/* Variants */}
+        <div>
+          <h3 className="text-xl font-semibold mb-2">Variants</h3>
+          <div className="max-h-64 overflow-y-auto">
+            {formData.variants.map((variant, index) => (
+              <div
+                key={index}
+                className="mb-4 flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0"
+              >
+                {/* Size */}
+                <div className="w-full sm:w-1/3">
+                  <label className="block">Size:</label>
+                  <input
+                    type="text"
+                    value={variant.size}
+                    className="border-4 border-slate-500 text-center w-full"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handleVariantChange(index, "size", e.target.value)
+                    }
+                  />
+                </div>
 
-            <span className="ml-4"> Size :</span>
+                {/* Price */}
+                <div className="w-full sm:w-1/3">
+                  <label className="block">Price:</label>
+                  <input
+                    type="number"
+                    value={variant.price}
+                    className="border-4 border-slate-500 text-center w-full"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handleVariantChange(index, "price", Number(e.target.value))
+                    }
+                  />
+                </div>
+
+                {/* Stock */}
+                <div className="w-full sm:w-1/3">
+                  <label className="block">Stock:</label>
+                  <input
+                    type="number"
+                    value={variant.stock}
+                    className="border-4 border-slate-500 text-center w-full"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handleVariantChange(index, "stock", Number(e.target.value))
+                    }
+                  />
+                </div>
+
+                {/* On Sale */}
+                <div className="w-full sm:w-1/3">
+                  <label className="block">On Sale:</label>
+                  <select
+                    className="border-4 border-slate-500 text-center w-full"
+                    value={variant.onSale}
+                    onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                      handleVariantChange(index, "onSale", Number(e.target.value))
+                    }
+                  >
+                    <option value="0">Not On Sale</option>
+                    <option value="1">On Sale</option>
+                  </select>
+                </div>
+              </div>
+            ))}
           </div>
 
-          {addItem && (
-            <div className="flex w-1/2">
-              {/* Modify Size */}
-              <div className=" ">
-                <label className=""> Size: </label>
-                <input
-                  type="text"
-                  value={FormData.size}
-                  className="border-4 border-slate-500 text-center  w-1/2"
-                  onChange={(e) =>
-                    setFormData({ ...FormData, size: e.target.value })
-                  }
-                ></input>
-              </div>
-
-              {/* Modify Price */}
-              <div className="">
-                <label className=""> Price : </label>
-                <input // this is string so need change to number
-                  type="number"
-                  value={FormData.price} //current value
-                  className="border-4 border-slate-500 text-center w-1/2"
-                  onChange={(e) =>
-                    setFormData({ ...FormData, price: Number(e.target.value) })
-                  }
-                ></input>
-              </div>
-
-              {/* Modify Price */}
-              <div className="">
-                <label className=""> Stock : </label>
-                <input
-                  type="number"
-                  value={FormData.stock}
-                  className="border-4 border-slate-500 text-center w-1/2"
-                  onChange={(e) =>
-                    setFormData({ ...FormData, stock: Number(e.target.value) })
-                  }
-                ></input>
-              </div>
-            </div>
-          )}
+          {/* Add New Variant Button */}
+          <Button onClick={addVariant}>Add More</Button>
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex justify-between mt-4 space-x-2 flex-col sm:flex-row gap-y-4">
           <button
-            className="mt-4 px-8 py-2 bg-red-500 text-white rounded "
-            onClick={() => {
-              onClose();
-            }}
+            className="px-8 py-2 bg-red-500 text-white rounded"
+            onClick={() => onClose()}
           >
             No
           </button>
           <button
-            className="mt-4  px-8 py-2 bg-blue-500 text-white rounded"
-            onClick={() => {
-              console.log(FormData);
-            }}
+            className="px-8 py-2 bg-blue-500 text-white rounded"
+            onClick={createItem}
           >
             Yes
           </button>
         </div>
-
-        <div></div>
       </div>
     </div>
   );
 };
+
 export default AddButton;
