@@ -1,13 +1,11 @@
 package com.example.logis_app.controller;
 
 import com.example.logis_app.pojo.PageResult.Order.Order;
+import com.example.logis_app.pojo.RequestParam.ReviewDTO;
 import com.example.logis_app.pojo.RequestParam.SelectedItem;
 import com.example.logis_app.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.logis_app.pojo.Result;
 
@@ -27,7 +25,13 @@ public class OrderController {
     public Result getOrderList(@PathVariable Integer userId) {
         log.info("Get order list of user id {} . . .", userId);
         List<Order> list = orderService.getOrderList(userId);
-        log.info("2");
         return Result.success(list);
+    }
+
+    @PostMapping
+    public Result saveReview(@RequestBody ReviewDTO reviewDTO) {
+        log.info("Write review : {} ", reviewDTO );
+        orderService.saveReview(reviewDTO);
+        return Result.success();
     }
 }

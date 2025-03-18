@@ -21,7 +21,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-   //http://localhost:8080/products
     @GetMapping
     public Result getProductList() {
         log.info("Query of Product List");
@@ -50,4 +49,6 @@ public class ProductController {
         BigDecimal price =  productService.checkPrice(sizeId);
         return Result.success(price);
     }
+
+
 }

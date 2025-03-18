@@ -14,6 +14,35 @@
 
     </select>
 
+    <select id="checkItemExist" resultType="java.lang.Integer">
+        SELECT comment_id
+        FROM item_comment
+        WHERE item_id = #{itemId}
+        LIMIT 1
+    </select>
+
+
+    <update id="updateItemCommentCount">
+        UPDATE item_comment
+        SET count = count + 1
+        WHERE item_id = #{itemId}
+    </update>
+
+    <insert id="insertItemCommentIfNotExists" useGeneratedKeys="true" keyProperty="commentId">
+        INSERT INTO item_comment (item_id)
+        VALUES (#{itemId})
+    </insert>
+
+
+    <insert id="insertItemCommentIndex" useGeneratedKeys="true" keyProperty="indexId">
+        INSERT INTO item_comment_index (item_id, comment_id, user_id, type)
+        VALUES (#{itemId}, #{commentId}, #{userId}, #{type})
+    </insert>
+
+    <insert id="insertReviewDetails">
+        INSERT INTO review_details (index_id, placed_at, quantity, item_name, size_name)
+        VALUES (#{indexId}, #{placedAt}, #{quantity}, #{itemName}, #{sizeName})
+    </insert>
 
 
 

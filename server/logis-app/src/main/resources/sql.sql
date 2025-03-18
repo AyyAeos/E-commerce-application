@@ -383,3 +383,58 @@ on_sale;
 alter table inventory_sizes
 add column 
 on_sale TINYINT(1) default 0;
+
+CREATE TABLE item_comment (
+    comment_id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT UNSIGNED,
+    count INT DEFAULT 1,
+    root_count INT DEFAULT 0,
+    deleted TINYINT(1) DEFAULT 0,
+     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     FOREIGN KEY (item_id) REFERENCES inventory(item_id)
+);
+
+-- Table for storing index information of comments
+CREATE TABLE item_comment_index (
+    index_id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT UNSIGNED,
+    comment_id INT NOT NULL,
+    user_id INT UNSIGNED,
+    root INT default 0,
+    parent INT default 1,
+    like_count INT DEFAULT 0,
+    type ENUM('AuthorLiked', 'AuthorPinned', 'AuthorReply') NOT NULL,
+   create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(user_id),
+    FOREIGN KEY (comment_id) REFERENCES item_comment(comment_id),
+     FOREIGN KEY (item_id) REFERENCES inventory(item_id)
+);
+CREATE INDEX idx_item_id ON item_comment_index(item_id);
+
+
+CREATE TABLE review_details (
+    review_id INT AUTO_INCREMENT PRIMARY KEY,
+    index_id INT,
+    placed_at DATETIME,
+    quantity INT,
+    item_name VARCHAR(255),
+    size_name VARCHAR(255),
+    FOREIGN KEY (index_id) REFERENCES item_comment_index(index_id) ON DELETE CASCADE
+);
+
+
+
+-- Table for storing the actual comment content
+CREATE TABLE comment (
+    index_id INT,
+    content TEXT,
+   create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (index_id) REFERENCES item_comment_index(index_id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_root ON item_comment_index (root);
+CREATE INDEX idx_parent ON item_comment_index (parent);
+CREATE INDEX idx_user_id ON item_comment_index (user_id);

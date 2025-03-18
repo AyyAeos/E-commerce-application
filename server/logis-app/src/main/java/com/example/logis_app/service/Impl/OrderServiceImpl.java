@@ -3,13 +3,15 @@ package com.example.logis_app.service.Impl;
 import com.example.logis_app.Mapper.OrderMapper;
 import com.example.logis_app.pojo.PageResult.Order.Item;
 import com.example.logis_app.pojo.PageResult.Order.Order;
+import com.example.logis_app.pojo.RequestParam.ReviewDTO;
 import com.example.logis_app.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-
+@Transactional
 @Service
 public class OrderServiceImpl implements OrderService {
     @Autowired
@@ -65,8 +67,19 @@ public class OrderServiceImpl implements OrderService {
         List<Order> list = new ArrayList<>(ordermap.values());
         list.sort(Comparator.comparing(Order::getPlacedAt).reversed());
         return list;
+    }
 
+    @Override
+    public void saveReview(ReviewDTO reviewDTO) {
+        Integer commentId = orderMapper.checkItemExist(reviewDTO.getItemId());
+        reviewDTO.setCommentId(commentId);
 
-
+        if (reviewDTO.getCommentId() != null) {
+            orderMapper.updateItemCommentCount(reviewDTO.getItemId());
+        } else {
+            reviewDTO.setCommentId(orderMapper.insertItemCommentIfNotExists(reviewDTO));
+        }
+        reviewDTO.setIndexId(orderMapper.insertItemCommentIndex(reviewDTO));
+        orderMapper.insertReviewDetails(reviewDTO);
     }
 }
