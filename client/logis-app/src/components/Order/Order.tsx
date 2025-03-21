@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
 import Cart from "../CartBar/Cart";
 import OrderIcon from "./OrderIcon";
+import { useState } from "react";
+import writeReview from "./Review";
+import WriteReview from "./Review";
 
 type OrderItem = {
   cartId: number;
@@ -13,7 +16,7 @@ type OrderItem = {
   sizeName: string;
 };
 
-type Order = {
+export type Order = {
   orderId: string;
   userId: number;
   placedAt: string;
@@ -68,6 +71,15 @@ const CheckOrder = () => {
         )}
       </>
     );
+  };
+  const [review, setReview] = useState<boolean>(false);
+
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null); // To store the full order details
+
+  const handleWriteReview = (order: Order) => {
+    setSelectedOrderId(order.orderId); // Set the selected order's ID
+    setSelectedOrder(order); // Pass the full order details to the state
   };
 
   return (
@@ -146,11 +158,18 @@ const CheckOrder = () => {
                     <p className="text-gray-600">Order id: {order.orderId}</p>
                   </div>
 
-                  <div className="flex justify-end gap-4 mt-4">
+              
+                    <div className="flex justify-end gap-4 mt-4">
                     <DeleteOrder placeDate={order} />
-                    <button className="border border-black px-4 py-2 hover:bg-slate-500 hover:text-white">
-                      Write A Review !
-                    </button>
+                    <button
+              className="border border-black px-4 py-2 hover:bg-slate-500 hover:text-white"
+              onClick={() => handleWriteReview(order)} // Pass the full order to WriteReview
+            >
+              Write A Review!
+            </button>
+                    {selectedOrderId === order.orderId && selectedOrder && (
+              <WriteReview order={selectedOrder} onClose={() => setSelectedOrderId(null)} />
+            )}
                   </div>
                 </div>
               </div>
@@ -163,3 +182,8 @@ const CheckOrder = () => {
 };
 
 export default CheckOrder;
+
+/*
+so mean when i click the review it w ill be true it will rerender every order become true and trigger write review?
+when selectedorderId === current order id it wil lrerender
+*/
