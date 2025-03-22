@@ -1,6 +1,7 @@
 package com.example.logis_app.controller;
 
 import com.example.logis_app.pojo.PageResult.Product.CartPage;
+import com.example.logis_app.pojo.PageResult.Product.ProductComment;
 import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
 import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
@@ -49,6 +50,15 @@ public class ProductController {
         BigDecimal price =  productService.checkPrice(sizeId);
         return Result.success(price);
     }
+
+    @GetMapping("/{itemId}/review")
+    public Result getReviewList(@PathVariable Integer itemId) {
+        log.info("Get review list for item : {}", itemId);
+        ProductComment productCommentList = productService.getReviewList(itemId);
+        return  Result.success(productCommentList);
+    }
+
+
 
 
 }

@@ -46,4 +46,19 @@
         WHERE item_id = #{itemId} AND size_id = #{sizeId}
     </update>
 
+    <select id="getCommentsByItemId" resultType="com.example.logis_app.pojo.PageResult.Product.ProductCommentList">
+    Select
+        ici.index_id, ici.user_id, ici.root, ici.parent, ici.like_count, ici.type, ici.create_time, ici.comment_id,
+        c.content, rd.quantity, rd.item_name, rd.size_name
+        FROM item_comment_index ici
+        LEFT JOIN review_details rd on ici.index_id = rd.index_id
+        LEFT JOIN comment c on ici.index_id = c.index_id
+        WHERE item_id = #{itemId}
+    </select>
+
+    <select id="getCommentCount" resultType="java.lang.Integer">
+        Select count FROM item_comment WHERE item_id = #{itemId}
+    </select>
+
+
 </mapper>

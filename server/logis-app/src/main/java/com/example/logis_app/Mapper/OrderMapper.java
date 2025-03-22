@@ -1,7 +1,9 @@
 package com.example.logis_app.Mapper;
 
+import com.example.logis_app.pojo.PageResult.Product.ProductComment;
 import com.example.logis_app.pojo.RequestParam.ReviewDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -21,4 +23,9 @@ public interface OrderMapper {
     Integer checkItemExist(Integer userId);
 
     void insertReviewDetails(ReviewDTO reviewDTO);
+
+    void storeComment(ReviewDTO reviewDTO);
+
+    Integer findMaxParent(Integer itemId);
+
 }

@@ -1,9 +1,8 @@
 package com.example.logis_app.service.Impl;
 
+import com.example.logis_app.Mapper.OrderMapper;
 import com.example.logis_app.Mapper.ProductMapper;
-import com.example.logis_app.pojo.PageResult.Product.CartPage;
-import com.example.logis_app.pojo.PageResult.Product.ProductPage;
-import com.example.logis_app.pojo.PageResult.Product.Variants;
+import com.example.logis_app.pojo.PageResult.Product.*;
 import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
 import com.example.logis_app.service.ProductService;
 import com.example.logis_app.util.ProductPageUtil;
@@ -53,4 +52,12 @@ public class ProductServiceImpl  implements ProductService {
     public BigDecimal checkPrice(Integer sizeId) {
         return productMapper.checkPrice(sizeId);
     }
+
+    @Override
+    public ProductComment getReviewList(Integer itemId) {
+        List<ProductCommentList> list = productMapper.getCommentsByItemId(itemId);
+        Integer count = productMapper.getCommentCount(itemId);
+        return new ProductComment(itemId, count, list);
+    }
+
 }

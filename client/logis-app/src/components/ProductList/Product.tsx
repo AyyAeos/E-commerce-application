@@ -6,6 +6,7 @@ import Cart from "../CartBar/Cart";
 import { cn } from "@/lib/utils";
 import OrderIcon from "../Order/OrderIcon";
 import { Skeleton } from "../ui/skeleton";
+import ProductComment from "./ProductComment";
 
 type Variants = {
   size: string;
@@ -47,7 +48,6 @@ const Product = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    return [];
   };
 
   const { data, error, isLoading } = useSWR<SelectedProduct>(
@@ -64,7 +64,6 @@ const Product = () => {
     itemPrice: 0,
   });
 
-  //Default additem become first
   useEffect(() => {
     if (!isLoading && data) {
       setAddItem((prev) => ({
@@ -241,12 +240,20 @@ const Product = () => {
               </button>
             </div>
           </div>
-          <div className="w-1/2  p-4 mt-6 bg-white w-full p-5">
+          <div className="  p-4 mt-6 bg-white w-full p-5">
             <h2 className="text-2xl sm:text-3xl md:text-4xl mb-4">
               Description
             </h2>
             {data?.description}; dnawdnaonaiowdnaoidniandioandiawndwaodnwad
           </div>
+
+          <div className="p-4 mt-6 bg-white w-full p-5">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl mb-4">
+              Comment
+            </h2>
+            <ProductComment itemId = {itemId} />
+          </div>
+
         </div>
       </div>
     </>

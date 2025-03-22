@@ -77,9 +77,20 @@ public class OrderServiceImpl implements OrderService {
         if (reviewDTO.getCommentId() != null) {
             orderMapper.updateItemCommentCount(reviewDTO.getItemId());
         } else {
-            reviewDTO.setCommentId(orderMapper.insertItemCommentIfNotExists(reviewDTO));
+            orderMapper.insertItemCommentIfNotExists(reviewDTO);
         }
-        reviewDTO.setIndexId(orderMapper.insertItemCommentIndex(reviewDTO));
+
+        // Fetch the highest parent value for this itemId (New Code)
+        Integer maxParent = orderMapper.findMaxParent(reviewDTO.getItemId());
+        reviewDTO.setParent((maxParent == null) ? 0 : maxParent + 1);
+
+
+        // Insert the review index and the review itself
+        orderMapper.insertItemCommentIndex(reviewDTO);
         orderMapper.insertReviewDetails(reviewDTO);
+
+        reviewDTO.setCreateTime(LocalDateTime.now());
+        orderMapper.storeComment(reviewDTO);
     }
+
 }

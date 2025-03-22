@@ -35,14 +35,29 @@
 
 
     <insert id="insertItemCommentIndex" useGeneratedKeys="true" keyProperty="indexId">
-        INSERT INTO item_comment_index (item_id, comment_id, user_id, type)
-        VALUES (#{itemId}, #{commentId}, #{userId}, #{type})
+        INSERT INTO item_comment_index (item_id, comment_id, user_id, type, parent)
+        VALUES (#{itemId}, #{commentId}, #{userId}, #{type}, #{parent})
     </insert>
 
     <insert id="insertReviewDetails">
         INSERT INTO review_details (index_id, placed_at, quantity, item_name, size_name)
         VALUES (#{indexId}, #{placedAt}, #{quantity}, #{itemName}, #{sizeName})
     </insert>
+
+    <insert id="storeComment">
+        INSERT INTO comment (index_id, content, create_time)
+        VALUES (#{indexId}, #{content}, #{createTime})
+    </insert>
+
+    <select id="findMaxParent" resultType="Integer">
+        SELECT MAX(parent)
+        FROM item_comment_index
+        WHERE item_id = #{itemId}
+    </select>
+
+
+
+
 
 
 

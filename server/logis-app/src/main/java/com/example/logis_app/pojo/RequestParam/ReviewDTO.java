@@ -3,6 +3,7 @@ package com.example.logis_app.pojo.RequestParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -27,4 +28,6 @@ public class ReviewDTO {
     private String type = "AuthorSend";
 
     private Integer parent;
+
+    private LocalDateTime createTime;
 }

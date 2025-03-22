@@ -1,6 +1,7 @@
 package com.example.logis_app.service;
 
 import com.example.logis_app.pojo.PageResult.Product.CartPage;
+import com.example.logis_app.pojo.PageResult.Product.ProductComment;
 import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
 
@@ -15,4 +16,6 @@ public interface ProductService {
     void addToCard(AddItemToCartQueryParam addItemToCartQueryParam);
 
     BigDecimal checkPrice(Integer sizeId);
+
+    ProductComment getReviewList(Integer itemId);
 }

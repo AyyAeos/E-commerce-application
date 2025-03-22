@@ -4,14 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductPage {
-    private Long itemId;
-    private String itemName;
-    private String description;
-    private List<Variants> variants;
+public class ProductComment {
+
+    //item comment table
+    private Integer itemId;
+    private Integer count;
+    List<ProductCommentList> productCommentLists;
+
+
+
 }
