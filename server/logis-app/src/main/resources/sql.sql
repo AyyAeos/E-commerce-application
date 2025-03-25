@@ -384,56 +384,91 @@ alter table inventory_sizes
 add column 
 on_sale TINYINT(1) default 0;
 
-CREATE TABLE item_comment (
-    comment_id INT AUTO_INCREMENT PRIMARY KEY,
-    item_id INT UNSIGNED,
-    count INT DEFAULT 1,
-    root_count INT DEFAULT 0,
-    deleted TINYINT(1) DEFAULT 0,
-     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     FOREIGN KEY (item_id) REFERENCES inventory(item_id)
-);
+CREATE TABLE IF NOT EXISTS `logis`.`item_comment` (
+  `comment_id` INT NOT NULL AUTO_INCREMENT,
+  `item_id` INT UNSIGNED NULL DEFAULT NULL,
+  `count` INT NULL DEFAULT '1',
+  `root_count` INT NULL DEFAULT '0',
+  `create_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`comment_id`),
+  INDEX `item_id` (`item_id` ASC) VISIBLE,
+  CONSTRAINT `item_comment_ibfk_1`
+    FOREIGN KEY (`item_id`)
+    REFERENCES `logis`.`inventory` (`item_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 17
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
 
 -- Table for storing index information of comments
-CREATE TABLE item_comment_index (
-    index_id INT AUTO_INCREMENT PRIMARY KEY,
-    item_id INT UNSIGNED,
-    comment_id INT NOT NULL,
-    user_id INT UNSIGNED,
-    root INT default 0,
-    parent INT default 1,
-    like_count INT DEFAULT 0,
-    type ENUM('AuthorLiked', 'AuthorPinned', 'AuthorReply'),
-   create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user(user_id),
-    FOREIGN KEY (comment_id) REFERENCES item_comment(comment_id),
-     FOREIGN KEY (item_id) REFERENCES inventory(item_id)
-);
+CREATE TABLE IF NOT EXISTS `logis`.`item_comment_index` (
+  `index_id` INT NOT NULL AUTO_INCREMENT,
+  `item_id` INT UNSIGNED NULL DEFAULT NULL,
+  `comment_id` INT NOT NULL,
+  `user_id` INT UNSIGNED NULL DEFAULT NULL,
+  `root` INT NULL DEFAULT '0',
+  `parent` INT NULL DEFAULT NULL,
+  `like_count` INT NULL DEFAULT '0',
+  `type` ENUM('AuthorLiked', 'AuthorPinned', 'AuthorReply', 'AuthorSend') NULL DEFAULT NULL,
+  `create_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`index_id`),
+  INDEX `comment_id` (`comment_id` ASC) VISIBLE,
+  INDEX `idx_root` (`root` ASC) VISIBLE,
+  INDEX `idx_parent` (`parent` ASC) VISIBLE,
+  INDEX `idx_user_id` (`user_id` ASC) VISIBLE,
+  INDEX `idx_item_id` (`item_id` ASC) VISIBLE,
+  CONSTRAINT `item_comment_index_ibfk_1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `logis`.`user` (`user_id`),
+  CONSTRAINT `item_comment_index_ibfk_2`
+    FOREIGN KEY (`comment_id`)
+    REFERENCES `logis`.`item_comment` (`comment_id`),
+  CONSTRAINT `item_comment_index_ibfk_3`
+    FOREIGN KEY (`item_id`)
+    REFERENCES `logis`.`inventory` (`item_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 51
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
 CREATE INDEX idx_item_id ON item_comment_index(item_id);
 
 
-CREATE TABLE review_details (
-    review_id INT AUTO_INCREMENT PRIMARY KEY,
-    index_id INT,
-    placed_at DATETIME,
-    quantity INT,
-    item_name VARCHAR(255),
-    size_name VARCHAR(255),
-    FOREIGN KEY (index_id) REFERENCES item_comment_index(index_id) ON DELETE CASCADE
-);
+CREATE TABLE IF NOT EXISTS `logis`.`review_details` (
+  `review_id` INT NOT NULL AUTO_INCREMENT,
+  `index_id` INT NULL DEFAULT NULL,
+  `placed_at` DATETIME NULL DEFAULT NULL,
+  `quantity` INT NULL DEFAULT NULL,
+  `item_name` VARCHAR(255) NULL DEFAULT NULL,
+  `size_name` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`review_id`),
+  INDEX `index_id` (`index_id` ASC) VISIBLE,
+  CONSTRAINT `review_details_ibfk_1`
+    FOREIGN KEY (`index_id`)
+    REFERENCES `logis`.`item_comment_index` (`index_id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 30
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
 
 
 -- Table for storing the actual comment content
-CREATE TABLE comment (
-    index_id INT,
-    content TEXT,
-   create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (index_id) REFERENCES item_comment_index(index_id) ON DELETE CASCADE
-);
+CREATE TABLE IF NOT EXISTS `logis`.`comment` (
+  `index_id` INT NULL DEFAULT NULL,
+  `content` TEXT NULL DEFAULT NULL,
+  `create_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `index_id` (`index_id` ASC) VISIBLE,
+  CONSTRAINT `comment_ibfk_1`
+    FOREIGN KEY (`index_id`)
+    REFERENCES `logis`.`item_comment_index` (`index_id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE INDEX idx_root ON item_comment_index (root);
 CREATE INDEX idx_parent ON item_comment_index (parent);
