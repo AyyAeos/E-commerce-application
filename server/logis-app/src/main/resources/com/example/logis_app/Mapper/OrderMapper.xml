@@ -35,8 +35,8 @@
 
 
     <insert id="insertItemCommentIndex" useGeneratedKeys="true" keyProperty="indexId">
-        INSERT INTO item_comment_index (item_id, comment_id, user_id, type, parent)
-        VALUES (#{itemId}, #{commentId}, #{userId}, #{type}, #{parent})
+        INSERT INTO item_comment_index (item_id, comment_id, user_id, type, parent, root)
+        VALUES (#{itemId}, #{commentId}, #{userId}, #{type}, #{parent}, #{root})
     </insert>
 
     <insert id="insertReviewDetails">
@@ -53,6 +53,12 @@
         SELECT MAX(parent)
         FROM item_comment_index
         WHERE item_id = #{itemId}
+    </select>
+
+    <select id="findMaxRoot" resultType="Integer">
+        SELECT MAX(root)
+        FROM item_comment_index
+        WHERE item_id = #{itemId} AND parent = #{parent}
     </select>
 
 

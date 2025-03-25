@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class ProductCommentList {
         private Integer indexId;
         private Integer userId;
+        private String username;
         private Integer root;
         private Integer parent;
         private Integer likeCount;

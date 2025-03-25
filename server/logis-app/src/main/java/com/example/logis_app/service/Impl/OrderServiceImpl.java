@@ -80,9 +80,15 @@ public class OrderServiceImpl implements OrderService {
             orderMapper.insertItemCommentIfNotExists(reviewDTO);
         }
 
-        // Fetch the highest parent value for this itemId (New Code)
-        Integer maxParent = orderMapper.findMaxParent(reviewDTO.getItemId());
-        reviewDTO.setParent((maxParent == null) ? 0 : maxParent + 1);
+        if (reviewDTO.getParent() == null) {
+            Integer maxParent = orderMapper.findMaxParent(reviewDTO.getItemId());
+            reviewDTO.setParent((maxParent == null) ? 1 : maxParent + 1);
+            reviewDTO.setRoot(0);
+        } else {
+            Integer maxRoot = orderMapper.findMaxRoot(reviewDTO.getItemId(), reviewDTO.getParent());
+            System.out.println("Max Root Retrieved: " + maxRoot);
+            reviewDTO.setRoot((maxRoot == null || maxRoot == 0) ? 1 : maxRoot + 1);
+        }
 
 
         // Insert the review index and the review itself

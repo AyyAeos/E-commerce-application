@@ -28,6 +28,7 @@ public class ReviewDTO {
     private String type = "AuthorSend";
 
     private Integer parent;
+    private Integer root;
 
     private LocalDateTime createTime;
 }

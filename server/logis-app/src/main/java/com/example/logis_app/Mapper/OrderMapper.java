@@ -28,4 +28,5 @@ public interface OrderMapper {
 
     Integer findMaxParent(Integer itemId);
 
+    Integer findMaxRoot(Integer itemId, Integer parent);
 }

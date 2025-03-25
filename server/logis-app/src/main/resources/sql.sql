@@ -404,7 +404,7 @@ CREATE TABLE item_comment_index (
     root INT default 0,
     parent INT default 1,
     like_count INT DEFAULT 0,
-    type ENUM('AuthorLiked', 'AuthorPinned', 'AuthorReply') NOT NULL,
+    type ENUM('AuthorLiked', 'AuthorPinned', 'AuthorReply'),
    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES user(user_id),
