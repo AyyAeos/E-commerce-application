@@ -67,7 +67,8 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
     if (isSuccess) {
       // Set timeout to reload page after 5 seconds
       timeoutId = setTimeout(() => {
-        window.location.reload();
+        mutate(`http://localhost:8080/products/${itemId}/review`);
+        setIsSuccess(false);
       }, 5000);
     }
 
@@ -161,7 +162,7 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
               className="bg-white text-green-600 px-3 py-1 rounded-full font-bold hover:bg-gray-200 transition"
               onClick={() => {
                 setIsSuccess(false)
-                window.location.reload()
+                mutate(`http://localhost:8080/products/${itemId}/review`);
               }}
             >
               Reload Now
