@@ -2,6 +2,7 @@ package com.example.logis_app.controller;
 
 import com.example.logis_app.pojo.PageResult.Product.CartPage;
 import com.example.logis_app.pojo.PageResult.Product.ProductComment;
+import com.example.logis_app.pojo.PageResult.Product.ProductCommentList;
 import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
 import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
@@ -66,5 +67,11 @@ public class ProductController {
         log.info("Update like", likeDTO);
         productService.updateLike(likeDTO);
         return Result.success();
+    }
+
+    @GetMapping("/replies")
+    public Result loadReplies(@RequestParam Integer parentId, @RequestParam Integer page , @RequestParam Integer pageLimit) {
+        List<ProductCommentList> list = productService.loadReplies(parentId, page, pageLimit);
+        return Result.success(list);
     }
 }

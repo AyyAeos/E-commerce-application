@@ -39,4 +39,6 @@ public interface ProductMapper {
     void addLike(LikeDTO likeDTO);
 
     void removeLike(LikeDTO likeDTO);
+
+	List<ProductCommentList> loadReplies(Integer parentId, Integer start, Integer pageLimit);
 }

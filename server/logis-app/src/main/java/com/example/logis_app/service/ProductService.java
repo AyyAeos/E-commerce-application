@@ -2,6 +2,7 @@ package com.example.logis_app.service;
 
 import com.example.logis_app.pojo.PageResult.Product.CartPage;
 import com.example.logis_app.pojo.PageResult.Product.ProductComment;
+import com.example.logis_app.pojo.PageResult.Product.ProductCommentList;
 import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
 import com.example.logis_app.pojo.RequestParam.LikeDTO;
@@ -21,4 +22,6 @@ public interface ProductService {
     ProductComment getReviewList(Integer itemId);
 
     void updateLike(LikeDTO likeDTO);
+
+    List<ProductCommentList> loadReplies(Integer parentId, Integer page, Integer pageLimit);
 }

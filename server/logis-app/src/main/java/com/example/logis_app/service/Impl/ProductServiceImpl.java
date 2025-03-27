@@ -74,5 +74,12 @@ public class ProductServiceImpl  implements ProductService {
         
     }
 
+    @Override
+    public List<ProductCommentList> loadReplies(Integer parentId, Integer page, Integer pageLimit) {
+       Integer start = (page - 1) * pageLimit;
+        return productMapper.loadReplies(parentId, start, pageLimit); 
+    }
+
+    
     
 }

@@ -13,20 +13,19 @@ import {
   Ruler,
   Hash,
 } from "lucide-react";
-import { mutate } from "swr";
+import useSWR, { mutate } from "swr";
+import { useReplies } from "./Replies";
 
 const ParentComment = ({
   userId,
   parentId,
   parentComment,
-  replies,
   itemId,
   setIsSuccess,
 }: {
   userId: string;
   parentId: number;
   parentComment: CommentList;
-  replies: CommentList[];
   itemId: number;
   setIsSuccess: (value: boolean) => void;
 }) => {
@@ -35,6 +34,16 @@ const ParentComment = ({
   );
   const [replyTexts, setReplyTexts] = useState<{ [key: number]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  //immediately ready to receive the object returned by useReplies(parentId)
+  //everything call the loadmorereplies because of async it will auto update the replies here and rerender
+  //destrucutre object and receive the return value
+    const { 
+      replies, 
+      loadMoreReplies, 
+      isLoading: isLoadingReplies, 
+      hasMore 
+    } = useReplies(parentId);
 
   const toggleReply = (parentId: number) => {
     setReplyStates((prev) => ({
@@ -104,6 +113,7 @@ const ParentComment = ({
       console.log(error);
     }
   };
+
 
   return (
     <div className="bg-white shadow-sm rounded-lg border border-gray-200 mb-4">
@@ -264,6 +274,16 @@ const ParentComment = ({
           </div>
         )}
       </div>
+      {hasMore && (
+        <div className="flex justify-center mb-4">
+          <Button 
+            onClick={loadMoreReplies} 
+            disabled={isLoadingReplies}
+          >
+            {isLoadingReplies ? "Loading..." : "Load More Replies"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
