@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +25,5 @@ public class ProductCommentList {
         private Integer quantity;
         private String itemName;
         private String sizeName;
+        private List<Integer> likedUser;
 }

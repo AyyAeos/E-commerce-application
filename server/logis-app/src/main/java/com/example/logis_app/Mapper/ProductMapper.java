@@ -5,6 +5,7 @@ import com.example.logis_app.pojo.PageResult.Product.ProductCommentList;
 import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.PageResult.Product.Variants;
 import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
+import com.example.logis_app.pojo.RequestParam.LikeDTO;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -32,4 +33,10 @@ public interface ProductMapper {
     List<ProductCommentList> getCommentsByItemId(Integer itemId);
 
     Integer getCommentCount(Integer itemId);
+
+    List<Integer> getLikedUser(Integer indexId);
+
+    void addLike(LikeDTO likeDTO);
+
+    void removeLike(LikeDTO likeDTO);
 }

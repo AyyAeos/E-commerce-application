@@ -4,6 +4,7 @@ import com.example.logis_app.pojo.PageResult.Product.CartPage;
 import com.example.logis_app.pojo.PageResult.Product.ProductComment;
 import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
+import com.example.logis_app.pojo.RequestParam.LikeDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,4 +19,6 @@ public interface ProductService {
     BigDecimal checkPrice(Integer sizeId);
 
     ProductComment getReviewList(Integer itemId);
+
+    void updateLike(LikeDTO likeDTO);
 }

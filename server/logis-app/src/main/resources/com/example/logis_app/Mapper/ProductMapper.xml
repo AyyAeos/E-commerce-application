@@ -61,5 +61,20 @@
         Select count FROM item_comment WHERE item_id = #{itemId}
     </select>
 
+    <select id="getLikedUser" resultType="java.lang.Integer">
+        SELECT user_id FROM comment_liked_count WHERE index_id = #{indexId}
+    </select>
+
+    <insert id="addLike" parameterType="map">
+        INSERT INTO comment_liked_count (index_id, user_id)
+        VALUES (#{indexId}, #{userId})
+    </insert>
+
+    <delete id="removeLike" parameterType="map">
+    DELETE FROM comment_liked_count 
+    WHERE index_id = #{indexId} AND user_id = #{userId}
+    </delete>
+
+
 
 </mapper>

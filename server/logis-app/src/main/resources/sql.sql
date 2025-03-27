@@ -475,7 +475,10 @@ CREATE INDEX idx_parent ON item_comment_index (parent);
 CREATE INDEX idx_user_id ON item_comment_index (user_id);
 
 
-create table comment_liked_count (
-	index_id INT NOT NULL,
-    user_id INT UNSIGNED NULL DEFAULT NULL
+CREATE TABLE comment_liked_count (
+    index_id INT NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (index_id, user_id),
+    FOREIGN KEY (index_id) REFERENCES item_comment_index(index_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
 );

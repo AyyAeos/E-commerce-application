@@ -5,8 +5,10 @@ import com.example.logis_app.pojo.PageResult.Product.ProductComment;
 import com.example.logis_app.pojo.PageResult.Product.ProductPage;
 import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
 import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
+import com.example.logis_app.pojo.RequestParam.LikeDTO;
 import com.example.logis_app.pojo.Result;
 import com.example.logis_app.service.ProductService;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -56,5 +58,13 @@ public class ProductController {
         log.info("Get review list for item : {}", itemId);
         ProductComment productCommentList = productService.getReviewList(itemId);
         return  Result.success(productCommentList);
+    }
+
+    @PostMapping("/{userId}/like")
+    public Result updateLike(@PathVariable String userId, @RequestBody LikeDTO likeDTO) {
+        likeDTO.setUserId(Integer.parseInt(userId));
+        log.info("Update like", likeDTO);
+        productService.updateLike(likeDTO);
+        return Result.success();
     }
 }

@@ -4,6 +4,7 @@ import com.example.logis_app.Mapper.OrderMapper;
 import com.example.logis_app.Mapper.ProductMapper;
 import com.example.logis_app.pojo.PageResult.Product.*;
 import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
+import com.example.logis_app.pojo.RequestParam.LikeDTO;
 import com.example.logis_app.service.ProductService;
 import com.example.logis_app.util.ProductPageUtil;
 
@@ -56,8 +57,22 @@ public class ProductServiceImpl  implements ProductService {
     @Override
     public ProductComment getReviewList(Integer itemId) {
         List<ProductCommentList> list = productMapper.getCommentsByItemId(itemId);
+        list.forEach(lists -> {
+            lists.setLikedUser(productMapper.getLikedUser(lists.getIndexId()));
+        });
         Integer count = productMapper.getCommentCount(itemId);
         return new ProductComment(itemId, count, list);
     }
 
+    @Override
+    public void updateLike(LikeDTO likeDTO) {
+        if(!likeDTO.getLike()) {
+            productMapper.addLike(likeDTO);
+        } else {
+            productMapper.removeLike(likeDTO);
+        }
+        
+    }
+
+    
 }
