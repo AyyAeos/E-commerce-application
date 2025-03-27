@@ -473,3 +473,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE INDEX idx_root ON item_comment_index (root);
 CREATE INDEX idx_parent ON item_comment_index (parent);
 CREATE INDEX idx_user_id ON item_comment_index (user_id);
+
+
+create table comment_liked_count (
+	index_id INT NOT NULL,
+    user_id INT UNSIGNED NULL DEFAULT NULL
+);

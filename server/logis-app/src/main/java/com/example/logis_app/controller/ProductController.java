@@ -57,8 +57,4 @@ public class ProductController {
         ProductComment productCommentList = productService.getReviewList(itemId);
         return  Result.success(productCommentList);
     }
-
-
-
-
 }

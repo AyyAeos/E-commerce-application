@@ -25,18 +25,6 @@ export interface Comment {
   productCommentLists: CommentList[];
 }
 
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  });
-};
-
 const ProductComment = ({ itemId }: { itemId: number }) => {
   const [replyStates, setReplyStates] = useState<{ [key: number]: boolean }>(
     {}
@@ -187,7 +175,7 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
                   {parentComment.content}
                 </p>
                 <p className="text-sm text-gray-600">
-                  Created: {formatDate(parentComment.createTime)}
+                  Created: {new Date(parentComment.createTime).toLocaleString()}
                 </p>
               </div>
             )}
@@ -202,7 +190,7 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
                     <strong>{comment.username}</strong>: {comment.content}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Created: {formatDate(comment.createTime)}
+                    Created: {new Date(comment.createTime).toLocaleString()}
                   </p>
                 </div>
               ))}
