@@ -1,10 +1,11 @@
 package com.example.logis_app.service.Impl;
 
-import com.example.logis_app.Mapper.OrderMapper;
 import com.example.logis_app.Mapper.ProductMapper;
-import com.example.logis_app.pojo.PageResult.Product.*;
-import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
-import com.example.logis_app.pojo.RequestParam.LikeDTO;
+import com.example.logis_app.pojo.DTO.CartDTO.AddCartDTO;
+import com.example.logis_app.pojo.DTO.ProductDTO.LikeDTO;
+import com.example.logis_app.pojo.vo.ProductVO.ProductComment;
+import com.example.logis_app.pojo.vo.ProductVO.ProductCommentList;
+import com.example.logis_app.pojo.vo.ProductVO.ProductPage;
 import com.example.logis_app.service.ProductService;
 import com.example.logis_app.util.ProductPageUtil;
 
@@ -38,14 +39,14 @@ public class ProductServiceImpl  implements ProductService {
     }
 
     @Override
-    public void addToCard(AddItemToCartQueryParam addItemToCartQueryParam) {
+    public void addToCard(AddCartDTO addCartDTO) {
          //check product exist
-        if(productMapper.checkProductExist(addItemToCartQueryParam)) {
+        if(productMapper.checkProductExist(addCartDTO)) {
             log.info("Product exist");
-            productMapper.updateQuantity(addItemToCartQueryParam);
+            productMapper.updateQuantity(addCartDTO);
         } else {
             log.info("Product not exist. Creating new product . . .");
-            productMapper.addToCard(addItemToCartQueryParam);
+            productMapper.addToCard(addCartDTO);
         }
     }
 

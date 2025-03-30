@@ -1,9 +1,9 @@
 package com.example.logis_app.controller;
 
-import com.example.logis_app.pojo.PageResult.LoginPage;
-import com.example.logis_app.pojo.RequestParam.LoginQueryParam;
-import com.example.logis_app.pojo.RequestParam.RegisterParam;
-import com.example.logis_app.pojo.Result;
+import com.example.logis_app.pojo.vo.LoginVO.LoginPage;
+import com.example.logis_app.pojo.DTO.LoginDTO.LoginDTO;
+import com.example.logis_app.pojo.DTO.LoginDTO.RegisterDTO;
+import com.example.logis_app.common.Result;
 import com.example.logis_app.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping
-    public Result login(@RequestBody LoginQueryParam loginQueryParam) {
-    log.info("Log in", loginQueryParam);
-    LoginPage loginPage = loginService.login(loginQueryParam);
+    public Result login(@RequestBody LoginDTO loginDTO) {
+    log.info("Log in", loginDTO);
+    LoginPage loginPage = loginService.login(loginDTO);
     if(loginPage.getCredentails() == false) {
         return Result.error("Login Failed");
     }
@@ -32,10 +32,10 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public Result register(@RequestBody RegisterParam registerParam) {
+    public Result register(@RequestBody RegisterDTO registerDTO) {
         log.info("Register . . . ");
         try {
-            boolean status = loginService.register(registerParam);
+            boolean status = loginService.register(registerDTO);
             return Result.success(status);
         } catch (DataIntegrityViolationException ex) {
            throw ex;

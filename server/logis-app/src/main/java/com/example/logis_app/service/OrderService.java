@@ -2,8 +2,8 @@ package com.example.logis_app.service;
 
 
 
-import com.example.logis_app.pojo.PageResult.Order.Order;
-import com.example.logis_app.pojo.RequestParam.ReviewDTO;
+import com.example.logis_app.pojo.vo.OrderVO.Order;
+import com.example.logis_app.pojo.DTO.ProductDTO.ReviewDTO;
 
 import java.util.List;
 

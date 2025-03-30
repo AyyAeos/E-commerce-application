@@ -1,9 +1,7 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.PageResult.Product.ProductComment;
-import com.example.logis_app.pojo.RequestParam.ReviewDTO;
+import com.example.logis_app.pojo.DTO.ProductDTO.ReviewDTO;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;

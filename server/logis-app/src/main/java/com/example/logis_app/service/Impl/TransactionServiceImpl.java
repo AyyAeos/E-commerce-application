@@ -1,9 +1,9 @@
 package com.example.logis_app.service.Impl;
 
 import com.example.logis_app.Mapper.TransactionMapper;
-import com.example.logis_app.pojo.PageResult.Transaction;
-import com.example.logis_app.pojo.PageResult.TransactionPage;
-import com.example.logis_app.pojo.RequestParam.TransactionQueryParam;
+import com.example.logis_app.pojo.vo.TransactionVO.Transaction;
+import com.example.logis_app.pojo.vo.TransactionVO.TransactionPage;
+import com.example.logis_app.pojo.DTO.TransactionQueryParam;
 import com.example.logis_app.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

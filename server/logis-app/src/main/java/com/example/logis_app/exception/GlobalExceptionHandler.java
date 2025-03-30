@@ -1,14 +1,13 @@
 package com.example.logis_app.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
-import com.example.logis_app.pojo.Result;
+import com.example.logis_app.common.Result;
 
 import lombok.extern.slf4j.Slf4j;
 

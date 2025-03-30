@@ -24,9 +24,9 @@ const WriteReview = ({ order, onClose }: { order: Order, onClose: () => void }) 
   const handleSubmit = async (selectedItemType: string | null) => {
     if (selectedItemType && reviewText) {
       const itemId = Number(selectedItemType);
-      const selectedItem = order.items.find((item) => item.itemId === itemId);
+      const placeOrderDTO = order.items.find((item) => item.itemId === itemId);
 
-      if (!selectedItem) {
+      if (!placeOrderDTO) {
         console.log("Selected item not found.");
         return;
       }
@@ -36,9 +36,9 @@ const WriteReview = ({ order, onClose }: { order: Order, onClose: () => void }) 
         userId: order.userId,
         content: reviewText,
         placedAt: order.placedAt,
-        quantity: selectedItem.quantity,
-        itemName: selectedItem.itemName,
-        sizeName: selectedItem.sizeName,
+        quantity: placeOrderDTO.quantity,
+        itemName: placeOrderDTO.itemName,
+        sizeName: placeOrderDTO.sizeName,
         likeCount: 0,
       };
 

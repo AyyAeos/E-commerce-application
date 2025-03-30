@@ -1,9 +1,8 @@
 package com.example.logis_app.controller;
 
-import com.example.logis_app.pojo.PageResult.DepartmentPage;
-import com.example.logis_app.pojo.RequestParam.DepartmentQueryParam;
-import com.example.logis_app.pojo.Result;
-import com.example.logis_app.service.AdminService;
+import com.example.logis_app.pojo.vo.DepartmentPage;
+import com.example.logis_app.pojo.DTO.DepartmentQueryParam;
+import com.example.logis_app.common.Result;
 import com.example.logis_app.service.DepartmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

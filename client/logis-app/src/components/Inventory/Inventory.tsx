@@ -16,19 +16,37 @@ import { CiSquarePlus } from "react-icons/ci";
 import AddButton from "./AddForm";
 
 import SearchForm from "./SearchForm";
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+type SearchFormDataType = {
+  itemName: string;
+  size: string;
+  onSale?: number | undefined;
+  minPrice?: number;
+  maxPrice?: number;
+  totalCounts?: number;
+  page?: number;
+  pageLimits?: number;
+};
+
+type Variants = {
+  size: string;
+  price: number;
+  stock: number;
+  sizeId: number;
+  onSale: number;
+};
+
+type Item = {
+  itemId: number;
+  itemName: string;
+  description: string;
+  variants: Variants[];
+};
+
 
 const Inventory: React.FC = () => {
-  type SearchFormDataType = {
-    itemName: string;
-    size: string;
-    onSale?: number | undefined;
-    minPrice?: number;
-    maxPrice?: number;
-    totalCounts?: number;
-    page?: number;
-    pageLimits?: number;
-  };
-
+ 
   const [searchForm, setSearchForm] = useState<SearchFormDataType>({
     itemName: "",
     size: "",
@@ -39,21 +57,6 @@ const Inventory: React.FC = () => {
     page: undefined,
     pageLimits: undefined,
   });
-
-  type Variants = {
-    size: string;
-    price: number;
-    stock: number;
-    sizeId: number;
-    onSale: number;
-  };
-
-  type Item = {
-    itemId: number;
-    itemName: string;
-    description: string;
-    variants: Variants[];
-  };
 
   const fetcher = async (url: string) => {
     try {
@@ -84,12 +87,6 @@ const Inventory: React.FC = () => {
     variant: Variants;
   } | null>(null);
 
-  //Display delete comfirmation box
-  const [DeleteComfirmation, SetDeleteComfirmation] = useState<{
-    item: Item;
-    variant: Variants;
-  } | null>(null);
-
   const [AddPage, SetAddPage] = useState(false);
 
   const handleSubmit = () => {
@@ -97,8 +94,16 @@ const Inventory: React.FC = () => {
     mutate("http://localhost:8080/admins/inventory/search");
   };
 
+  const navigate = useNavigate();
+
   return (
     <>
+      <button
+        className="fixed top-24 left-4 bg-white/10 backdrop-blur-lg text-black p-3 rounded-full shadow-lg hover:bg-white/20 hover:scale-[1.2]"
+        onClick={() => navigate(-1)}
+      >
+        <FaArrowLeft size={20} />
+      </button>
       <div className="pt-8 overflow-y-scroll min-h-screen bg-white text-primary-foreground  px-5 sm:px-10 md:px-20">
         <div className="flex justify-center text-2xl font-bold">
           {/*  let inventory take all space and other pull to right */}
@@ -124,16 +129,18 @@ const Inventory: React.FC = () => {
         <div className="overflow-x-auto">
           {isLoading && <p>Loading...</p>}
           {error && <p className="text-red-500">Failed to fetch inventory</p>}
-          <Table>
-            <TableCaption>A list of Inventory.</TableCaption>
+
+          <Table className="w-full border-collapse border border-gray-300 shadow-md rounded-lg overflow-hidden">
+            <TableCaption className="text-lg font-semibold py-4">
+              Inventory List
+            </TableCaption>
 
             <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Item Id</TableHead>
+              <TableRow className="">
                 <TableHead>Item Name</TableHead>
                 <TableHead className="">Description</TableHead>
-                <TableHead className="">Size Id</TableHead>
                 <TableHead className="">Status</TableHead>
+                <TableHead className="">Size</TableHead>
                 <TableHead className="">Stock</TableHead>
                 <TableHead className="">Price</TableHead>
                 <TableHead className="">Action</TableHead>
@@ -148,41 +155,27 @@ const Inventory: React.FC = () => {
                       {index === 0 && (
                         <>
                           <TableCell rowSpan={item.variants.length}>
-                            {item.itemId}
-                          </TableCell>
-                          <TableCell rowSpan={item.variants.length}>
                             {item.itemName}
                           </TableCell>
-                        
-                        
-                     
+
                           <TableCell rowSpan={item.variants.length}>
                             {item.description}
                           </TableCell>
                         </>
                       )}
-                      {/* Variant-specific columns */}
-                      <TableCell>{variant.sizeId}</TableCell>
-                      <TableCell>{variant.onSale === 0 ? "Not On Sale" : "On Sale"}</TableCell>
+                      <TableCell>
+                        {variant.onSale === 0 ? "Not On Sale" : "On Sale"}
+                      </TableCell>
                       <TableCell>{variant.size}</TableCell>
                       <TableCell>{variant.price}</TableCell>
                       <TableCell className="">{variant.stock}</TableCell>
                       <TableCell>
                         <div className="flex space-x-6">
                           <button
-                            className="border-2 border-black px-2 py-2 hover:bg-red-500"
+                            className="border-2 border-black px-2 py-2 hover:bg-red-500 w-full"
                             onClick={() => SetEditItem({ item, variant })}
                           >
                             Edit
-                          </button>
-
-                          <button
-                            className="border-2 border-black px-2 py-2 hover:bg-red-500"
-                            onClick={() =>
-                              SetDeleteComfirmation({ variant, item })
-                            }
-                          >
-                            Delete
                           </button>
                         </div>
                       </TableCell>
@@ -197,13 +190,6 @@ const Inventory: React.FC = () => {
                 item={EditItem.item}
                 variant={EditItem.variant}
                 onClose={() => SetEditItem(null)}
-              />
-            )}
-            {DeleteComfirmation && (
-              <DeleteItem
-                item={DeleteComfirmation.item}
-                variant={DeleteComfirmation.variant}
-                onClose={() => SetDeleteComfirmation(null)}
               />
             )}
           </Table>

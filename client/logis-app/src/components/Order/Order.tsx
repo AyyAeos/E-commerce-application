@@ -4,7 +4,6 @@ import useSWR from "swr";
 import Cart from "../CartBar/Cart";
 import OrderIcon from "./OrderIcon";
 import { useState } from "react";
-import writeReview from "./Review";
 import WriteReview from "./Review";
 
 type OrderItem = {
@@ -104,78 +103,81 @@ const CheckOrder = () => {
           No orders found. Please click EXIT on the top right!
         </p>
       ) : (
-        <div className="px-5 sm:px-10 md:px-20">
-          <h1 className="py-4 text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold px-2 mb-4 text-center">
-            Your Orders
-          </h1>
-          <div className="flex flex-col gap-5">
-            {orders.map((order: Order) => (
-              <div
-                key={order.orderId}
-                className="bg-white shadow-lg rounded-lg p-5 border"
-              >
-                <p className="font-semibold text-xl text-end">
-                  Status : {order.status}
-                </p>
+          <div className="p-4 pt-16">
+            <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-8">
+              Your Orders
+            </h1>
+            <div className="flex flex-col gap-5">
+              {orders.map((order: Order) => (
+                <div
+                  key={order.orderId}
+                  className="bg-white shadow-lg rounded-lg p-5 border"
+                >
+                  <p className="font-semibold text-xl text-end">
+                    Status : {order.status}
+                  </p>
 
-                <p className="text-gray-600 text-end text-md">
-                  Last Updated Date:{" "}
-                  {new Date(order.updatedAt).toLocaleString()}
-                </p>
+                  <p className="text-gray-600 text-end text-md">
+                    Last Updated Date:{" "}
+                    {new Date(order.updatedAt).toLocaleString()}
+                  </p>
 
-                <div className="mt-4">
-                  {order.items.map((item: OrderItem, index: number) => (
-                    <div
-                      key={index}
-                      className="border p-3 rounded-lg mb-2 bg-gray-100"
-                    >
-                      <p>
-                        <span className="font-semibold">Item:</span>{" "}
-                        {item.itemName}
+                  <div className="mt-4">
+                    {order.items.map((item: OrderItem, index: number) => (
+                      <div
+                        key={index}
+                        className="border p-3 rounded-lg mb-2 bg-gray-100"
+                      >
+                        <p>
+                          <span className="font-semibold">Item:</span>{" "}
+                          {item.itemName}
+                        </p>
+                        <p>
+                          <span className="font-semibold">Size:</span>{" "}
+                          {item.sizeName}
+                        </p>
+                        <p>
+                          <span className="font-semibold">Qty:</span>{" "}
+                          {item.quantity}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-wrap justify-between">
+                    <div className="w-1/2">
+                      <p className="text-lg font-bold mt-4">
+                        Total Items: {order.items.length}
                       </p>
-                      <p>
-                        <span className="font-semibold">Size:</span>{" "}
-                        {item.sizeName}
+
+                      <p className="text-gray-600">
+                        Created Date:{" "}
+                        {new Date(order.placedAt).toLocaleString()}
                       </p>
-                      <p>
-                        <span className="font-semibold">Qty:</span>{" "}
-                        {item.quantity}
-                      </p>
+
+                      <p className="text-gray-600">Order id: {order.orderId}</p>
                     </div>
-                  ))}
-                </div>
 
-                <div className="flex flex-wrap justify-between">
-                  <div className="w-1/2">
-                    <p className="text-lg font-bold mt-4">
-                      Total Items: {order.items.length}
-                    </p>
-
-                    <p className="text-gray-600">
-                      Created Date: {new Date(order.placedAt).toLocaleString()}
-                    </p>
-
-                    <p className="text-gray-600">Order id: {order.orderId}</p>
-                  </div>
-
-              
                     <div className="flex justify-end gap-4 mt-4">
-                    <DeleteOrder placeDate={order} />
-                    <button
-              className="border border-black px-4 py-2 hover:bg-slate-500 hover:text-white"
-              onClick={() => handleWriteReview(order)} // Pass the full order to WriteReview
-            >
-              Write A Review!
-            </button>
-                    {selectedOrderId === order.orderId && selectedOrder && (
-              <WriteReview order={selectedOrder} onClose={() => setSelectedOrderId(null)} />
-            )}
+                      <DeleteOrder placeDate={order} />
+                      <button
+                        className="border border-black px-4 py-2 hover:bg-slate-500 hover:text-white"
+                        onClick={() => handleWriteReview(order)} // Pass the full order to WriteReview
+                      >
+                        Write A Review!
+                      </button>
+                      {selectedOrderId === order.orderId && selectedOrder && (
+                        <WriteReview
+                          order={selectedOrder}
+                          onClose={() => setSelectedOrderId(null)}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
       )}
     </div>
   );
@@ -183,7 +185,4 @@ const CheckOrder = () => {
 
 export default CheckOrder;
 
-/*
-so mean when i click the review it w ill be true it will rerender every order become true and trigger write review?
-when selectedorderId === current order id it wil lrerender
-*/
+

@@ -1,13 +1,12 @@
 package com.example.logis_app.controller;
 
-import com.example.logis_app.pojo.PageResult.Order.Order;
-import com.example.logis_app.pojo.RequestParam.ReviewDTO;
-import com.example.logis_app.pojo.RequestParam.SelectedItem;
+import com.example.logis_app.pojo.vo.OrderVO.Order;
+import com.example.logis_app.pojo.DTO.ProductDTO.ReviewDTO;
 import com.example.logis_app.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.logis_app.pojo.Result;
+import com.example.logis_app.common.Result;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,7 +1,7 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.PageResult.DepartmentPage;
-import com.example.logis_app.pojo.RequestParam.DepartmentQueryParam;
+import com.example.logis_app.pojo.vo.DepartmentPage;
+import com.example.logis_app.pojo.DTO.DepartmentQueryParam;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -46,7 +46,7 @@
         WHERE item_id = #{itemId} AND size_id = #{sizeId}
     </update>
 
-    <select id="getCommentsByItemId" resultType="com.example.logis_app.pojo.PageResult.Product.ProductCommentList">
+    <select id="getCommentsByItemId" resultType="com.example.logis_app.pojo.vo.ProductVO.ProductCommentList">
     Select
         ici.index_id, u.username, ici.user_id, ici.root, ici.parent, ici.like_count, ici.type, ici.create_time, ici.comment_id,
         c.content, rd.quantity, rd.item_name, rd.size_name
@@ -75,7 +75,7 @@
     WHERE index_id = #{indexId} AND user_id = #{userId}
     </delete>
 
-      <select id="loadReplies" resultType="com.example.logis_app.pojo.PageResult.Product.ProductCommentList">
+      <select id="loadReplies" resultType="com.example.logis_app.pojo.vo.ProductVO.ProductCommentList">
     Select
         ici.index_id, u.username, ici.user_id, ici.root, ici.parent, ici.like_count, ici.type, ici.create_time, ici.comment_id,
         c.content, rd.quantity, rd.item_name, rd.size_name

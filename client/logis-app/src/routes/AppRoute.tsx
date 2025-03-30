@@ -15,6 +15,8 @@ import CartPage from "@/components/CartBar/CartPage";
 import Checkout from "@/components/CheckOut/CheckOut";
 import OrderPage from "@/components/Order/Order";
 import CheckOrder from "@/components/Order/Order";
+import AdminOrder from "@/components/Admin/AdminOrder";
+import UserTable from "@/components/User/User";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -27,6 +29,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/logins/admin" element={<AdminPage />} />
       <Route path="/admins/inventory" element={<Inventory />} />
       <Route path="/admins/transaction" element={<Transaction />} />
+      <Route path="/admins/order" element={<AdminOrder />} />
+      <Route path="/admins/user" element={<UserTable />} />
       <Route path="/products/:itemId" element={<Product />} />
       <Route path="/carts/:userId" element={<CartPage />} />
       <Route path="/checkouts/:userId" element={<Checkout />} />

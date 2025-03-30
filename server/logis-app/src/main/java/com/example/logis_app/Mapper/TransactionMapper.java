@@ -1,8 +1,7 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.PageResult.Transaction;
-import com.example.logis_app.pojo.PageResult.TransactionPage;
-import com.example.logis_app.pojo.RequestParam.TransactionQueryParam;
+import com.example.logis_app.pojo.vo.TransactionVO.Transaction;
+import com.example.logis_app.pojo.DTO.TransactionQueryParam;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.math.BigDecimal;

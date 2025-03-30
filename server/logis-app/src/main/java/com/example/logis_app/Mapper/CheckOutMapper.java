@@ -1,12 +1,11 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.RequestParam.SelectedItem;
+import com.example.logis_app.pojo.DTO.CartDTO.PlaceOrderDTO;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
 @Mapper
 public interface CheckOutMapper {
-    void placeOrder(SelectedItem selectedItems);
+    void placeOrder(PlaceOrderDTO selectedItems);
 
     void updateOrderStatus(Integer cartId);
 }

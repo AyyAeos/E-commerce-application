@@ -1,16 +1,13 @@
 package com.example.logis_app.controller;
 
-import com.example.logis_app.pojo.PageResult.InventoryPage;
-import com.example.logis_app.pojo.PageResult.Product.ProductPage;
-import com.example.logis_app.pojo.RequestParam.InventoryAddItem;
-import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
-import com.example.logis_app.pojo.Result;
+import com.example.logis_app.pojo.vo.InventoryPage;
+import com.example.logis_app.pojo.DTO.InventoryDTO.AddItemDTO;
+import com.example.logis_app.pojo.DTO.InventoryDTO.QueryItemDTO;
+import com.example.logis_app.common.Result;
 import com.example.logis_app.service.InventoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @Slf4j
@@ -21,12 +18,12 @@ public class InventoryController {
     private InventoryService inventoryService;
 
     @GetMapping("/search")
-    public Result getItemByParam(@ModelAttribute InventoryQueryParam inventoryQueryParam) {
+    public Result getItemByParam(@ModelAttribute QueryItemDTO queryItemDTO) {
 
-        log.info("Searched item : {} ", inventoryQueryParam);
+        log.info("Searched item : {} ", queryItemDTO);
 
 
-        InventoryPage list = inventoryService.getItemBySelected(inventoryQueryParam);
+        InventoryPage list = inventoryService.getItemBySelected(queryItemDTO);
        log.info("Selected list : {}", list);
 
          return Result.success(list);
@@ -42,8 +39,8 @@ public class InventoryController {
 }
   */
     @PostMapping("/create")
-    public Result addItem(@RequestBody InventoryAddItem inventoryAddItem) {
-        Boolean result = inventoryService.insertNewItem(inventoryAddItem);
+    public Result addItem(@RequestBody AddItemDTO addItemDTO) {
+        Boolean result = inventoryService.insertNewItem(addItemDTO);
         return Result.success(result);
     }
     /*
@@ -58,7 +55,7 @@ public class InventoryController {
   }
      */
     @PutMapping("/{id}")
-    public Result updateItem(@PathVariable Integer id, @RequestBody InventoryQueryParam item) {
+    public Result updateItem(@PathVariable Integer id, @RequestBody QueryItemDTO item) {
         item.setItemId(id);
         inventoryService.updateItem(item);
         return Result.success();

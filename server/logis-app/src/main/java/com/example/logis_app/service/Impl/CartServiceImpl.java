@@ -1,22 +1,17 @@
 package com.example.logis_app.service.Impl;
 
-import java.math.BigDecimal;
-import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import com.example.logis_app.pojo.RequestParam.CartQueryModify;
+import com.example.logis_app.pojo.DTO.CartDTO.ModifyCartDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.logis_app.Mapper.CartMapper;
-import com.example.logis_app.pojo.PageResult.Product.CartPage;
-import com.example.logis_app.pojo.PageResult.Product.ProductPage;
-import com.example.logis_app.pojo.PageResult.Product.Variants;
+import com.example.logis_app.pojo.vo.ProductVO.CartPage;
 import com.example.logis_app.service.CartService;
-import com.example.logis_app.util.ProductPageUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -68,13 +63,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void modifyQuantity(CartQueryModify cartQueryModify) {
-    cartMapper.modifyQuantity(cartQueryModify);
+    public void modifyQuantity(ModifyCartDTO modifyCartDTO) {
+    cartMapper.modifyQuantity(modifyCartDTO);
 
         // 2️⃣ Remove outdated cart data from Redis
-        String redisKey = "cart:" + cartQueryModify.getUserId();
+        String redisKey = "cart:" + modifyCartDTO.getUserId();
         redisTemplate.delete(redisKey);
 
-        log.info("Cart updated in DB and Redis cache invalidated for user: " + cartQueryModify.getUserId());
+        log.info("Cart updated in DB and Redis cache invalidated for user: " + modifyCartDTO.getUserId());
     }
 }

@@ -1,7 +1,7 @@
 package com.example.logis_app.service.Impl;
 
 import com.example.logis_app.Mapper.CheckOutMapper;
-import com.example.logis_app.pojo.RequestParam.SelectedItem;
+import com.example.logis_app.pojo.DTO.CartDTO.PlaceOrderDTO;
 import com.example.logis_app.service.CheckOutService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,12 @@ public class CheckOutServiceImpl implements CheckOutService {
 
     @Transactional
     @Override
-    public void placeOrder(List<SelectedItem> selectedItems) {
+    public void placeOrder(List<PlaceOrderDTO> placeOrderDTOS) {
 
-        for(SelectedItem selectedItem : selectedItems) {
-            log.info("Placing order: {}", selectedItem);
-        checkOutMapper.placeOrder(selectedItem);
-        checkOutMapper.updateOrderStatus(selectedItem.getCartId());
+        for(PlaceOrderDTO placeOrderDTO : placeOrderDTOS) {
+            log.info("Placing order: {}", placeOrderDTO);
+        checkOutMapper.placeOrder(placeOrderDTO);
+        checkOutMapper.updateOrderStatus(placeOrderDTO.getCartId());
         }
 
     }

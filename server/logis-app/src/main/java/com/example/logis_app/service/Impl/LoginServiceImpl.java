@@ -1,9 +1,9 @@
 package com.example.logis_app.service.Impl;
 
 import com.example.logis_app.Mapper.LoginMapper;
-import com.example.logis_app.pojo.PageResult.LoginPage;
-import com.example.logis_app.pojo.RequestParam.LoginQueryParam;
-import com.example.logis_app.pojo.RequestParam.RegisterParam;
+import com.example.logis_app.pojo.vo.LoginVO.LoginPage;
+import com.example.logis_app.pojo.DTO.LoginDTO.LoginDTO;
+import com.example.logis_app.pojo.DTO.LoginDTO.RegisterDTO;
 import com.example.logis_app.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +18,17 @@ public class LoginServiceImpl implements LoginService {
     private LoginMapper loginMapper;
 
     @Override
-    public LoginPage login(LoginQueryParam loginQueryParam) {
-        LoginPage loginPage=  loginMapper.login(loginQueryParam);
+    public LoginPage login(LoginDTO loginDTO) {
+        LoginPage loginPage=  loginMapper.login(loginDTO);
 
-        if (loginPage == null || !loginQueryParam.getPassword().equals(loginPage.getPassword())) {
+        if (loginPage == null || !loginDTO.getPassword().equals(loginPage.getPassword())) {
             loginPage.setCredentails(false);
         }
         return new LoginPage(loginPage.getCredentails(), loginPage.getUserId(), loginPage.getPassword());
     }
 
     @Override
-    public Boolean register(RegisterParam registerParam) {
-        return loginMapper.register(registerParam) > 0 ;
+    public Boolean register(RegisterDTO registerDTO) {
+        return loginMapper.register(registerDTO) > 0 ;
     }
 }

@@ -1,9 +1,8 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.PageResult.Product.Variants;
-import com.example.logis_app.pojo.RequestParam.InventoryAddItem;
-import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
-import com.example.logis_app.pojo.RequestParam.InventoryVariants;
+import com.example.logis_app.pojo.DTO.InventoryDTO.AddItemDTO;
+import com.example.logis_app.pojo.DTO.InventoryDTO.QueryItemDTO;
+import com.example.logis_app.pojo.DTO.InventoryDTO.InventoryVariantsDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -13,19 +12,19 @@ import java.util.Map;
 public interface InventoryMapper {
     List<Map<String, Object>> getAllItems();
 
-    List<Map<String, Object>> getItemBySelected(InventoryQueryParam inventoryQueryParam);
+    List<Map<String, Object>> getItemBySelected(QueryItemDTO queryItemDTO);
 
-    Integer insertItem(InventoryAddItem inventoryAddItem);
+    Integer insertItem(AddItemDTO addItemDTO);
 
-    void updateItem(InventoryQueryParam item);
+    void updateItem(QueryItemDTO item);
 
     void deleteItem(Integer id, Integer sizeId);
 
-    void insertItemSize(InventoryVariants inventoryVariants);
+    void insertItemSize(InventoryVariantsDTO inventoryVariantsDTO);
 
-    void updateInventorySize(InventoryQueryParam item);
+    void updateInventorySize(QueryItemDTO item);
 
-    Integer getSum(InventoryQueryParam inventoryQueryParam);
+    Integer getSum(QueryItemDTO queryItemDTO);
 
     Boolean checkItem(String itemName);
 }

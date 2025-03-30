@@ -1,11 +1,10 @@
 package com.example.logis_app.service;
 
-import com.example.logis_app.pojo.PageResult.Product.CartPage;
-import com.example.logis_app.pojo.PageResult.Product.ProductComment;
-import com.example.logis_app.pojo.PageResult.Product.ProductCommentList;
-import com.example.logis_app.pojo.PageResult.Product.ProductPage;
-import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
-import com.example.logis_app.pojo.RequestParam.LikeDTO;
+import com.example.logis_app.pojo.vo.ProductVO.ProductComment;
+import com.example.logis_app.pojo.vo.ProductVO.ProductCommentList;
+import com.example.logis_app.pojo.vo.ProductVO.ProductPage;
+import com.example.logis_app.pojo.DTO.CartDTO.AddCartDTO;
+import com.example.logis_app.pojo.DTO.ProductDTO.LikeDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +14,7 @@ public interface ProductService {
 
     ProductPage getSpecificProduct(Integer id);
 
-    void addToCard(AddItemToCartQueryParam addItemToCartQueryParam);
+    void addToCard(AddCartDTO addCartDTO);
 
     BigDecimal checkPrice(Integer sizeId);
 

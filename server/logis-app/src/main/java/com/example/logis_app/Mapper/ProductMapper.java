@@ -1,11 +1,8 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.PageResult.Product.ProductComment;
-import com.example.logis_app.pojo.PageResult.Product.ProductCommentList;
-import com.example.logis_app.pojo.PageResult.Product.ProductPage;
-import com.example.logis_app.pojo.PageResult.Product.Variants;
-import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
-import com.example.logis_app.pojo.RequestParam.LikeDTO;
+import com.example.logis_app.pojo.vo.ProductVO.ProductCommentList;
+import com.example.logis_app.pojo.DTO.CartDTO.AddCartDTO;
+import com.example.logis_app.pojo.DTO.ProductDTO.LikeDTO;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,14 +18,14 @@ public interface ProductMapper {
 
     List<Map<String,Object>> getSpecificProduct(Integer id);
 
-    void addToCard(AddItemToCartQueryParam addItemToCartQueryParam);
+    void addToCard(AddCartDTO addCartDTO);
 
     BigDecimal checkPrice(Integer sizeId);
 
-    boolean checkProductExist(AddItemToCartQueryParam addItemToCartQueryParam);
+    boolean checkProductExist(AddCartDTO addCartDTO);
 
 
-    void updateQuantity(AddItemToCartQueryParam addItemToCartQueryParam);
+    void updateQuantity(AddCartDTO addCartDTO);
 
     List<ProductCommentList> getCommentsByItemId(Integer itemId);
 

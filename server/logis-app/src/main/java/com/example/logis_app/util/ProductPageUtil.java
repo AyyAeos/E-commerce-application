@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.logis_app.pojo.PageResult.Product.ProductPage;
-import com.example.logis_app.pojo.PageResult.Product.Variants;
+import com.example.logis_app.pojo.vo.ProductVO.ProductPage;
+import com.example.logis_app.pojo.vo.ProductVO.Variants;
 
 public class ProductPageUtil {
 

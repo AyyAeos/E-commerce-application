@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.logis_app.Mapper.CartMapper">
    
-       <select id="checkCart" resultType="com.example.logis_app.pojo.PageResult.Product.CartPage">
+       <select id="checkCart" resultType="com.example.logis_app.pojo.vo.ProductVO.CartPage">
      select c.cart_id, c.item_id, c.quantity, c.size_id, c.updated_at, isz.size, i.item_name,isz.price
     FROM cart_item c
     LEFT JOIN inventory_sizes isz on isz.size_id = c.size_id

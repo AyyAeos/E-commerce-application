@@ -2,133 +2,171 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import axios from 'axios';
+import { FaArrowLeft, FaTimes, FaCheck } from 'react-icons/fa';
 
-
-type Item =  {
-    cartId  : number,
-    itemId : number,
-    quantity : number,
-    sizeId  : number,
-    size : string,
-    updatedAt : string,
-    itemName : string,
-    price : number,
+type Item = {
+    cartId: number,
+    itemId: number,
+    quantity: number,
+    sizeId: number,
+    size: string,
+    updatedAt: string,
+    itemName: string,
+    price: number,
 }
-
 
 const Checkout = () => {
 
-    //receive props
     const location = useLocation();
-    const { selectedItems = [], totalPrice = 0 } = location.state || {};
-    const userId = localStorage.getItem("userId")
-    const navigate = useNavigate()
+    const { placeOrderDTOS = [], totalPrice = 0 } = location.state || {};
+    const userId = localStorage.getItem("userId");
+    const navigate = useNavigate();
 
     //useState for comfirmation message for comfirm button
-    const[comfirmationMessage, setComfirmationMessage] = useState<Boolean>(false);
-    const[orderPlaced, setOrderPlaced] = useState<Boolean>(false);
+    const [confirmationMessage, setConfirmationMessage] = useState<Boolean>(false);
+    const [orderPlaced, setOrderPlaced] = useState<Boolean>(false);
+    const [isLoading, setIsLoading] = useState<Boolean>(false);
 
     //Go back and Comfirm button
     const placeOrder = async () => {
+        setIsLoading(true);
         try {
-            const response = await axios.post(`http://localhost:8080/checkouts/${userId}`
-                ,selectedItems
-                )
-            if(response.data.msg === "success" && response.data.code ===1) {
-                setOrderPlaced(true)
-                setComfirmationMessage(false)
+            const response = await axios.post(`http://localhost:8080/checkouts/${userId}`,
+                placeOrderDTOS
+            )
+            if (response.data.msg === "success" && response.data.code === 1) {
+                setOrderPlaced(true);
+                setConfirmationMessage(false);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
+        } finally {
+            setIsLoading(false);
         }
-        
     }
 
     return (
-        <>
-       {selectedItems?.length > 0 ? (
-        <p>Loading orders...</p>
-        ) : (
-        <p>No items selected!</p>
-        )}
+        <div className="min-h-screen bg-primary flex flex-col items-center p-4 pt-16">
+            <button
+                className="fixed top-24 right-4 bg-white/10 text-white p-3 rounded-full shadow-lg hover:bg-white/20 hover:scale-[1.2]"
+                onClick={() => navigate(`/products`)}
+            >
+                <FaTimes size={20} />
+            </button>
 
-        
+            <button
+                className="fixed top-24 left-4 bg-white/10 text-white p-3 rounded-full shadow-lg hover:bg-white/20 hover:scale-[1.2]"
+                onClick={() => navigate(`/carts/${userId}`)}
+            >
+                <FaArrowLeft size={20} />
+            </button>
 
-        <div className='flex justify-center min-h-screen bg-primary text-black px-4 overflow-x-hidden '>
+            <div className="max-w-6xl w-full">
+                <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-8">
+                    Checkout
+                </h1>
 
-            {/* max witdth is 3xl */}
-            <div className='w-full flex flex-col justify-center items-center p-5 sm:px-10 md:px-20'>
-                <h1 className='font-bold text-white text-4xl m-4 text-center'>Checkout Page</h1>
-                <div className='border bg-slate-500 w-full p-4 rounded-lg text-white '>
-                    <ul>
-                        {selectedItems.map((item : Item) => (
-                            // gap = good for all screen
-                            <li key={item.sizeId} className='grid grid-cols-3 gap-4 items-center py-2 border-b'>
-                              
-                                    <span className='text-2xl font-bold '>{item.itemName}</span>
-                                    <span className='text-center'>{item.size}</span>
-                                    <span className='text-right'>RM {item.price} *  {item.quantity} = 
-                                        <div className='text-end rounded'>
-                                            <span> RM {(item.price * item.quantity).toFixed(2)}</span>
-                                        </div>
+                {placeOrderDTOS?.length > 0 ? (
+                    <div className="bg-white/10 rounded-2xl border border-white/20 shadow-xl mb-8">
+                        {/* Header */}
+                        <div className="flex rounded-t-2xl bg-white/20 text-white p-4 font-medium text-sm md:text-base">
+                            <div className="w-1/3 text-center">Item</div>
+                            <div className="w-1/3 text-center">Size</div>
+                            <div className="w-1/3 text-center">Price</div>
+                        </div>
 
+                        {/* Items */}
+                        <div className="divide-y divide-white/10">
+                            {placeOrderDTOS.map((item: Item) => (
+                                <div key={item.sizeId} className="flex text-sm md:text-base items-center p-4 hover:bg-white/5">
+                                    <div className="w-1/3 text-center text-white font-medium">
+                                        {item.itemName}
+                                    </div>
+                                    <div className="w-1/3 text-center text-pink-100">
+                                        {item.size}
+                                    </div>
+                                    <div className="w-1/3 text-center text-white font-medium">
+                                        RM {item.price.toFixed(2)} × {item.quantity} = RM {(item.price * item.quantity).toFixed(2)}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
 
-                                    </span>
-                              
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                        <div className="flex justify-end p-4 bg-white/5 rounded-b-2xl">
+                            <div className="text-white text-xl font-bold">
+                                Total: <span className="text-pink-100">RM {totalPrice.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl text-center">
+                        <p className="text-white text-xl">No items selected!</p>
+                    </div>
+                )}
 
-                
-                 <h2 className='rounded border border-black bg-lime-500 w-full text-3xl text-right p-2 rounded text-white'>Total Price: RM {(totalPrice).toFixed(2)}</h2>
+                {placeOrderDTOS?.length > 0 && (
+                    <div className="flex justify-center gap-4">
+                        <Button
+                            className="py-6 px-8 text-lg font-medium rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center gap-2"
+                            onClick={() => navigate(`/carts/${userId}`)}
+                        >
+                            <FaArrowLeft size={16} />
+                            <span>Back to Cart</span>
+                        </Button>
 
-                <div className='flex m-4 px-2 py-2 justify-center gap-4 sm:gap-36 '>
-                    <Button className='w-48'
-                    onClick={()=> {
-                        navigate(`/carts/${userId})`)
-                    }}>
-                        Go back
-                    </Button>
+                        <Button
+                            className="py-6 px-8 text-lg font-medium rounded-xl bg-black hover:scale-105 flex items-center justify-center gap-2"
+                            onClick={() => setConfirmationMessage(true)}
+                        >
+                            <FaCheck size={16} />
+                            <span>Confirm Order</span>
+                        </Button>
+                    </div>
+                )}
+            </div>
 
-                    <Button className='w-48'
-                    onClick={()=> {
-                    setComfirmationMessage(true)
-                    }}>
-                        Comfirm
-                    </Button>
-                </div>
-
-
-              {comfirmationMessage && (
-                <div className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center p-4">
-                    <div className="bg-white p-6 rounded-lg w-full max-w-md">
-                        <p className="text-2xl text-center">Are you sure to proceed?</p>
-                        <div className="flex justify-center gap-4 mt-6">
-                            <Button className="w-32 text-lg" onClick={() => setComfirmationMessage(false)}>No</Button>
-                            <Button className="w-32 text-lg" onClick={placeOrder}>Yes</Button>
+            {confirmationMessage && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center p-4 z-20">
+                    <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-xl p-8 max-w-md w-full">
+                        <h2 className="text-2xl font-bold text-white text-center mb-6">Confirm Your Order</h2>
+                        <p className="text-white text-center mb-8">Are you sure you want to place this order?</p>
+                        <div className="flex justify-center gap-4">
+                            <Button
+                                className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl"
+                                onClick={() => setConfirmationMessage(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                className="px-6 py-3 bg-black"
+                                onClick={placeOrder}
+                            >
+                                Confirm
+                            </Button>
                         </div>
                     </div>
                 </div>
             )}
-             {orderPlaced && (
-                <div className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center p-4">
-                    <div className="bg-white p-6 rounded-lg w-full max-w-md text-center">
-                        <p className="text-2xl">Your order has been placed!</p>
-                        <Button className="text-xl mt-6 w-full" onClick={() => navigate("/products")}>
-                            Back to home page
+
+            {(orderPlaced === true ) && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center p-4 z-20">
+                    <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-xl p-8 max-w-md w-full text-center">
+                        <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <FaCheck size={30} className="text-white" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-white mb-4">Order Placed Successfully!</h2>
+                        <p className="text-pink-100 mb-8">Thank you for your purchase.</p>
+                        <Button
+                            className="w-full py-3 text-lg font-medium rounded-xl bg-black"
+                            onClick={() => navigate("/products")}
+                        >
+                            Back to Home
                         </Button>
                     </div>
                 </div>
             )}
-                
         </div>
-    </div>
-    </>
-        
     );
 };
 
 export default Checkout;
-
-// w-full + max-w + px-4

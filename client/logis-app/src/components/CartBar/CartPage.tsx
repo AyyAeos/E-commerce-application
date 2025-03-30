@@ -1,230 +1,278 @@
 import axios from "axios";
 import useSWR from "swr";
 import { Button } from "../ui/button";
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from "@/components/ui/checkbox";
 import { useCallback, useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
-
+import { FaPlus, FaMinus, FaArrowLeft, FaTimes, FaShoppingCart, FaCheck } from "react-icons/fa";
+import { Skeleton } from "../ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 //means cause i change the state of datadata react re-render every thing again
-type Item =  {
-    cartId  : number,
-    itemId : number,
-    quantity : number,
-    sizeId  : number,
-    size : string,
-    updatedAt : string,
-    itemName : string,
-    price : number,
-    selected: boolean
-}
-
-
+type Item = {
+  cartId: number;
+  itemId: number;
+  quantity: number;
+  sizeId: number;
+  size: string;
+  updatedAt: string;
+  itemName: string;
+  price: number;
+  selected: boolean;
+};
 
 const CartPage = () => {
-    
-    const userId = localStorage.getItem("userId")
-    //calculate total price
-    const [totalPrice, setTotalPrice] = useState<number>(0);
+  const userId = localStorage.getItem("userId");
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [error, setError] = useState<string>("");
 
-    //Get Cart data
-    const fetcher = async(url: string) => {
-        try{
-            const res = await axios.get(url)
-            if(res.data.msg === 'success') {
-                return res.data.data
-            }
-        } catch (error) {
-            console.log(error);
-            return []
-            
-        }
+  const fetcher = async (url: string) => {
+    try {
+      const res = await axios.get(url);
+      if (res.data.msg === "success") {
+        return res.data.data;
       }
+    } catch (error) {
+      console.log(error);
+      setError("Failed to fetch cart items. Please try again.");
+      return [];
+    }
+  };
 
-      const[datadata, setDataData] = useState<Item[]>([])
-      
-      const {data, error, isLoading} = useSWR<Item[]>(`http://localhost:8080/carts/${userId}`, fetcher)
+  const [datadata, setDataData] = useState<Item[]>([]);
 
-      useEffect(() => {
-        if (data) {
-            setDataData(data);
+  const { data, error: swrError, isLoading } = useSWR<Item[]>(
+    `http://localhost:8080/carts/${userId}`,
+    fetcher
+  );
+
+  useEffect(() => {
+    if (data) {
+      setDataData(data);
+    }
+  }, [data]);
+
+  const handleCheckboxClick = useCallback((item: Item) => {
+    setDataData((prevData) => {
+      return prevData.map((prev) => {
+        if (prev.sizeId === item.sizeId) {
+          const isSelected = !prev.selected;
+          setTotalPrice((prevTotal) =>
+            prevTotal +
+            (isSelected ? item.price * item.quantity : -item.price * item.quantity)
+          );
+          return { ...prev, selected: isSelected };
         }
-    }, [data]);
+        return prev;
+      });
+    });
+  }, []);
 
-    const handleCheckboxClick = useCallback((item: Item) => {
-        setDataData((prevData) => {
-            return prevData.map(prev => {
-                if (prev.sizeId === item.sizeId) {
-                    const isSelected = !prev.selected;
-                    setTotalPrice(prevTotal => prevTotal + (isSelected ? item.price * item.quantity : -item.price * item.quantity));
-                    return { ...prev, selected: isSelected };
-                }
-                return prev;
-            });
+  const updateCartToServer = debounce(
+    async (cartId: number, newQuantity: number, sizeId: number) => {
+      try {
+        await axios.put(`http://localhost:8080/carts/${userId}`, {
+          cartId,
+          quantity: newQuantity,
+          sizeId,
         });
-    }, []);
+      } catch (error) {
+        console.error("Failed to update cart:", error);
+        setError("Failed to update cart. Please try again.");
+      }
+    },
+    500
+  );
+  // wait 500 sec after last button is hit , if hit = reset
 
-    const updateCartToServer = debounce(async (cartId: number, newQuantity: number, sizeId: number) => {
-        try {
-            await axios.put(`http://localhost:8080/carts/${userId}`, {
-                cartId,
-                quantity: newQuantity,
-                sizeId
-            });
-        } catch (error) {
-            console.error("Failed to update cart:", error);
+  const updateQuantity = (cartId: number, sizeId: number, increment: number) => {
+    setDataData((prevData) => {
+      return prevData.map((item) => {
+        if (item.sizeId === sizeId) {
+          const newQuantity = item.quantity + increment;
+          if (newQuantity < 1) return item;
+
+          updateCartToServer(cartId, newQuantity, sizeId);
+
+          if (item.selected) {
+            setTotalPrice((prev) => prev + item.price * increment);
+          }
+
+          return { ...item, quantity: newQuantity }; //update to data data afterwards
         }
-    }, 500); 
-    // wait 500 sec after last button is hit , if hit = reset 
-    
-    const updateQuantity = (cartId : number, sizeId: number, increment: number) => {
-        setDataData(prevData => {
-            return prevData.map(item => {
-                if (item.sizeId === sizeId) {
-                    const newQuantity = item.quantity + increment;
-                    if (newQuantity < 1) return item; 
+        return item;
+      });
+    });
+  };
 
-                    // setTimeout(() => updateCartToServer(cartId, newQuantity, sizeId));
-                     updateCartToServer(cartId, newQuantity, sizeId)
-                    
-                    if (item.selected) {
-                        setTotalPrice(prev => prev + item.price * increment);
-                    }
-                    
-                    return { ...item, quantity: newQuantity }; //update to data data afterwards
-                }
-                return item;
-            });
-        });
-    };
-    
-    const addQuantity = (cartId : number, sizeId: number ) => updateQuantity(cartId, sizeId, 1);
-    const minusQuantity = (cartId : number, sizeId: number) => updateQuantity(cartId,sizeId, -1);
-    
+  const addQuantity = (cartId: number, sizeId: number) =>
+    updateQuantity(cartId, sizeId, 1);
+  const minusQuantity = (cartId: number, sizeId: number) =>
+    updateQuantity(cartId, sizeId, -1);
 
- 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-        const handleCheckOut = () => {
-            navigate(`/checkouts/${userId}`, {
-                state: { selectedItems: datadata.filter(prev => prev.selected === true), totalPrice },
-            });
-        }; 
+  const handleCheckOut = () => {
+    navigate(`/checkouts/${userId}`, {
+      state: {
+        placeOrderDTOS: datadata.filter((prev) => prev.selected === true),
+        totalPrice,
+      },
+    });
+  };
 
+  const LoadingSkeleton = () => (
+    <div className="max-w-4xl mx-auto w-full bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-xl">
+      <Skeleton className="h-12 w-1/2 mx-auto mb-8 bg-white/20" />
+      <Skeleton className="h-10 w-full mb-6 bg-white/20" />
+      {[1, 2, 3].map((i) => (
+        <Skeleton key={i} className="h-16 w-full mb-2 bg-white/20" />
+      ))}
+    </div>
+  );
 
+  return (
+    <div className="min-h-screen bg-primary flex flex-col items-center p-4 pt-16">
+      <button
+        className="fixed top-24 right-4 bg-white/10 backdrop-blur-lg text-white p-3 rounded-full shadow-lg hover:bg-white/20 hover:scale-[1.2] "
+        onClick={() => navigate(`/products`)}
+      >
+        <FaTimes size={20} />
+      </button>
 
-    return (
-        <>
+      <button
+        className="fixed top-24 left-4 bg-white/10 backdrop-blur-lg text-white p-3 rounded-full shadow-lg hover:bg-white/20 hover:scale-[1.2]"
+        onClick={() => navigate(-1)}
+      >
+        <FaArrowLeft size={20} />
+      </button>
 
-        <button
-          className="fixed mt-4 right-4 bg-red-500 text-white p-3 rounded-full shadow-lg hover:bg-red-600"
-          onClick={() => navigate(`/products`)}
-        >
-          EXIT
-        </button>
-
-        {isLoading ? (
-        <p>Loading orders...</p>
-        ) : error ? (
-            <p className="text-red-500"> Please refresh the page or Click exit on top right !</p>
-        ) : data && data.length === 0 ? (
-            <p className="text-red-500">No orders found. Please Click Exit on top right !</p>
-        ) : (
-
-        <div className="flex min-h-screen bg-primary text-primary-foreground overflow-y-scroll">
-
-            {/* column take full screen */}
-                     <div className="flex flex-col w-full px-5  sm:px-10 md:px-20">
-
-                    <div className="text-2xl sm:text-4xl md:text-6xl xl:text-8xl font-bold px-2 m-4 text-center">
-                            Carts
-                    </div>
-
-                    <div className="flex rounded bg-white text-sm xl:text-2xl mb-6 xl:font-bold items-center">
-                        <p className="w-1/6 text-center">Item Name</p>
-                        <p className="w-1/6 text-center">Size</p>
-                        <p className="w-1/6 text-center">Price</p>
-                        <p className="w-1/6 text-center">Quantity</p>
-                        <p className="w-1/6 text-center">Total</p>
-                        <p className="w-1/6 text-center">Select</p>
-                    </div>
-
-              
-                {datadata && datadata.map( (item : Item, index : number) => {
-                    const isSelected = datadata.find(prev => prev.sizeId === item.sizeId && prev.selected === true);
-
-                    return (
-                    
-                <div key={index}  className={`flex text-xs md:text-xl xl:font-bold items-center justify-between rounded mb-2 py-2 transition-colors text-white ${
-                                isSelected ? "bg-red-300" : "bg-slate-500"
-                                }`}>
-                                <span className="w-1/6 text-center">{item.itemName}</span>
-                                <span className="w-1/6 text-center">{item.size}</span>
-                                <span className="w-1/6 text-center"> {item.price}</span>
-
-                                <div className="w-1/6 flex justify-center items-center">
-                                    <Button
-                                    className=" w-6 h-6 text-xs px-1 py-0.5 sm:w-8 sm:h-8"
-                                    onClick={() => {
-                                        minusQuantity(item.cartId, item.sizeId)
-                                    }}
-                                    > - 
-                                    </Button>
-
-                                    <h2 className="text-center w-10 ">{item.quantity}</h2>
-
-                                    <Button
-                                    className="w-6 h-6 text-xs px-1 py-0.5 sm:w-8 sm:h-8"
-                                     onClick={() => addQuantity(item.cartId, item.sizeId)}
-                                     > + </Button>
-                                </div>
-
-                                <div className="w-1/6 text-center">
-                                     {(item.price * item.quantity).toFixed(2)}
-                                </div>
-
-                                <div className="w-1/6 flex justify-center">
-                                <Checkbox onClick={() => handleCheckboxClick(item)}  />
-                                </div>
-                    </div>
-                    );
-                })}
-                <span className="mb-24"></span>
-                    
-                    
-            {datadata && datadata.filter(prev =>  prev.selected === true ) .length > 0 && 
-                (
-
-                    <div className="fixed bottom-0 rounded` left-1/2 transform -translate-x-1/2 bg-white opacity-80 w-full max-w-7xl p-2 sm:p-4">
-                    <div className="flex flex-col">
-                        <div className="text-end font-bold text-sm sm:text-2xl p-2">
-                            Total Price : RM {totalPrice.toFixed(2)}
-                        </div>
-                
-                       
-                            <Button className="bg-blue-500 text-lg hover:bg-red-500"
-                            onClick={handleCheckOut}>
-                                Check Out
-                            </Button>
-                        
-                    </div>
-                </div>
-                
-                       
-
-                      
-                    
-                )
-
-            }
-           
-            </div>
+      {isLoading ? (
+        <LoadingSkeleton />
+      ) : swrError || error ? (
+        <Alert className="bg-red-500/20 border border-red-500/50 max-w-md w-full mt-8">
+          <AlertDescription className="text-white">
+            {error || "Please refresh the page or click exit on top right!"}
+          </AlertDescription>
+        </Alert>
+      ) : data && data.length === 0 ? (
+        <div className="max-w-md w-full bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl text-center mt-8">
+          <FaShoppingCart className="mx-auto text-pink-200 text-6xl mb-4" />
+          <h2 className="text-2xl font-bold text-white mb-2">Your Cart is Empty</h2>
+          <p className="text-pink-100 mb-6">Looks like you haven't added any items to your cart yet.</p>
+          <Button 
+            className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 transition-all duration-300"
+            onClick={() => navigate('/products')}
+          >
+            Continue Shopping
+          </Button>
         </div>
-            
-        )}
-        </>
-    );
-}
+      ) : (
+        <div className="max-w-6xl w-full">
+          <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-8">
+            Shopping Cart
+          </h1>
+
+          <div className="bg-white/10 rounded-2xl border border-white/20 shadow-xl mb-24">
+            {/* Header */}
+            <div className="flex rounded-t-2xl bg-white/20 text-white p-4 font-medium text-sm md:text-base">
+              <div className="w-1/6 text-center">Item</div>
+              <div className="w-1/6 text-center">Size</div>
+              <div className="w-1/6 text-center">Price</div>
+              <div className="w-1/6 text-center">Quantity</div>
+              <div className="w-1/6 text-center">Total</div>
+              <div className="w-1/6 text-center">Select</div>
+            </div>
+
+            {/* Cart Items */}
+            <div className="divide-y divide-white/10">
+              {datadata &&
+                datadata.map((item: Item, index: number) => {
+                  const isSelected = item.selected;
+
+                  return (
+                    <div
+                      key={index}
+                      className="flex text-sm md:text-base items-center p-4 transition-all duration-300">
+                      <div className="w-1/6 text-center text-white font-medium truncate">
+                        {item.itemName}
+                      </div>
+                      <div className="w-1/6 text-center text-white">
+                        {item.size}
+                      </div>
+                      <div className="w-1/6 text-center text-white">
+                        RM {item.price.toFixed(2)}
+                      </div>
+
+                      <div className="w-1/6 flex justify-center items-center">
+                        <button
+                          className={`flex items-center justify-center p-2 rounded-l-md bg-white/10 border border-white/20 text-white ${
+                            item.quantity <= 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-white/20"
+                          }`}
+                          onClick={() => {
+                            minusQuantity(item.cartId, item.sizeId);
+                          }}
+                          disabled={item.quantity <= 1}
+                        >
+                          <FaMinus size={12} />
+                        </button>
+
+                        <div className="bg-white/20 border-t border-b border-white/20 px-3 py-1 text-white">
+                          {item.quantity}
+                        </div>
+
+                        <button
+                          className="flex items-center justify-center p-2 rounded-r-md bg-white/10 border border-white/20 text-white hover:bg-white/20"
+                          onClick={() => addQuantity(item.cartId, item.sizeId)}
+                        >
+                          <FaPlus size={12} />
+                        </button>
+                      </div>
+
+                      <div className="w-1/6 text-center text-white font-medium">
+                        RM {(item.price * item.quantity).toFixed(2)}
+                      </div>
+
+                      <div className="w-1/6 flex justify-center">
+                        <div
+                          className={`w-6 h-6 rounded-md flex items-center justify-center cursor-pointer ${
+                            isSelected
+                              ? "bg-gradient-to-r from-pink-500 to-purple-600"
+                              : "bg-white/10 hover:bg-white/20"
+                          }`}
+                          onClick={() => handleCheckboxClick(item)}
+                        >
+                          {isSelected && <FaCheck size={12} className="text-white" />}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+
+          {datadata && datadata.filter((prev) => prev.selected === true).length > 0 && (
+            <div className="fixed bottom-0 left-0 right-0 bg-white/10 border-t border-white/20 py-4 px-6 shadow-lg">
+              <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="text-white text-lg sm:text-xl font-medium">
+                  <span>Total: </span>
+                  <span className="font-bold text-white">RM {totalPrice.toFixed(2)}</span>
+                </div>
+                <Button
+                  className="w-full sm:w-auto py-6 px-8 text-lg font-medium rounded-xl bg-black hover:scale-105 flex items-center justify-center gap-2"
+                  onClick={handleCheckOut}
+                >
+                  <FaCheck size={16} />
+                  <span>Checkout</span>
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default CartPage;

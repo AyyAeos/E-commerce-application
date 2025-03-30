@@ -1,15 +1,12 @@
 package com.example.logis_app.controller;
 
-import com.example.logis_app.pojo.PageResult.Product.CartPage;
-import com.example.logis_app.pojo.PageResult.Product.ProductComment;
-import com.example.logis_app.pojo.PageResult.Product.ProductCommentList;
-import com.example.logis_app.pojo.PageResult.Product.ProductPage;
-import com.example.logis_app.pojo.RequestParam.AddItemToCartQueryParam;
-import com.example.logis_app.pojo.RequestParam.AdminQueryParam;
-import com.example.logis_app.pojo.RequestParam.LikeDTO;
-import com.example.logis_app.pojo.Result;
+import com.example.logis_app.pojo.vo.ProductVO.ProductComment;
+import com.example.logis_app.pojo.vo.ProductVO.ProductCommentList;
+import com.example.logis_app.pojo.vo.ProductVO.ProductPage;
+import com.example.logis_app.pojo.DTO.CartDTO.AddCartDTO;
+import com.example.logis_app.pojo.DTO.ProductDTO.LikeDTO;
+import com.example.logis_app.common.Result;
 import com.example.logis_app.service.ProductService;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,10 +37,10 @@ public class ProductController {
     }
 
     @PostMapping("/{id}")
-    public Result addToCart(@PathVariable Integer id, @RequestBody AddItemToCartQueryParam addItemToCartQueryParam) {
-        addItemToCartQueryParam.setItemId(id);
-        log.info("Add item to card : {}" , addItemToCartQueryParam);
-        productService.addToCard(addItemToCartQueryParam);
+    public Result addToCart(@PathVariable Integer id, @RequestBody AddCartDTO addCartDTO) {
+        addCartDTO.setItemId(id);
+        log.info("Add item to card : {}" , addCartDTO);
+        productService.addToCard(addCartDTO);
         return Result.success();
     }
 

@@ -1,19 +1,16 @@
 package com.example.logis_app.service;
 
-import com.example.logis_app.pojo.PageResult.InventoryPage;
-import com.example.logis_app.pojo.PageResult.Product.ProductPage;
-import com.example.logis_app.pojo.RequestParam.InventoryAddItem;
-import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
-
-import java.util.List;
+import com.example.logis_app.pojo.vo.InventoryPage;
+import com.example.logis_app.pojo.DTO.InventoryDTO.AddItemDTO;
+import com.example.logis_app.pojo.DTO.InventoryDTO.QueryItemDTO;
 
 public interface InventoryService {
 
-    InventoryPage getItemBySelected(InventoryQueryParam inventoryQueryParam);
+    InventoryPage getItemBySelected(QueryItemDTO queryItemDTO);
 
-    Boolean insertNewItem( InventoryAddItem inventoryAddItem);
+    Boolean insertNewItem( AddItemDTO addItemDTO);
 
-    void updateItem(InventoryQueryParam item);
+    void updateItem(QueryItemDTO item);
 
     void deleteItem(Integer id, Integer sizeId);
 }

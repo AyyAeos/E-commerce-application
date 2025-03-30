@@ -34,10 +34,7 @@ const ParentComment = ({
   );
   const [replyTexts, setReplyTexts] = useState<{ [key: number]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  //immediately ready to receive the object returned by useReplies(parentId)
-  //everything call the loadmorereplies because of async it will auto update the replies here and rerender
-  //destrucutre object and receive the return value
+  
     const { 
       replies, 
       loadMoreReplies, 
@@ -239,7 +236,7 @@ const ParentComment = ({
       )}
 
       {/* Reply Section */}
-      <div className="p-4 border-t border-gray-100">
+      <div className="p-4 border-t border-gray-100 text-pink-200">
         <Button
           variant="outline"
           size="sm"

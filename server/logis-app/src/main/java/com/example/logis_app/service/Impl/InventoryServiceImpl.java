@@ -1,13 +1,11 @@
 package com.example.logis_app.service.Impl;
 
 import com.example.logis_app.Mapper.InventoryMapper;
-import com.example.logis_app.exception.ItemAlreadyExistsException;
-import com.example.logis_app.pojo.PageResult.InventoryPage;
-import com.example.logis_app.pojo.PageResult.Product.ProductPage;
-import com.example.logis_app.pojo.PageResult.Product.Variants;
-import com.example.logis_app.pojo.RequestParam.InventoryAddItem;
-import com.example.logis_app.pojo.RequestParam.InventoryQueryParam;
-import com.example.logis_app.pojo.RequestParam.InventoryVariants;
+import com.example.logis_app.pojo.vo.InventoryPage;
+import com.example.logis_app.pojo.vo.ProductVO.ProductPage;
+import com.example.logis_app.pojo.DTO.InventoryDTO.AddItemDTO;
+import com.example.logis_app.pojo.DTO.InventoryDTO.QueryItemDTO;
+import com.example.logis_app.pojo.DTO.InventoryDTO.InventoryVariantsDTO;
 import com.example.logis_app.service.InventoryService;
 import com.example.logis_app.util.ProductPageUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,12 +24,12 @@ public class InventoryServiceImpl implements InventoryService {
     private InventoryMapper inventoryMapper;
 
     @Override
-    public InventoryPage getItemBySelected(InventoryQueryParam inventoryQueryParam) {
-        inventoryQueryParam.setBegin((inventoryQueryParam.getPage() - 1) * inventoryQueryParam.getPageLimits());
-        List<Map<String, Object>> productList =  inventoryMapper.getItemBySelected(inventoryQueryParam);
-        Integer itemCounts = inventoryMapper.getSum(inventoryQueryParam);
-        Integer page = inventoryQueryParam.getPage();
-        Integer pageLimits = inventoryQueryParam.getPageLimits();
+    public InventoryPage getItemBySelected(QueryItemDTO queryItemDTO) {
+        queryItemDTO.setBegin((queryItemDTO.getPage() - 1) * queryItemDTO.getPageLimits());
+        List<Map<String, Object>> productList =  inventoryMapper.getItemBySelected(queryItemDTO);
+        Integer itemCounts = inventoryMapper.getSum(queryItemDTO);
+        Integer page = queryItemDTO.getPage();
+        Integer pageLimits = queryItemDTO.getPageLimits();
 
         List<ProductPage> list =  ProductPageUtil.transformToProductPage(productList);
 
@@ -43,23 +41,23 @@ public class InventoryServiceImpl implements InventoryService {
 
 
     @Override
-    public Boolean insertNewItem(InventoryAddItem inventoryAddItem) {
+    public Boolean insertNewItem(AddItemDTO addItemDTO) {
 
             // Check if the item already exists in the database
-            Boolean isValid = inventoryMapper.checkItem(inventoryAddItem.getItemName());
+            Boolean isValid = inventoryMapper.checkItem(addItemDTO.getItemName());
 
             // If item does not exist, proceed to insert
             if (isValid == null || !isValid) {
                 // Insert the main item into the inventory
-                inventoryMapper.insertItem(inventoryAddItem);
+                inventoryMapper.insertItem(addItemDTO);
 
                 // Get the generated item ID
-                Integer itemId = inventoryAddItem.getItemId();
+                Integer itemId = addItemDTO.getItemId();
 
                 // Insert the variants associated with the item
-                for (InventoryVariants inventoryVariants : inventoryAddItem.getVariants()) {
-                    inventoryVariants.setItemId(itemId); // Associate variant with the new item
-                    inventoryMapper.insertItemSize(inventoryVariants); // Insert each variant
+                for (InventoryVariantsDTO inventoryVariantsDTO : addItemDTO.getVariants()) {
+                    inventoryVariantsDTO.setItemId(itemId); // Associate variant with the new item
+                    inventoryMapper.insertItemSize(inventoryVariantsDTO); // Insert each variant
                 }
                 return true;
             }
@@ -68,7 +66,7 @@ public class InventoryServiceImpl implements InventoryService {
 
 
     @Override
-    public void updateItem(InventoryQueryParam item) {
+    public void updateItem(QueryItemDTO item) {
 
         inventoryMapper.updateItem(item);
         inventoryMapper.updateInventorySize(item);
