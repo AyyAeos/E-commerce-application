@@ -23,6 +23,7 @@ export default function NavBar() {
           <a href="#" className="hover:text-gray-400">About</a>
           <a href="/logins" className="hover:text-gray-400">Services</a>
           <a href="/logins/admin" className="hover:text-gray-400">Admin </a>
+          <a href="/chatbots" className="hover:text-gray-400">Ai Chat</a>
         </nav>
 
               {/* Mobile Menu Button */}
@@ -41,6 +42,8 @@ export default function NavBar() {
                     <a href="#" className="hover:text-gray-400">About</a>
                     <a href="/logins" className="hover:text-gray-400">Services</a>
                     <a href="/logins/admin" className="hover:text-gray-400">Admin</a>
+                    <a href="/chatbots" className="hover:text-gray-400">Ai Chat</a>
+                    
                 </div>
             )}
 

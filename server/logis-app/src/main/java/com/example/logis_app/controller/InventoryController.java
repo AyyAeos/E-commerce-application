@@ -19,41 +19,20 @@ public class InventoryController {
 
     @GetMapping("/search")
     public Result getItemByParam(@ModelAttribute QueryItemDTO queryItemDTO) {
-
         log.info("Searched item : {} ", queryItemDTO);
-
-
         InventoryPage list = inventoryService.getItemBySelected(queryItemDTO);
        log.info("Selected list : {}", list);
 
          return Result.success(list);
     }
 
-    /*
-   { http://localhost:8080/admins/inventory/create
- "itemName": "Laptop",
- "size": "17-inch",
- "price": 1200.40,
- "stockQuantity": 20,
- "onSale": true
-}
-  */
+
     @PostMapping("/create")
     public Result addItem(@RequestBody AddItemDTO addItemDTO) {
         Boolean result = inventoryService.insertNewItem(addItemDTO);
         return Result.success(result);
     }
-    /*
-    http://localhost:8080/admins/inventory/9
-      {
-    "itemName": "Lapto",
-    "size": "17-inch",
-    "price": 120.40,
-    "stockQuantity": 2,
-    "onSale": false
 
-  }
-     */
     @PutMapping("/{id}")
     public Result updateItem(@PathVariable Integer id, @RequestBody QueryItemDTO item) {
         item.setItemId(id);

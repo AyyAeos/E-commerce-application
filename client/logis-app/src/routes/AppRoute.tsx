@@ -17,6 +17,7 @@ import OrderPage from "@/components/Order/Order";
 import CheckOrder from "@/components/Order/Order";
 import AdminOrder from "@/components/Admin/AdminOrder";
 import UserTable from "@/components/User/User";
+import Chatbots from "@/components/Chatbot/Chatbot";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -35,6 +36,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/carts/:userId" element={<CartPage />} />
       <Route path="/checkouts/:userId" element={<Checkout />} />
       <Route path="/orders/:userId" element={<CheckOrder />} />
+      <Route path="/chatbots" element={<Chatbots />} />
 
       {/* Invalid Path */}
       <Route path="*" element={<PageNotFound />} />
