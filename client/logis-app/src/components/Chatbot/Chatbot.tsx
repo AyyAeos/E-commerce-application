@@ -49,53 +49,96 @@ const Chatbox = () => {
       }
     };
 
-    ws.onmessage = (event) => {
-      console.log("Raw message received:", event.data);
-      
-      try {
-        const data = JSON.parse(event.data);
+  // Modify your onmessage handler to ensure messages are properly stored
+ws.onmessage = (event) => {
+  console.log("Raw message received:", event.data);
+  
+  try {
+    const data = JSON.parse(event.data);
+    
+    if (data.isSystem) {
+      // System message handling remains the same
+      console.log("System message received:", data);
+      if (Array.isArray(data.message)) {
+        const filteredUsers = userRole === "admin" 
+          ? data.message
+          : data.message.filter((name: string) => name !== username);
         
-        if (data.isSystem) {
-          // Handle system messages - like online users list
-          console.log("System message received:", data);
-          if (Array.isArray(data.message)) {
-            // Filter out our own username from the list if needed
-            const filteredUsers = userRole === "admin" 
-              ? data.message
-              : data.message.filter((name: string) => name !== username);
-            
-            setOnlineUsers(filteredUsers);
-          }
-        } else {
-          // Handle chat messages
-          console.log("Chat message received:", data);
-          const fromUser = data.fromName;
-          
-          // Add message to conversation with this user
-          setMessages(prev => {
-            const userMessages = prev[fromUser] || [];
-            
-            return {
-              ...prev,
-              [fromUser]: [...userMessages, {
-                fromName: fromUser,
-                message: data.message,
-                timestamp: data.timestamp 
-                  ? new Date(data.timestamp).toLocaleTimeString()
-                  : new Date().toLocaleTimeString()
-              }]
-            };
-          });
-          
-          // If this user isn't selected yet, automatically select them
-          if (!selectedUser && userRole === "admin") {
-            setSelectedUser(fromUser);
-          }
-        }
-      } catch (error) {
-        console.error("Error parsing message:", error);
+        setOnlineUsers(filteredUsers);
       }
-    };
+    } else {
+      // Handle chat messages - with more detailed logging
+      console.log("Chat message received:", data);
+      const senderName = data.fromName;
+      const receiverName = username;
+      
+      // Debug - print current username and roles
+      console.log("Current user:", username);
+      console.log("Current role:", userRole);
+      console.log("Message from:", senderName, "to:", receiverName);
+      
+      // For customer: store messages where I'm the sender or receiver
+      if (userRole === "customer" && (senderName === username || receiverName === username)) {
+        const otherUser = senderName === username ? receiverName : senderName;
+        
+        console.log("Customer storing message with:", otherUser);
+        
+        setMessages(prev => {
+          const existingMessages = prev[otherUser] || [];
+          const newMessage = {
+            fromName: senderName,
+            message: data.message,
+            timestamp: new Date(data.timestamp || Date.now()).toLocaleTimeString()
+          };
+          
+          console.log("Adding message to conversation:", newMessage);
+          
+          return {
+            ...prev,
+            [otherUser]: [...existingMessages, newMessage]
+          };
+        });
+        
+        // Auto-select this user if none selected
+        if (!selectedUser) {
+          console.log("Auto-selecting user:", otherUser);
+          setSelectedUser(otherUser);
+        }
+      }
+      
+      // For admin: store all messages
+      if (userRole === "admin") {
+        const relevantUser = senderName === username ? receiverName : senderName;
+        
+        console.log("Admin storing message with:", relevantUser);
+        
+        setMessages(prev => {
+          const existingMessages = prev[relevantUser] || [];
+          const newMessage = {
+            fromName: senderName,
+            message: data.message,
+            timestamp: new Date(data.timestamp || Date.now()).toLocaleTimeString()
+          };
+          
+          console.log("Adding message to conversation:", newMessage);
+          
+          return {
+            ...prev,
+            [relevantUser]: [...existingMessages, newMessage]
+          };
+        });
+        
+        // Auto-select this user if none selected
+        if (!selectedUser) {
+          console.log("Auto-selecting user:", relevantUser);
+          setSelectedUser(relevantUser);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error parsing message:", error);
+  }
+};
 
     ws.onclose = (event) => {
       console.log("WebSocket closed", event);
