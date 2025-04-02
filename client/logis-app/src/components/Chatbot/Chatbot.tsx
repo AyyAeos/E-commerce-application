@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 
+//add message
 interface Message {
   fromName: string;
   message: string;
   timestamp?: number | string;
 }
 
+//add user 
 interface SystemMessage {
   isSystem: boolean;
   message: string[] | string;
@@ -15,27 +17,34 @@ const Chatbox = () => {
   const userRole = localStorage.getItem("userRole");
   const username = localStorage.getItem("username");
 
+  //receipent name
   const [toName, setToName] = useState<string>("");
+  //lsit of online user
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  //chat message
   const [messages, setMessages] = useState<Record<string, Message[]>>({});
+  // new ws instance
   const [socket, setSocket] = useState<WebSocket | null>(null);
+  //current input message
   const [messageText, setMessageText] = useState("");
+  //target chatter
   const [selectedUser, setSelectedUser] = useState<string>("");
+  //websocket connection status
   const [connectionStatus, setConnectionStatus] = useState<string>("Connecting...");
-  const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  //reconnect attempt
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const maxReconnectAttempts = 5;
   const reconnectDelay = 3000;
 
-  // Function to create and set up WebSocket
+  // setup websocket
   const setupWebSocket = () => {
+    //connect to a server
     const ws = new WebSocket("ws://localhost:8080/chats");
 
     ws.onopen = () => {
       console.log("WebSocket connected");
       setConnectionStatus("Connected");
-      setReconnectAttempts(0);
       
       // Send initial registration message
       if (username) {
@@ -144,16 +153,6 @@ ws.onmessage = (event) => {
       console.log("WebSocket closed", event);
       setConnectionStatus("Disconnected");
       
-      // Try to reconnect if not closed cleanly and within max attempts
-      if (!event.wasClean && reconnectAttempts < maxReconnectAttempts) {
-        console.log(`Attempting to reconnect (${reconnectAttempts + 1}/${maxReconnectAttempts})...`);
-        setConnectionStatus(`Reconnecting (${reconnectAttempts + 1})...`);
-        
-        setTimeout(() => {
-          setReconnectAttempts(prev => prev + 1);
-          setupWebSocket();
-        }, reconnectDelay);
-      }
     };
 
     ws.onerror = (error) => {
@@ -173,7 +172,7 @@ ws.onmessage = (event) => {
   useEffect(() => {
     const cleanup = setupWebSocket();
     return cleanup;
-  }, [reconnectAttempts]);
+  }, []);
 
   // Scroll to bottom whenever messages change
   useEffect(() => {
