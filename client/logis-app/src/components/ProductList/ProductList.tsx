@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import OrderIcon from "../Order/OrderIcon";
 import { Skeleton } from "../ui/skeleton";
 import { FaShoppingBag, FaSearch, FaArrowRight } from "react-icons/fa";
+import axiosInstance from "@/utils/axiosInstance";
 
 export default function ProductList() {
   type Product = {
@@ -23,7 +24,7 @@ export default function ProductList() {
 
   const fetcher = async (url: string) => {
     try {
-      const res = await axios.get(url);
+      const res = await axiosInstance.get(url);
       if (res.data.msg === "success") {
         return res.data.data;
       }

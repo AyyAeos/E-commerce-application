@@ -61,9 +61,9 @@ const Login: React.FC = () => {
 
       if (response.data.msg === "success" && response.data.code === 1) {
         console.log("Login successful:");
-        localStorage.setItem("userId", response.data.data);
-        localStorage.setItem("userRole", 'customer');
-        localStorage.setItem("username", values.username)
+        localStorage.setItem("token", response.data.data); 
+        localStorage.setItem("username", values.username);
+        localStorage.setItem("userRole", "customer"); 
         setLoginFailed(false);
         navigate("/products");
       } else {

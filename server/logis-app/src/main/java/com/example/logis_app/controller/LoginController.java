@@ -1,10 +1,9 @@
 package com.example.logis_app.controller;
 
-import com.example.logis_app.pojo.vo.LoginVO.LoginPage;
+import com.example.logis_app.pojo.vo.LoginVO.LoginUser;
 import com.example.logis_app.pojo.DTO.LoginDTO.LoginDTO;
 import com.example.logis_app.pojo.DTO.LoginDTO.RegisterDTO;
 import com.example.logis_app.common.Result;
-import com.example.logis_app.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,16 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @Autowired
-    private LoginService loginService;
+    private com.example.logis_app.service.LoginService loginService;
 
     @PostMapping
     public Result login(@RequestBody LoginDTO loginDTO) {
     log.info("Log in", loginDTO);
-    LoginPage loginPage = loginService.login(loginDTO);
-    if(loginPage.getCredentails() == false) {
-        return Result.error("Login Failed");
-    }
-    return Result.success(loginPage.getUserId());
+    String jwt = loginService.login(loginDTO);
+    return Result.success(jwt);
     }
 
     @PostMapping("/register")
