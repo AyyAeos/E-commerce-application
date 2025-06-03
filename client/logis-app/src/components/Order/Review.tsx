@@ -1,24 +1,33 @@
 import { useState, useMemo } from "react";
-import { Order } from "./Order"; 
-import axios from "axios";
+import { Order } from "./Order";
+import axiosInstance from "@/utils/axiosInstance";
 
-const WriteReview = ({ order, onClose }: { order: Order, onClose: () => void }) => {
+
+const WriteReview = ({
+  order,
+  onClose,
+}: {
+  order: Order;
+  onClose: () => void;
+}) => {
   const [selectedItemType, setSelectedItemType] = useState<string | null>(null);
   const [reviewText, setReviewText] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
-  const handleReviewChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleReviewChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setReviewText(event.target.value);
   };
 
   const typeMap = new Map<number, string>();
   const uniqueItemTypes = useMemo(() => {
     order.items.forEach((item) => {
-      if (!typeMap.has(item.itemId)) {  
+      if (!typeMap.has(item.itemId)) {
         typeMap.set(item.itemId, item.itemName);
       }
     });
-    return Array.from(typeMap.entries()); 
+    return Array.from(typeMap.entries());
   }, [order.items]);
 
   const handleSubmit = async (selectedItemType: string | null) => {
@@ -43,8 +52,11 @@ const WriteReview = ({ order, onClose }: { order: Order, onClose: () => void }) 
       };
 
       try {
-        const response = await axios.post(`http://localhost:8080/orders/${order.userId}`, reviewDTO);
-        if (response.data.code === 1 && response.data.msg === 'success') {
+        const response = await axiosInstance.post(
+          `http://localhost:8080/orders/${order.userId}`,
+          reviewDTO
+        );
+        if (response.data.code === 1 && response.data.msg === "success") {
           setIsSuccess(true);
         } else {
           alert("Error submitting review");
@@ -63,7 +75,7 @@ const WriteReview = ({ order, onClose }: { order: Order, onClose: () => void }) 
       {isSuccess ? (
         <div className="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
           <h2 className="text-xl mb-4">Review Submitted Successfully!</h2>
-          <button 
+          <button
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
             onClick={() => onClose()}
           >
@@ -75,7 +87,9 @@ const WriteReview = ({ order, onClose }: { order: Order, onClose: () => void }) 
           <h2 className="text-xl mb-4">Write a Review</h2>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Select an Item Type</label>
+            <label className="block text-sm font-medium mb-2">
+              Select an Item Type
+            </label>
             <select
               className="w-full p-2 border border-gray-300 rounded-md"
               onChange={(e) => setSelectedItemType(e.target.value)}
@@ -91,7 +105,9 @@ const WriteReview = ({ order, onClose }: { order: Order, onClose: () => void }) 
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Your Review</label>
+            <label className="block text-sm font-medium mb-2">
+              Your Review
+            </label>
             <textarea
               className="w-full p-2 border border-gray-300 rounded-md"
               placeholder="Write your review here..."
@@ -111,7 +127,7 @@ const WriteReview = ({ order, onClose }: { order: Order, onClose: () => void }) 
 
             <button
               className="border px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700"
-              onClick={onClose} 
+              onClick={onClose}
             >
               Exit
             </button>

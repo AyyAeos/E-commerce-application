@@ -45,7 +45,7 @@ public class LoginServiceImpl implements UserDetailsService, LoginService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public String login(LoginDTO loginDTO) {
+    public LoginUser login(LoginDTO loginDTO) {
 
         // Authenticate the user
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
@@ -72,13 +72,15 @@ public class LoginServiceImpl implements UserDetailsService, LoginService {
         redisTemplate.opsForValue().set(redisKey, loginUser);
         redisTemplate.expire(redisKey, 30, TimeUnit.MINUTES);
 
-        return jwt;
+        loginUser.setJwt(jwt);
+
+        return loginUser;
     }
 
 
     @Override
     public LoginUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        LoginUser loginPage = new LoginUser();
+     
 
         User user = loginMapper.login(username);
 

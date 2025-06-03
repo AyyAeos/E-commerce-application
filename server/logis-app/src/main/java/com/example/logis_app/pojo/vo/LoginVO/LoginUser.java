@@ -15,6 +15,11 @@ public class LoginUser implements UserDetails {
 
 
     private User user;
+    private String jwt;
+
+    public LoginUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -50,4 +55,6 @@ public class LoginUser implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

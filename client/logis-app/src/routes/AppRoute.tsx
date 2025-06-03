@@ -10,7 +10,7 @@ import AdminPage from "@/components/Admin/AdminPage";
 import Inventory from "@/components/Inventory/Inventory";
 import Transaction from "@/components/Transaction/Transaction";
 import Product from "@/components/ProductList/Product";
-import Cart from "@/components/CartBar/Cart";
+import Cart from "@/components/CartBar/CartIcon";
 import CartPage from "@/components/CartBar/CartPage";
 import Checkout from "@/components/CheckOut/CheckOut";
 import OrderPage from "@/components/Order/Order";
@@ -29,8 +29,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/products" element={<ProductList />} />
       <Route path="/logins/admin" element={<AdminPage />} />
       <Route path="/admins/inventory" element={<Inventory />} />
-      <Route path="/admins/transaction" element={<Transaction />} />
-      <Route path="/admins/order" element={<AdminOrder />} />
       <Route path="/admins/user" element={<UserTable />} />
       <Route path="/products/:itemId" element={<Product />} />
       <Route path="/carts/:userId" element={<CartPage />} />

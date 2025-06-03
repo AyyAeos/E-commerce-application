@@ -23,8 +23,8 @@ public class LoginController {
     @PostMapping
     public Result login(@RequestBody LoginDTO loginDTO) {
     log.info("Log in", loginDTO);
-    String jwt = loginService.login(loginDTO);
-    return Result.success(jwt);
+    LoginUser loginUser = loginService.login(loginDTO);
+    return Result.success(loginUser);
     }
 
     @PostMapping("/register")

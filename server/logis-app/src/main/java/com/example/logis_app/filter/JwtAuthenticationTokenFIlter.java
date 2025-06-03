@@ -14,11 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
@@ -69,9 +71,10 @@ public class JwtAuthenticationTokenFIlter extends OncePerRequestFilter {
 
 
 
-        if(Objects.isNull(loginUser)) {
-            throw new RuntimeException("User have not logon on");
-        }
+    if (Objects.isNull(loginUser)) {
+    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not logged in or session expired");
+}
+
 
 
         //have a setAuthentic (true) flase

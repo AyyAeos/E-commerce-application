@@ -12,7 +12,7 @@
 
     <insert id="register" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO user (name, user_phone, username, password, email, role)
-        VALUES (#{name}, #{userPhone}, #{username}, #{password}, #{email}, #{role)
+        VALUES (#{name}, #{userPhone}, #{username}, #{password}, #{email}, #{role})
     </insert>
 
 

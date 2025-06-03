@@ -8,6 +8,7 @@ import { debounce } from "lodash";
 import { FaPlus, FaMinus, FaArrowLeft, FaTimes, FaShoppingCart, FaCheck } from "react-icons/fa";
 import { Skeleton } from "../ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import axiosInstance from "@/utils/axiosInstance";
 
 //means cause i change the state of datadata react re-render every thing again
 type Item = {
@@ -29,7 +30,7 @@ const CartPage = () => {
 
   const fetcher = async (url: string) => {
     try {
-      const res = await axios.get(url);
+      const res = await axiosInstance.get(url);
       if (res.data.msg === "success") {
         return res.data.data;
       }
@@ -72,7 +73,7 @@ const CartPage = () => {
   const updateCartToServer = debounce(
     async (cartId: number, newQuantity: number, sizeId: number) => {
       try {
-        await axios.put(`http://localhost:8080/carts/${userId}`, {
+        await axiosInstance.put(`http://localhost:8080/carts/${userId}`, {
           cartId,
           quantity: newQuantity,
           sizeId,

@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
-import Cart from "../CartBar/Cart";
+import Cart from "../CartBar/CartIcon";
 import OrderIcon from "./OrderIcon";
 import { useState } from "react";
 import WriteReview from "./Review";
+import axiosInstance from "@/utils/axiosInstance";
 
 type OrderItem = {
   cartId: number;
@@ -32,7 +32,7 @@ const CheckOrder = () => {
 
   const fetcher = async (url: string) => {
     try {
-      const response = await axios.get(url);
+      const response = await axiosInstance.get(url);
       if (response.data.msg === "success" && response.data.code === 1) {
         console.log(response.data.data);
         return response.data.data;
@@ -103,86 +103,83 @@ const CheckOrder = () => {
           No orders found. Please click EXIT on the top right!
         </p>
       ) : (
-          <div className="p-4 pt-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-8">
-              Your Orders
-            </h1>
-            <div className="flex flex-col gap-5">
-              {orders.map((order: Order) => (
-                <div
-                  key={order.orderId}
-                  className="bg-white shadow-lg rounded-lg p-5 border"
-                >
-                  <p className="font-semibold text-xl text-end">
-                    Status : {order.status}
-                  </p>
+        <div className="p-4 pt-16">
+          <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-8">
+            Your Orders
+          </h1>
+          <div className="flex flex-col gap-5">
+            {orders.map((order: Order) => (
+              <div
+                key={order.orderId}
+                className="bg-white shadow-lg rounded-lg p-5 border"
+              >
+                <p className="font-semibold text-xl text-end">
+                  Status : {order.status}
+                </p>
 
-                  <p className="text-gray-600 text-end text-md">
-                    Last Updated Date:{" "}
-                    {new Date(order.updatedAt).toLocaleString()}
-                  </p>
+                <p className="text-gray-600 text-end text-md">
+                  Last Updated Date:{" "}
+                  {new Date(order.updatedAt).toLocaleString()}
+                </p>
 
-                  <div className="mt-4">
-                    {order.items.map((item: OrderItem, index: number) => (
-                      <div
-                        key={index}
-                        className="border p-3 rounded-lg mb-2 bg-gray-100"
-                      >
-                        <p>
-                          <span className="font-semibold">Item:</span>{" "}
-                          {item.itemName}
-                        </p>
-                        <p>
-                          <span className="font-semibold">Size:</span>{" "}
-                          {item.sizeName}
-                        </p>
-                        <p>
-                          <span className="font-semibold">Qty:</span>{" "}
-                          {item.quantity}
-                        </p>
-                      </div>
-                    ))}
+                <div className="mt-4">
+                  {order.items.map((item: OrderItem, index: number) => (
+                    <div
+                      key={index}
+                      className="border p-3 rounded-lg mb-2 bg-gray-100"
+                    >
+                      <p>
+                        <span className="font-semibold">Item:</span>{" "}
+                        {item.itemName}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Size:</span>{" "}
+                        {item.sizeName}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Qty:</span>{" "}
+                        {item.quantity}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap justify-between">
+                  <div className="w-1/2">
+                    <p className="text-lg font-bold mt-4">
+                      Total Items: {order.items.length}
+                    </p>
+
+                    <p className="text-gray-600">
+                      Created Date: {new Date(order.placedAt).toLocaleString()}
+                    </p>
+
+                    <p className="text-gray-600">Order id: {order.orderId}</p>
                   </div>
 
-                  <div className="flex flex-wrap justify-between">
-                    <div className="w-1/2">
-                      <p className="text-lg font-bold mt-4">
-                        Total Items: {order.items.length}
-                      </p>
-
-                      <p className="text-gray-600">
-                        Created Date:{" "}
-                        {new Date(order.placedAt).toLocaleString()}
-                      </p>
-
-                      <p className="text-gray-600">Order id: {order.orderId}</p>
-                    </div>
-
-                    <div className="flex justify-end gap-4 mt-4">
-                      <DeleteOrder placeDate={order} />
-                      <button
-                        className="border border-black px-4 py-2 hover:bg-slate-500 hover:text-white"
-                        onClick={() => handleWriteReview(order)} // Pass the full order to WriteReview
-                      >
-                        Write A Review!
-                      </button>
-                      {selectedOrderId === order.orderId && selectedOrder && (
-                        <WriteReview
-                          order={selectedOrder}
-                          onClose={() => setSelectedOrderId(null)}
-                        />
-                      )}
-                    </div>
+                  <div className="flex justify-end gap-4 mt-4">
+                    <DeleteOrder placeDate={order} />
+                    <button
+                      className="border border-black px-4 py-2 hover:bg-slate-500 hover:text-white"
+                      onClick={() => handleWriteReview(order)} // Pass the full order to WriteReview
+                    >
+                      Write A Review!
+                    </button>
+                    {selectedOrderId === order.orderId && selectedOrder && (
+                      <WriteReview
+                        order={selectedOrder}
+                        onClose={() => setSelectedOrderId(null)}
+                      />
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
+        </div>
       )}
     </div>
   );
 };
 
 export default CheckOrder;
-
-

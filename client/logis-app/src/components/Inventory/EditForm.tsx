@@ -1,4 +1,5 @@
-import axios from "axios";
+
+import axiosInstance from "@/utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
 
@@ -53,7 +54,7 @@ const EditForm = ({
   const handleSubmit = async (item: Item) => {
     console.log("Form Submitted", FormData);
     try {
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `http://localhost:8080/admins/inventory/${item.itemId}`,
         FormData
       );

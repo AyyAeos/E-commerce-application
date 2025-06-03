@@ -1,14 +1,14 @@
 import useSWR from "swr";
 import { Button } from "../ui/button";
-import axios from "axios";
-import Cart from "../CartBar/Cart";
+
+import Cart from "../CartBar/CartIcon";
 import { useNavigate } from "react-router-dom";
 import OrderIcon from "../Order/OrderIcon";
 import { Skeleton } from "../ui/skeleton";
 import { FaShoppingBag, FaSearch, FaArrowRight } from "react-icons/fa";
 import axiosInstance from "@/utils/axiosInstance";
 
-export default function ProductList() {
+const ProductList = () => {
   type Product = {
     itemId: number;
     itemName: string;
@@ -71,7 +71,7 @@ export default function ProductList() {
       "from-pink-100 to-rose-100",
       "from-green-100 to-teal-100",
       "from-amber-100 to-orange-100",
-      "from-indigo-100 to-sky-100"
+      "from-indigo-100 to-sky-100",
     ];
     return gradients[Math.floor(Math.random() * gradients.length)];
   };
@@ -80,7 +80,7 @@ export default function ProductList() {
     <div className="min-h-screen bg-primary">
       <OrderIcon userId={userId} />
       <Cart userId={userId} />
-      
+
       {/* container center content  mx -autohorizontally center */}
       <div className="container mx-auto px-4 py-10">
         <div className="mb-10 text-center">
@@ -95,7 +95,10 @@ export default function ProductList() {
         {isLoading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white/10 rounded-2xl p-6 border border-white/20 shadow-xl">
+              <div
+                key={i}
+                className="bg-white/10 rounded-2xl p-6 border border-white/20 shadow-xl"
+              >
                 <Skeleton className="h-16 w-3/4 bg-white/20 mb-4 rounded-lg" />
                 <Skeleton className="h-4 w-full bg-white/20 mb-2 rounded" />
                 <Skeleton className="h-4 w-full bg-white/20 mb-2 rounded" />
@@ -109,7 +112,7 @@ export default function ProductList() {
           </div>
         )}
 
-        { error && (
+        {error && (
           <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 my-8 text-white text-center">
             <p>Failed to fetch products. Please refresh the page.</p>
           </div>
@@ -122,23 +125,31 @@ export default function ProductList() {
                 key={product.itemId}
                 className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-xl transition-all duration-300 hover:transform hover:scale-[1.02] hover:shadow-2xl flex flex-col h-full"
               >
-                <div className={`rounded-xl bg-gradient-to-br ${getRandomGradient()} mb-4 p-6 flex items-center justify-center`}>
+                <div
+                  className={`rounded-xl bg-gradient-to-br ${getRandomGradient()} mb-4 p-6 flex items-center justify-center`}
+                >
                   <FaShoppingBag className="text-gray-700 text-4xl opacity-40" />
                 </div>
-                
+
                 <h2 className="text-xl font-bold text-white mb-2">
                   {product.itemName}
                 </h2>
-                
+
                 <p className="text-pink-100 mb-4 flex-grow">
                   {product.description}
                 </p>
 
                 <div className="flex justify-between items-center mt-auto pt-4 border-t border-white/10">
                   <div className="text-lg font-semibold text-white">
-                    ${priceMap.get(product.itemId).min === priceMap.get(product.itemId).max
+                    $
+                    {priceMap.get(product.itemId).min ===
+                    priceMap.get(product.itemId).max
                       ? priceMap.get(product.itemId).min.toFixed(2)
-                      : `${priceMap.get(product.itemId).min.toFixed(2)} - ${priceMap.get(product.itemId).max.toFixed(2)}`}
+                      : `${priceMap
+                          .get(product.itemId)
+                          .min.toFixed(2)} - ${priceMap
+                          .get(product.itemId)
+                          .max.toFixed(2)}`}
                   </div>
 
                   <Button
@@ -157,11 +168,18 @@ export default function ProductList() {
         {data && data.length === 0 && !isLoading && (
           <div className="bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl text-center my-12">
             <FaSearch className="mx-auto text-pink-300 text-5xl mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-2">No Products Found</h3>
-            <p className="text-pink-100">We couldn't find any products at the moment. Please check back later.</p>
+            <h3 className="text-2xl font-bold text-white mb-2">
+              No Products Found
+            </h3>
+            <p className="text-pink-100">
+              We couldn't find any products at the moment. Please check back
+              later.
+            </p>
           </div>
         )}
       </div>
     </div>
   );
-}
+};
+
+export default ProductList;

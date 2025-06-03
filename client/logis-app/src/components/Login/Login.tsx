@@ -11,11 +11,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
+
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FaUser, FaLock, FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import axiosInstance from "@/utils/axiosInstance";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -54,16 +55,20 @@ const Login: React.FC = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
-      const response = await axios.post("http://localhost:8080/logins", {
-        username: values.username,
-        password: values.password,
-      });
+      const response = await axiosInstance.post(
+        "http://localhost:8080/logins",
+        {
+          username: values.username,
+          password: values.password,
+        }
+      );
 
       if (response.data.msg === "success" && response.data.code === 1) {
         console.log("Login successful:");
-        localStorage.setItem("token", response.data.data); 
+        localStorage.setItem("token", response.data.data.jwt);
         localStorage.setItem("username", values.username);
-        localStorage.setItem("userRole", "customer"); 
+        localStorage.setItem("userRole", "customer");
+        localStorage.setItem("userId", response.data.data.user.userId);
         setLoginFailed(false);
         navigate("/products");
       } else {
@@ -88,8 +93,8 @@ const Login: React.FC = () => {
               Connection error. Please try again later.
             </AlertDescription>
           </Alert>
-          <Button 
-            onClick={() => window.location.reload()} 
+          <Button
+            onClick={() => window.location.reload()}
             className="bg-white/20 hover:bg-white/30 text-white hover:scale-150"
           >
             Refresh Page
@@ -190,7 +195,7 @@ const Login: React.FC = () => {
                 <FaArrowLeft size={12} />
                 <span>Back to Home</span>
               </Link>
-              
+
               <Link
                 to="/register"
                 className="text-pink-100 hover:scale-[1.2] hover:text-white"

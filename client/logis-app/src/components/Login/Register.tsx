@@ -11,11 +11,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
+
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
-import { FaUser, FaPhone, FaEnvelope, FaLock, FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import {
+  FaUser,
+  FaPhone,
+  FaEnvelope,
+  FaLock,
+  FaArrowRight,
+  FaArrowLeft,
+} from "react-icons/fa";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import axiosInstance from "@/utils/axiosInstance";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -27,12 +35,19 @@ const Register: React.FC = () => {
     name: z.string().min(2, "Name must be at least 2 characters"),
     userPhone: z.string().min(10, "Phone number must be at least 10 digits"),
     username: z.string().min(2, "Username must be at least 2 characters"),
-    password: z.string()
+    password: z
+      .string()
       .min(6, { message: "Password must be at least 6 characters." })
-      .regex(/[A-Z]/, { message: "Must contain at least one uppercase letter." })
-      .regex(/[a-z]/, { message: "Must contain at least one lowercase letter." })
+      .regex(/[A-Z]/, {
+        message: "Must contain at least one uppercase letter.",
+      })
+      .regex(/[a-z]/, {
+        message: "Must contain at least one lowercase letter.",
+      })
       .regex(/[0-9]/, { message: "Must contain at least one number." })
-      .regex(/[^A-Za-z0-9]/, { message: "Must contain at least one special character." }),
+      .regex(/[^A-Za-z0-9]/, {
+        message: "Must contain at least one special character.",
+      }),
     email: z.string().email("Invalid email address"),
   });
 
@@ -50,17 +65,24 @@ const Register: React.FC = () => {
   const onSubmit = async (values: any) => {
     setIsLoading(true);
     try {
-      const response = await axios.post("http://localhost:8080/logins/register", values);
+      const response = await axiosInstance.post(
+        "http://localhost:8080/logins/register",
+        values
+      );
       console.log(response.data);
       if (response.data.code === 0) {
         setErrorMessage(response.data.msg);
-      } else if (response.data.msg === 'success' && response.data.data === true) {
+      } else if (
+        response.data.msg === "success" &&
+        response.data.data === true
+      ) {
         console.log("Registration successful");
-        navigate('/logins');
+        navigate("/logins");
       }
     } catch (error: any) {
       console.log("Registration failed", error);
-      const message = error.response?.data?.msg || "Registration failed. Try again.";
+      const message =
+        error.response?.data?.msg || "Registration failed. Try again.";
       console.log(message);
       setErrorMessage(message);
     } finally {
@@ -96,34 +118,40 @@ const Register: React.FC = () => {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {['name', 'userPhone', 'username', 'email', 'password'].map((fieldName) => (
-              <FormField
-                key={fieldName}
-                control={form.control}
-                name={fieldName as any}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-white">
-                      {fieldLabels[fieldName as keyof typeof fieldLabels]}
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <div className="absolute left-3 top-3 text-white">
-                          {fieldIcons[fieldName as keyof typeof fieldIcons]}
+            {["name", "userPhone", "username", "email", "password"].map(
+              (fieldName) => (
+                <FormField
+                  key={fieldName}
+                  control={form.control}
+                  name={fieldName as any}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">
+                        {fieldLabels[fieldName as keyof typeof fieldLabels]}
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <div className="absolute left-3 top-3 text-white">
+                            {fieldIcons[fieldName as keyof typeof fieldIcons]}
+                          </div>
+                          <Input
+                            type={
+                              fieldName === "password" ? "password" : "text"
+                            }
+                            placeholder={`Enter your ${fieldLabels[
+                              fieldName as keyof typeof fieldLabels
+                            ].toLowerCase()}`}
+                            className="bg-white/20 border-white/30 pl-10 text-white placeholder:text-white focus-visible:ring-pink-500"
+                            {...field}
+                          />
                         </div>
-                        <Input
-                          type={fieldName === 'password' ? 'password' : 'text'}
-                          placeholder={`Enter your ${fieldLabels[fieldName as keyof typeof fieldLabels].toLowerCase()}`}
-                          className="bg-white/20 border-white/30 pl-10 text-white placeholder:text-white focus-visible:ring-pink-500"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage className="text-pink-200" />
-                  </FormItem>
-                )}
-              />
-            ))}
+                      </FormControl>
+                      <FormMessage className="text-pink-200" />
+                    </FormItem>
+                  )}
+                />
+              )
+            )}
 
             {errorMessage.trim() !== "" && (
               <Alert className="bg-red-500/20 border border-red-500/50">
@@ -158,7 +186,7 @@ const Register: React.FC = () => {
                 <FaArrowLeft size={12} />
                 <span>Back to Home</span>
               </Link>
-              
+
               <Link
                 to="/logins"
                 className="text-pink-200 hover:scale-[1.2] hover:text-white"

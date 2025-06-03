@@ -8,16 +8,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import axios from "axios";
+
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
-import DeleteItem from "./DeleteForm";
+
 import { CiSquarePlus } from "react-icons/ci";
 import AddButton from "./AddForm";
 
 import SearchForm from "./SearchForm";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "@/utils/axiosInstance";
 type SearchFormDataType = {
   itemName: string;
   size: string;
@@ -44,9 +45,7 @@ type Item = {
   variants: Variants[];
 };
 
-
 const Inventory: React.FC = () => {
- 
   const [searchForm, setSearchForm] = useState<SearchFormDataType>({
     itemName: "",
     size: "",
@@ -60,7 +59,7 @@ const Inventory: React.FC = () => {
 
   const fetcher = async (url: string) => {
     try {
-      const res = await axios.get(url, { params: searchForm });
+      const res = await axiosInstance.get(url, { params: searchForm });
       if (res.data.msg === "success") {
         setSearchForm({
           ...searchForm,

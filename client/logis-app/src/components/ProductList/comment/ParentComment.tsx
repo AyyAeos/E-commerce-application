@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { CommentList } from "./ProductComment";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import axios from "axios";
+
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+
 import {
   MessageCircle,
   ThumbsUp,
@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import useSWR, { mutate } from "swr";
 import { useReplies } from "./Replies";
+import axiosInstance from "@/utils/axiosInstance";
+import { CommentList } from "./ProductComment";
 
 const ParentComment = ({
   userId,
@@ -34,13 +36,13 @@ const ParentComment = ({
   );
   const [replyTexts, setReplyTexts] = useState<{ [key: number]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-    const { 
-      replies, 
-      loadMoreReplies, 
-      isLoading: isLoadingReplies, 
-      hasMore 
-    } = useReplies(parentId);
+
+  const {
+    replies,
+    loadMoreReplies,
+    isLoading: isLoadingReplies,
+    hasMore,
+  } = useReplies(parentId);
 
   const toggleReply = (parentId: number) => {
     setReplyStates((prev) => ({
@@ -70,7 +72,7 @@ const ParentComment = ({
     };
 
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `http://localhost:8080/orders/${userId}`,
         reviewDTO
       );
@@ -101,7 +103,7 @@ const ParentComment = ({
     console.log(likeDTO);
 
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `http://localhost:8080/products/${userId}/like`,
         likeDTO
       );
@@ -110,7 +112,6 @@ const ParentComment = ({
       console.log(error);
     }
   };
-
 
   return (
     <div className="bg-white shadow-sm rounded-lg border border-gray-200 mb-4">
@@ -273,10 +274,7 @@ const ParentComment = ({
       </div>
       {hasMore && (
         <div className="flex justify-center mb-4">
-          <Button 
-            onClick={loadMoreReplies} 
-            disabled={isLoadingReplies}
-          >
+          <Button onClick={loadMoreReplies} disabled={isLoadingReplies}>
             {isLoadingReplies ? "Loading..." : "Load More Replies"}
           </Button>
         </div>

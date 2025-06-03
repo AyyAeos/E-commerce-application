@@ -1,9 +1,17 @@
 import { useState } from "react";
-import axios from "axios";
 import useSWR, { mutate } from "swr";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import axiosInstance from "@/utils/axiosInstance";
 
 type User = {
   userId: number;
@@ -21,10 +29,10 @@ type User = {
 const UserPage: React.FC = () => {
   const [EditUser, SetEditUser] = useState<User | null>(null);
   const [DeleteUser, SetDeleteUser] = useState<User | null>(null);
-  
+
   const fetcher = async (url: string) => {
     try {
-      const res = await axios.get(url);
+      const res = await axiosInstance.get(url);
       if (res.data.msg === "success") {
         return res.data.data;
       }

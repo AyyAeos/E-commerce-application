@@ -1,6 +1,6 @@
-import axios from "axios";
 import useSWR, { mutate } from "swr";
 import React, { useEffect, useState } from "react";
+import axiosInstance from "@/utils/axiosInstance";
 import ParentComment from "./ParentComment";
 
 export interface CommentList {
@@ -16,7 +16,7 @@ export interface CommentList {
   quantity?: number;
   itemName?: string;
   sizeName?: string;
-  likedUser : number[];
+  likedUser: number[];
 }
 
 export interface Comment {
@@ -30,10 +30,10 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
 
   const fetcher = async (url: string) => {
     try {
-      const response = await axios.get(url);
+      const response = await axiosInstance.get(url);
       if (response.data.msg === "success" && response.data.code === 1) {
         console.log(response.data.data);
-        
+
         return response.data.data;
       }
     } catch (error) {

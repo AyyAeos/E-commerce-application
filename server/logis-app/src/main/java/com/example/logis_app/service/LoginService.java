@@ -8,10 +8,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface LoginService extends UserDetailsService {
 
-    @Override
-    LoginUser loadUserByUsername(String username) throws UsernameNotFoundException;
+ 
 
     Boolean register(RegisterDTO registerDTO);
 
-    String login(LoginDTO loginDTO);
+    LoginUser login(LoginDTO loginDTO);
 }

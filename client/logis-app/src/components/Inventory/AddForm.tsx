@@ -1,6 +1,7 @@
 import { useState, ChangeEvent } from "react";
 import { Button } from "../ui/button";
-import axios from "axios";
+import axiosInstance from "@/utils/axiosInstance";
+
 
 // Define types for the form data
 interface Variant {
@@ -33,27 +34,29 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
   });
 
   // Function to create the item and post to the server
- // Function to create the item and post to the server
-const createItem = async () => {
-  try {
-    const response = await axios.post("http://localhost:8080/admins/inventory/create", formData);
-    console.log("Response:", response.data);
+  // Function to create the item and post to the server
+  const createItem = async () => {
+    try {
+      const response = await axiosInstance.post(
+        "http://localhost:8080/admins/inventory/create",
+        formData
+      );
+      console.log("Response:", response.data);
 
-    // Check if the response is successful
-    if (response.data.msg === "success" && response.data.data === true) {
-      // Close the modal first
-      onClose();
+      // Check if the response is successful
+      if (response.data.msg === "success" && response.data.data === true) {
+        // Close the modal first
+        onClose();
 
-      // Show the success message using alert
-      alert("Item successfully added!");
-    }  else {
-      alert ("Item already existed")
+        // Show the success message using alert
+        alert("Item successfully added!");
+      } else {
+        alert("Item already existed");
+      }
+    } catch (error) {
+      console.error("Error submitting data:", error);
     }
-  } catch (error) {
-    console.error("Error submitting data:", error);
-  }
-};
-
+  };
 
   // Handle changes in variant fields
   const handleVariantChange = (
@@ -84,7 +87,9 @@ const createItem = async () => {
 
         {/* Item Name */}
         <div className="mb-4 flex flex-col sm:flex-row sm:items-center">
-          <label className="w-full sm:w-1/3 text-left mb-2 sm:mb-0">Item Name:</label>
+          <label className="w-full sm:w-1/3 text-left mb-2 sm:mb-0">
+            Item Name:
+          </label>
           <input
             type="text"
             value={formData.itemName}
@@ -97,7 +102,9 @@ const createItem = async () => {
 
         {/* Description */}
         <div className="mb-4 flex flex-col sm:flex-row sm:items-center">
-          <label className="w-full sm:w-1/3 text-left mb-2 sm:mb-0">Description:</label>
+          <label className="w-full sm:w-1/3 text-left mb-2 sm:mb-0">
+            Description:
+          </label>
           <textarea
             value={formData.description}
             className="border-4 border-slate-500 text-center w-full sm:w-2/3 resize-y h-28 p-2"
@@ -137,7 +144,11 @@ const createItem = async () => {
                     value={variant.price}
                     className="border-4 border-slate-500 text-center w-full"
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      handleVariantChange(index, "price", Number(e.target.value))
+                      handleVariantChange(
+                        index,
+                        "price",
+                        Number(e.target.value)
+                      )
                     }
                   />
                 </div>
@@ -150,7 +161,11 @@ const createItem = async () => {
                     value={variant.stock}
                     className="border-4 border-slate-500 text-center w-full"
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      handleVariantChange(index, "stock", Number(e.target.value))
+                      handleVariantChange(
+                        index,
+                        "stock",
+                        Number(e.target.value)
+                      )
                     }
                   />
                 </div>
@@ -162,7 +177,11 @@ const createItem = async () => {
                     className="border-4 border-slate-500 text-center w-full"
                     value={variant.onSale}
                     onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                      handleVariantChange(index, "onSale", Number(e.target.value))
+                      handleVariantChange(
+                        index,
+                        "onSale",
+                        Number(e.target.value)
+                      )
                     }
                   >
                     <option value="0">Not On Sale</option>
