@@ -49,7 +49,6 @@ const Product = () => {
   const fetcher = async (url: string) => {
     try {
       const response = await axiosInstance.get(url);
-
       if (response.data.msg === "success" && response.data.code === 1) {
         console.log(`Fetched data: ${response.data.data}`);
         return response.data.data;
@@ -64,10 +63,7 @@ const Product = () => {
     data,
     error: swrError,
     isLoading,
-  } = useSWR<SelectedProduct>(
-    `http://localhost:8080/products/${itemId}`,
-    fetcher
-  );
+  } = useSWR<SelectedProduct>(`products/${itemId}`, fetcher);
 
   const [addItem, setAddItem] = useState<AddItemType>({
     itemId: itemId ? parseInt(itemId) : 0,
@@ -93,7 +89,7 @@ const Product = () => {
   const checkPrice = async (sizeId: number) => {
     try {
       const response = await axiosInstance.get(
-        `http://localhost:8080/products/${itemId}/${sizeId}`
+        `/products/${itemId}/${sizeId}`
       );
 
       if (response.data.msg === "success" && response.data.code === 1) {
@@ -132,11 +128,9 @@ const Product = () => {
   };
 
   const addToCart = async () => {
-    console.log(addItem);
-
     try {
       const response = await axiosInstance.post(
-        `http://localhost:8080/products/${itemId}`,
+        `/products/${itemId}`,
         addItem
       );
 
@@ -170,10 +164,6 @@ const Product = () => {
 
   return (
     <>
-      {/* <div className="mt-4">
-      
-      </div> */}
-
       <div className="min-h-screen bg-primary flex flex-col items-center">
         <Cart userId={userId} />
         <OrderIcon userId={userId} />

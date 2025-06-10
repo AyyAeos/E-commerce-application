@@ -8,19 +8,32 @@ import { Skeleton } from "../ui/skeleton";
 import { FaShoppingBag, FaSearch, FaArrowRight } from "react-icons/fa";
 import axiosInstance from "@/utils/axiosInstance";
 
-const ProductList = () => {
-  type Product = {
-    itemId: number;
-    itemName: string;
-    description: string;
-    variants: Variant[];
-  };
+type Product = {
+  itemId: number;
+  itemName: string;
+  description: string;
+  variants: Variant[];
+};
 
-  type Variant = {
-    size: string;
-    stock: number;
-    price: number;
-  };
+type Variant = {
+  size: string;
+  stock: number;
+  price: number;
+};
+
+const ProductList = () => {
+  const userId = localStorage.getItem("userId") ?? "";
+  const navigate = useNavigate();
+
+  if (!userId) {
+    return (
+      <div>
+        <h2>It looks like you're not logged in!</h2>
+        <p>Please log in to access this page.</p>
+        <button onClick={() => navigate("/logins")}>Go to Login</button>
+      </div>
+    );
+  }
 
   const fetcher = async (url: string) => {
     try {
@@ -34,10 +47,7 @@ const ProductList = () => {
     }
   };
 
-  const { data, error, isLoading } = useSWR(
-    `http://localhost:8080/products`,
-    fetcher
-  );
+  const { data, error, isLoading } = useSWR(`/products`, fetcher);
 
   let priceMap = new Map();
 
@@ -45,11 +55,11 @@ const ProductList = () => {
     product.variants.forEach((variant: Variant) => {
       if (!priceMap.has(product.itemId)) {
         priceMap.set(product.itemId, {
-          min: Number.MAX_VALUE, //largest value
-          max: -Number.MAX_VALUE, //smallest value
+          min: Number.MAX_VALUE,
+          max: -Number.MAX_VALUE,
         });
       }
-      // math.min(currentVlaue, value)
+
       priceMap.set(product.itemId, {
         min: Math.min(priceMap.get(product.itemId).min, variant.price),
         max: Math.max(priceMap.get(product.itemId).max, variant.price),
@@ -57,14 +67,10 @@ const ProductList = () => {
     });
   });
 
-  const navigate = useNavigate();
-  const handleClick = (itemId: number) => {
+  const handleClick = (itemId) => {
     navigate(`/products/${itemId}`);
   };
 
-  const userId = localStorage.getItem("userId") ?? "";
-
-  // Generate random placeholder backgrounds for product cards
   const getRandomGradient = () => {
     const gradients = [
       "from-blue-100 to-purple-100",
@@ -81,7 +87,6 @@ const ProductList = () => {
       <OrderIcon userId={userId} />
       <Cart userId={userId} />
 
-      {/* container center content  mx -autohorizontally center */}
       <div className="container mx-auto px-4 py-10">
         <div className="mb-10 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">

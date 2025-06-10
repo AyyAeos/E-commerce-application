@@ -58,7 +58,7 @@ public class CartServiceImpl implements CartService {
         redisTemplate.opsForValue().set(redisKey, cartData);
         redisTemplate.expire(redisKey, 10, TimeUnit.MINUTES);
 
-        log.info("Cart data fetched from DB and cached in Redis for user: " + userId);
+        log.info("Cart data fetched from DB and cached in Redis for user: " + userId + cartData.toString());
         return cartData;
     }
 

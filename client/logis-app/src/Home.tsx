@@ -15,7 +15,7 @@ const Home: React.FC = () => {
             </span>
           </h1>
           <p className="mt-4 text-lg md:text-xl text-pink-100 opacity-90">
-            Your E-commrce Website Choice
+             E-commrce Website 
           </p>
         </div>
 

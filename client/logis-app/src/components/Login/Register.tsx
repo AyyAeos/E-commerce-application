@@ -66,7 +66,7 @@ const Register: React.FC = () => {
     setIsLoading(true);
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/logins/register",
+        "/logins/register",
         values
       );
       console.log(response.data);
