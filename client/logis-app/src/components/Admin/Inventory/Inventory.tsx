@@ -1,4 +1,3 @@
-import EditForm from "@/components/Inventory/EditForm";
 import {
   Table,
   TableBody,
@@ -19,6 +18,7 @@ import SearchForm from "./SearchForm";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "@/utils/axiosInstance";
+import EditForm from "./EditForm";
 type SearchFormDataType = {
   itemName: string;
   size: string;

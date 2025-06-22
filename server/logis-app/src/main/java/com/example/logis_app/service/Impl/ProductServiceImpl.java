@@ -11,6 +11,7 @@ import com.example.logis_app.util.ProductPageUtil;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,9 @@ import java.util.*;
 @Service
 @Transactional
 public class ProductServiceImpl  implements ProductService {
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     private ProductMapper productMapper;
@@ -48,6 +52,9 @@ public class ProductServiceImpl  implements ProductService {
             log.info("Product not exist. Creating new product . . .");
             productMapper.addToCard(addCartDTO);
         }
+
+        String redisKey = "cart:" + addCartDTO.getUserId();
+        redisTemplate.delete(redisKey);
     }
 
     @Override

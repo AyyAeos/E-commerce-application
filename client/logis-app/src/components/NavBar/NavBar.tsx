@@ -10,7 +10,7 @@ export const NavBar = () => {
 
   return (
     <>
-      <div className=" flex p-5 justify-between  bg-black text-white text-center text-2xl fixed top-0 left-0 right-0">
+      <div className="flex p-5 justify-between  bg-black text-white text-center text-2xl fixed top-0 left-0 right-0">
         <button
           className="px-4 py-2"
           onClick={() => {
@@ -40,7 +40,7 @@ export const NavBar = () => {
             <Button
               className="hover:text-gray-400"
               onClick={() => {
-                localStorage.removeItem("userId");
+                localStorage.clear();
                 navigate("/");
               }}
             >

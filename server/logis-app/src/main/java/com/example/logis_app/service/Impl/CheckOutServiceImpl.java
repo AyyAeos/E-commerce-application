@@ -5,6 +5,7 @@ import com.example.logis_app.pojo.DTO.CartDTO.PlaceOrderDTO;
 import com.example.logis_app.service.CheckOutService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,9 @@ public class CheckOutServiceImpl implements CheckOutService {
     @Autowired
     private CheckOutMapper checkOutMapper;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     @Transactional
     @Override
     public void placeOrder(List<PlaceOrderDTO> placeOrderDTOS) {
@@ -27,6 +31,9 @@ public class CheckOutServiceImpl implements CheckOutService {
         checkOutMapper.placeOrder(placeOrderDTO);
         checkOutMapper.updateOrderStatus(placeOrderDTO.getCartId());
         }
+
+        String redisKey = "cart:" + placeOrderDTOS.getFirst().getUserId();
+        redisTemplate.delete(redisKey);
 
     }
 }

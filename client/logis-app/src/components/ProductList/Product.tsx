@@ -16,29 +16,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import axiosInstance from "@/utils/axiosInstance";
 import ProductComment from "./comment/ProductComment";
-
-type Variants = {
-  size: string;
-  stock: number;
-  price: number;
-  sizeId: number;
-};
-
-type SelectedProduct = {
-  itemId: number;
-  itemName: string;
-  description: string;
-  variants: Variants[];
-};
-
-type AddItemType = {
-  itemId: number;
-  itemName: string;
-  sizeId: number;
-  quantity: number;
-  userId: string;
-  itemPrice: number;
-};
+import { AddItemType, Product, Variant } from "./type";
 
 const Product = () => {
   const { itemId } = useParams();
@@ -46,11 +24,21 @@ const Product = () => {
   const userId = localStorage.getItem("userId") ?? "";
   const [error, setError] = useState<string>("");
 
+  // Cart Item
+  const [addItem, setAddItem] = useState<AddItemType>({
+    itemId: itemId ? parseInt(itemId) : 0,
+    itemName: "",
+    sizeId: 0,
+    quantity: 0,
+    userId: userId ?? "",
+    itemPrice: 0,
+  });
+
+  // Fetch Product
   const fetcher = async (url: string) => {
     try {
       const response = await axiosInstance.get(url);
       if (response.data.msg === "success" && response.data.code === 1) {
-        console.log(`Fetched data: ${response.data.data}`);
         return response.data.data;
       }
     } catch (error) {
@@ -63,17 +51,9 @@ const Product = () => {
     data,
     error: swrError,
     isLoading,
-  } = useSWR<SelectedProduct>(`products/${itemId}`, fetcher);
+  } = useSWR<Product>(`products/${itemId}`, fetcher);
 
-  const [addItem, setAddItem] = useState<AddItemType>({
-    itemId: itemId ? parseInt(itemId) : 0,
-    itemName: "",
-    sizeId: 0,
-    quantity: 0,
-    userId: userId ?? "",
-    itemPrice: 0,
-  });
-
+  //Select the first item as selected item
   useEffect(() => {
     if (!isLoading && data) {
       setAddItem((prev) => ({
@@ -86,26 +66,7 @@ const Product = () => {
     }
   }, [isLoading, data, userId]);
 
-  const checkPrice = async (sizeId: number) => {
-    try {
-      const response = await axiosInstance.get(
-        `/products/${itemId}/${sizeId}`
-      );
-
-      if (response.data.msg === "success" && response.data.code === 1) {
-        console.log("Get Price Successfully . . .");
-        setAddItem((prevState) => ({
-          ...prevState,
-          itemPrice: response.data.data,
-          quantity: 1,
-        }));
-      }
-    } catch (error) {
-      console.log(error);
-      setError("Failed to update price. Please try again.");
-    }
-  };
-
+  //Add Quantity
   const addButton = () => {
     setAddItem((prevState) => ({
       ...prevState,
@@ -115,6 +76,7 @@ const Product = () => {
     }));
   };
 
+  //Minus Quantity
   const minusButton = () => {
     setAddItem((prevState) => ({
       ...prevState,
@@ -127,15 +89,12 @@ const Product = () => {
     }));
   };
 
+  //Add Selected Item to Cart
   const addToCart = async () => {
     try {
-      const response = await axiosInstance.post(
-        `/products/${itemId}`,
-        addItem
-      );
+      const response = await axiosInstance.post(`/products/${itemId}`, addItem);
 
       if (response.data.msg === "success" && response.data.code === 1) {
-        console.log("Add To Cart Successfully . . .");
         navigate(`/carts/${userId}`);
       }
     } catch (error) {
@@ -144,6 +103,7 @@ const Product = () => {
     }
   };
 
+  // Loading Screen Animation
   const LoadingSkeleton = () => (
     <div className="max-w-4xl mx-auto w-full bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-xl">
       <div className="flex flex-col space-y-4 md:flex-row md:space-x-6 md:space-y-0">
@@ -211,7 +171,7 @@ const Product = () => {
                         <h3 className="text-xl text-white mb-3">Size</h3>
                         <div className="flex flex-wrap gap-3">
                           {data?.variants &&
-                            data.variants.map((variant: Variants) => (
+                            data.variants.map((variant: Variant) => (
                               <button
                                 key={variant.sizeId}
                                 className={cn(
@@ -226,8 +186,8 @@ const Product = () => {
                                     itemName: data.itemName,
                                     sizeId: variant.sizeId,
                                     quantity: 1,
+                                    itemPrice: variant.price,
                                   }));
-                                  checkPrice(variant.sizeId);
                                 }}
                               >
                                 {variant.size}

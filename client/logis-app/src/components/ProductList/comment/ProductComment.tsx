@@ -2,31 +2,14 @@ import useSWR, { mutate } from "swr";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import ParentComment from "./ParentComment";
+import { CommentList } from "../type";
 
-export interface CommentList {
-  indexId: number;
-  username: string;
-  userId: number;
-  root: number;
-  parent: number;
-  likeCount: number;
-  type: string;
-  createTime: string;
-  content: string;
-  quantity?: number;
-  itemName?: string;
-  sizeName?: string;
-  likedUser: number[];
-}
 
-export interface Comment {
-  itemId: number;
-  count: number;
-  productCommentLists: CommentList[];
-}
 
 const ProductComment = ({ itemId }: { itemId: number }) => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  
+  const userId = localStorage.getItem("userId") || "";
 
   const fetcher = async (url: string) => {
     try {
@@ -38,16 +21,21 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+      return (
+        <>
+        Error Fetching review . Please refresh the screen.
+        </>
+      )
     }
-    return null;
+   
   };
 
   const { data, error, isLoading } = useSWR<Comment>(
-    `http://localhost:8080/products/${itemId}/review`,
+    `/products/${itemId}/review`,
     fetcher
   );
 
-  // Auto reload effect when a reply is submitted successfully
+  //GEt latest command
   useEffect(() => {
     if (isSuccess) {
       const timeoutId = setTimeout(() => {
@@ -62,7 +50,6 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
   if (error) return <div>Error fetching data</div>;
   if (!data) return null;
 
-  const userId = localStorage.getItem("userId") || "";
 
   // Group comments by parentId
   const groupedComments: Record<number, CommentList[]> = {};

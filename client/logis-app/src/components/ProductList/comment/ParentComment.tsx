@@ -16,7 +16,7 @@ import {
 import useSWR, { mutate } from "swr";
 import { useReplies } from "./Replies";
 import axiosInstance from "@/utils/axiosInstance";
-import { CommentList } from "./ProductComment";
+import { CommentList } from "../type";
 
 const ParentComment = ({
   userId,
@@ -73,7 +73,7 @@ const ParentComment = ({
 
     try {
       const response = await axiosInstance.post(
-        `http://localhost:8080/orders/${userId}`,
+        `/orders/${userId}`,
         reviewDTO
       );
 
@@ -104,10 +104,10 @@ const ParentComment = ({
 
     try {
       const response = await axiosInstance.post(
-        `http://localhost:8080/products/${userId}/like`,
+        `/products/${userId}/like`,
         likeDTO
       );
-      mutate(`http://localhost:8080/products/${itemId}/review`);
+      mutate(`/products/${itemId}/review`);
     } catch (error) {
       console.log(error);
     }

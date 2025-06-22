@@ -62,13 +62,11 @@ const Register: React.FC = () => {
     },
   });
 
+  //Register user
   const onSubmit = async (values: any) => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post(
-        "/logins/register",
-        values
-      );
+      const response = await axiosInstance.post("/logins/register", values);
       console.log(response.data);
       if (response.data.code === 0) {
         setErrorMessage(response.data.msg);
@@ -90,7 +88,7 @@ const Register: React.FC = () => {
     }
   };
 
-  // Map of field names to their respective icons
+  // Form Icon
   const fieldIcons = {
     name: <FaUser />,
     userPhone: <FaPhone />,
@@ -99,7 +97,7 @@ const Register: React.FC = () => {
     password: <FaLock />,
   };
 
-  // Human-readable field labels
+  //  Form Tittle
   const fieldLabels = {
     name: "Full Name",
     userPhone: "Phone Number",
@@ -116,6 +114,7 @@ const Register: React.FC = () => {
           <p className="mt-2 text-pink-100">Join Tusla and get started today</p>
         </div>
 
+        {/* Display Form */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {["name", "userPhone", "username", "email", "password"].map(
@@ -153,6 +152,7 @@ const Register: React.FC = () => {
               )
             )}
 
+            {/* Resgister Failed */}
             {errorMessage.trim() !== "" && (
               <Alert className="bg-red-500/20 border border-red-500/50">
                 <AlertDescription className="text-white">
@@ -191,7 +191,7 @@ const Register: React.FC = () => {
                 to="/logins"
                 className="text-pink-200 hover:scale-[1.2] hover:text-white"
               >
-                Already have an account?
+                Already have an account? Login
               </Link>
             </div>
           </form>

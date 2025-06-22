@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { CommentList } from "./ProductComment";
 import axiosInstance from "@/utils/axiosInstance";
+import { CommentList } from "../type";
 
 //optinal array can be []
 export const useReplies = (
@@ -19,12 +19,9 @@ export const useReplies = (
 
     setIsLoading(true);
     try {
-      console.log(
-        `http://localhost:8080/products/replies?parentId=${parentId}&page=${page}&pageLimit=4`
-      );
 
       const response = await axiosInstance.get(
-        `http://localhost:8080/products/replies?parentId=${parentId}&page=${page}&pageLimit=4`
+        `/products/replies?parentId=${parentId}&page=${page}&pageLimit=4`
       );
 
       if (response.data.code === 1 && response.data.data?.length > 0) {

@@ -1,16 +1,9 @@
 import { SetStateAction, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
-import { Button } from "../ui/button";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "../ui/pagination";
+
+import { Button } from "@/components/ui/button";
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 type SearchFormDataType = {
   itemName: string;

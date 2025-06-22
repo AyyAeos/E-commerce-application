@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from "react";
-import { Button } from "../ui/button";
 import axiosInstance from "@/utils/axiosInstance";
+import { Button } from "@/components/ui/button";
 
 
 // Define types for the form data

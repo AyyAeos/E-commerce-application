@@ -55,7 +55,7 @@ const EditForm = ({
     console.log("Form Submitted", FormData);
     try {
       const response = await axiosInstance.put(
-        `http://localhost:8080/admins/inventory/${item.itemId}`,
+        `/admins/inventory/${item.itemId}`,
         FormData
       );
       if (response.data.msg === "success" && response.data.code === 1) {

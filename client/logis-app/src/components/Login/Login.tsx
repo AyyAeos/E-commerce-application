@@ -52,22 +52,21 @@ const Login: React.FC = () => {
     },
   });
 
+  //Validate User
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post(
-        "/logins",
-        {
-          username: values.username,
-          password: values.password,
-        }
-      );
+      const response = await axiosInstance.post("/logins", {
+        username: values.username,
+        password: values.password,
+      });
 
       if (response.data.msg === "success" && response.data.code === 1) {
         console.log("Login successful:");
+        //Set customer information
         localStorage.setItem("token", response.data.data.jwt);
-        localStorage.setItem("username", values.username);
-        localStorage.setItem("userRole", "customer");
+        localStorage.setItem("username", response.data.data.user.userName);
+        localStorage.setItem("userRole", response.data.data.user.role);
         localStorage.setItem("userId", response.data.data.user.userId);
         setLoginFailed(false);
         navigate("/products");
@@ -84,6 +83,7 @@ const Login: React.FC = () => {
     }
   };
 
+  //Connection Problem with server
   if (fetchFailed) {
     return (
       <div className="min-h-screen bg-primary flex items-center justify-center p-4">
@@ -112,6 +112,7 @@ const Login: React.FC = () => {
           <p className="mt-2 text-pink-100">Sign in to your Tusla account</p>
         </div>
 
+        {/* Display Form */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField

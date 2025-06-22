@@ -7,34 +7,14 @@ import OrderIcon from "../Order/OrderIcon";
 import { Skeleton } from "../ui/skeleton";
 import { FaShoppingBag, FaSearch, FaArrowRight } from "react-icons/fa";
 import axiosInstance from "@/utils/axiosInstance";
-
-type Product = {
-  itemId: number;
-  itemName: string;
-  description: string;
-  variants: Variant[];
-};
-
-type Variant = {
-  size: string;
-  stock: number;
-  price: number;
-};
+import { getRandomGradient, Product, Variant } from "./type";
+import LoginErrorMessage from "@/LoginErrorMessage";
 
 const ProductList = () => {
   const userId = localStorage.getItem("userId") ?? "";
   const navigate = useNavigate();
 
-  if (!userId) {
-    return (
-      <div>
-        <h2>It looks like you're not logged in!</h2>
-        <p>Please log in to access this page.</p>
-        <button onClick={() => navigate("/logins")}>Go to Login</button>
-      </div>
-    );
-  }
-
+  //Fetch producy list
   const fetcher = async (url: string) => {
     try {
       const res = await axiosInstance.get(url);
@@ -49,6 +29,7 @@ const ProductList = () => {
 
   const { data, error, isLoading } = useSWR(`/products`, fetcher);
 
+  // Set Price Change Map
   let priceMap = new Map();
 
   data?.forEach((product: Product) => {
@@ -67,19 +48,9 @@ const ProductList = () => {
     });
   });
 
-  const handleClick = (itemId) => {
+  // Navigate to Selected Product
+  const handleClick = (itemId: Product) => {
     navigate(`/products/${itemId}`);
-  };
-
-  const getRandomGradient = () => {
-    const gradients = [
-      "from-blue-100 to-purple-100",
-      "from-pink-100 to-rose-100",
-      "from-green-100 to-teal-100",
-      "from-amber-100 to-orange-100",
-      "from-indigo-100 to-sky-100",
-    ];
-    return gradients[Math.floor(Math.random() * gradients.length)];
   };
 
   return (
@@ -97,8 +68,10 @@ const ProductList = () => {
           </p>
         </div>
 
+        {/* Display Product */}
         {isLoading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {/* Random Gradient Colour */}
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
@@ -169,7 +142,7 @@ const ProductList = () => {
             ))}
           </div>
         )}
-
+        {/* Fetch Failed */}
         {data && data.length === 0 && !isLoading && (
           <div className="bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl text-center my-12">
             <FaSearch className="mx-auto text-pink-300 text-5xl mb-4" />

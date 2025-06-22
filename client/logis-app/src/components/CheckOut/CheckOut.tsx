@@ -33,7 +33,7 @@ const Checkout = () => {
     setIsLoading(true);
     try {
       const response = await axiosInstance.post(
-        `http://localhost:8080/checkouts/${userId}`,
+        `/checkouts/${userId}`,
         placeOrderDTOS
       );
       if (response.data.msg === "success" && response.data.code === 1) {

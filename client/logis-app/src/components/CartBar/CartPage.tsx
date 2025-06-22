@@ -1,27 +1,20 @@
-import axios from "axios";
 import useSWR from "swr";
 import { Button } from "../ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
-import { FaPlus, FaMinus, FaArrowLeft, FaTimes, FaShoppingCart, FaCheck } from "react-icons/fa";
+import {
+  FaPlus,
+  FaMinus,
+  FaArrowLeft,
+  FaTimes,
+  FaShoppingCart,
+  FaCheck,
+} from "react-icons/fa";
 import { Skeleton } from "../ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import axiosInstance from "@/utils/axiosInstance";
-
-//means cause i change the state of datadata react re-render every thing again
-type Item = {
-  cartId: number;
-  itemId: number;
-  quantity: number;
-  sizeId: number;
-  size: string;
-  updatedAt: string;
-  itemName: string;
-  price: number;
-  selected: boolean;
-};
+import { Item } from "./type/type";
 
 const CartPage = () => {
   const userId = localStorage.getItem("userId");
@@ -41,27 +34,31 @@ const CartPage = () => {
     }
   };
 
-  const [datadata, setDataData] = useState<Item[]>([]);
+  const [CartItem, setCartItem] = useState<Item[]>([]);
 
-  const { data, error: swrError, isLoading } = useSWR<Item[]>(
-    `http://localhost:8080/carts/${userId}`,
-    fetcher
-  );
+  const {
+    data,
+    error: swrError,
+    isLoading,
+  } = useSWR<Item[]>(`/carts/${userId}`, fetcher);
 
   useEffect(() => {
     if (data) {
-      setDataData(data);
+      setCartItem(data);
     }
   }, [data]);
 
   const handleCheckboxClick = useCallback((item: Item) => {
-    setDataData((prevData) => {
+    setCartItem((prevData) => {
       return prevData.map((prev) => {
         if (prev.sizeId === item.sizeId) {
           const isSelected = !prev.selected;
-          setTotalPrice((prevTotal) =>
-            prevTotal +
-            (isSelected ? item.price * item.quantity : -item.price * item.quantity)
+          setTotalPrice(
+            (prevTotal) =>
+              prevTotal +
+              (isSelected
+                ? item.price * item.quantity
+                : -item.price * item.quantity)
           );
           return { ...prev, selected: isSelected };
         }
@@ -73,7 +70,7 @@ const CartPage = () => {
   const updateCartToServer = debounce(
     async (cartId: number, newQuantity: number, sizeId: number) => {
       try {
-        await axiosInstance.put(`http://localhost:8080/carts/${userId}`, {
+        await axiosInstance.put(`/carts/${userId}`, {
           cartId,
           quantity: newQuantity,
           sizeId,
@@ -87,8 +84,12 @@ const CartPage = () => {
   );
   // wait 500 sec after last button is hit , if hit = reset
 
-  const updateQuantity = (cartId: number, sizeId: number, increment: number) => {
-    setDataData((prevData) => {
+  const updateQuantity = (
+    cartId: number,
+    sizeId: number,
+    increment: number
+  ) => {
+    setCartItem((prevData) => {
       return prevData.map((item) => {
         if (item.sizeId === sizeId) {
           const newQuantity = item.quantity + increment;
@@ -117,7 +118,7 @@ const CartPage = () => {
   const handleCheckOut = () => {
     navigate(`/checkouts/${userId}`, {
       state: {
-        placeOrderDTOS: datadata.filter((prev) => prev.selected === true),
+        placeOrderDTOS: CartItem.filter((prev) => prev.selected === true),
         totalPrice,
       },
     });
@@ -160,11 +161,15 @@ const CartPage = () => {
       ) : data && data.length === 0 ? (
         <div className="max-w-md w-full bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl text-center mt-8">
           <FaShoppingCart className="mx-auto text-pink-200 text-6xl mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">Your Cart is Empty</h2>
-          <p className="text-pink-100 mb-6">Looks like you haven't added any items to your cart yet.</p>
-          <Button 
+          <h2 className="text-2xl font-bold text-white mb-2">
+            Your Cart is Empty
+          </h2>
+          <p className="text-pink-100 mb-6">
+            Looks like you haven't added any items to your cart yet.
+          </p>
+          <Button
             className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 transition-all duration-300"
-            onClick={() => navigate('/products')}
+            onClick={() => navigate("/products")}
           >
             Continue Shopping
           </Button>
@@ -188,14 +193,15 @@ const CartPage = () => {
 
             {/* Cart Items */}
             <div className="divide-y divide-white/10">
-              {datadata &&
-                datadata.map((item: Item, index: number) => {
+              {CartItem &&
+                CartItem.map((item: Item, index: number) => {
                   const isSelected = item.selected;
 
                   return (
                     <div
                       key={index}
-                      className="flex text-sm md:text-base items-center p-4 transition-all duration-300">
+                      className="flex text-sm md:text-base items-center p-4 transition-all duration-300"
+                    >
                       <div className="w-1/6 text-center text-white font-medium truncate">
                         {item.itemName}
                       </div>
@@ -209,7 +215,9 @@ const CartPage = () => {
                       <div className="w-1/6 flex justify-center items-center">
                         <button
                           className={`flex items-center justify-center p-2 rounded-l-md bg-white/10 border border-white/20 text-white ${
-                            item.quantity <= 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-white/20"
+                            item.quantity <= 1
+                              ? "opacity-50 cursor-not-allowed"
+                              : "hover:bg-white/20"
                           }`}
                           onClick={() => {
                             minusQuantity(item.cartId, item.sizeId);
@@ -244,7 +252,9 @@ const CartPage = () => {
                           }`}
                           onClick={() => handleCheckboxClick(item)}
                         >
-                          {isSelected && <FaCheck size={12} className="text-white" />}
+                          {isSelected && (
+                            <FaCheck size={12} className="text-white" />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -253,23 +263,26 @@ const CartPage = () => {
             </div>
           </div>
 
-          {datadata && datadata.filter((prev) => prev.selected === true).length > 0 && (
-            <div className="fixed bottom-0 left-0 right-0 bg-white/10 border-t border-white/20 py-4 px-6 shadow-lg">
-              <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-white text-lg sm:text-xl font-medium">
-                  <span>Total: </span>
-                  <span className="font-bold text-white">RM {totalPrice.toFixed(2)}</span>
+          {CartItem &&
+            CartItem.filter((prev) => prev.selected === true).length > 0 && (
+              <div className="fixed bottom-0 left-0 right-0 bg-white/10 border-t border-white/20 py-4 px-6 shadow-lg">
+                <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="text-white text-lg sm:text-xl font-medium">
+                    <span>Total: </span>
+                    <span className="font-bold text-white">
+                      RM {totalPrice.toFixed(2)}
+                    </span>
+                  </div>
+                  <Button
+                    className="w-full sm:w-auto py-6 px-8 text-lg font-medium rounded-xl bg-black hover:scale-105 flex items-center justify-center gap-2"
+                    onClick={handleCheckOut}
+                  >
+                    <FaCheck size={16} />
+                    <span>Checkout</span>
+                  </Button>
                 </div>
-                <Button
-                  className="w-full sm:w-auto py-6 px-8 text-lg font-medium rounded-xl bg-black hover:scale-105 flex items-center justify-center gap-2"
-                  onClick={handleCheckOut}
-                >
-                  <FaCheck size={16} />
-                  <span>Checkout</span>
-                </Button>
               </div>
-            </div>
-          )}
+            )}
         </div>
       )}
     </div>
