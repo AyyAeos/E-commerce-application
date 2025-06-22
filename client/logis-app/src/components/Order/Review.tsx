@@ -53,7 +53,7 @@ const WriteReview = ({
 
       try {
         const response = await axiosInstance.post(
-          `http://localhost:8080/orders/${order.userId}`,
+          `/orders/${order.userId}`,
           reviewDTO
         );
         if (response.data.code === 1 && response.data.msg === "success") {

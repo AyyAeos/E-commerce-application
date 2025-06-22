@@ -7,7 +7,7 @@ import OrderIcon from "../Order/OrderIcon";
 import { Skeleton } from "../ui/skeleton";
 import { FaShoppingBag, FaSearch, FaArrowRight } from "react-icons/fa";
 import axiosInstance from "@/utils/axiosInstance";
-import { getRandomGradient, Product, Variant } from "./type";
+import { getRandomGradient, SelectedProduct, Variant } from "./type";
 import LoginErrorMessage from "@/LoginErrorMessage";
 
 const ProductList = () => {
@@ -28,11 +28,12 @@ const ProductList = () => {
   };
 
   const { data, error, isLoading } = useSWR(`/products`, fetcher);
+  console.log("data : ", data)
 
   // Set Price Change Map
   let priceMap = new Map();
 
-  data?.forEach((product: Product) => {
+  data?.forEach((product: SelectedProduct) => {
     product.variants.forEach((variant: Variant) => {
       if (!priceMap.has(product.itemId)) {
         priceMap.set(product.itemId, {
@@ -49,9 +50,14 @@ const ProductList = () => {
   });
 
   // Navigate to Selected Product
-  const handleClick = (itemId: Product) => {
-    navigate(`/products/${itemId}`);
-  };
+const handleClick = (product: SelectedProduct) => {
+  console.log("Product : ", product);
+  
+  // If using react-router-dom
+  navigate(`/products/${product.itemId}`, {
+    state: { product }, // You can pass state like this
+  });
+};
 
   return (
     <div className="min-h-screen bg-primary">
@@ -98,7 +104,7 @@ const ProductList = () => {
 
         {data && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {data.map((product: Product) => (
+            {data.map((product: SelectedProduct) => (
               <div
                 key={product.itemId}
                 className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-xl transition-all duration-300 hover:transform hover:scale-[1.02] hover:shadow-2xl flex flex-col h-full"
@@ -131,7 +137,7 @@ const ProductList = () => {
                   </div>
 
                   <Button
-                    onClick={() => handleClick(product.itemId)}
+                    onClick={() => handleClick(product)}
                     className="bg-black rounded-lg border-0 flex items-center gap-2 text-white hover:scale-150"
                   >
                     <span>Details</span>

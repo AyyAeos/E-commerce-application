@@ -82,7 +82,6 @@ const CartPage = () => {
     },
     500
   );
-  // wait 500 sec after last button is hit , if hit = reset
 
   const updateQuantity = (
     cartId: number,
@@ -209,7 +208,8 @@ const CartPage = () => {
                         {item.size}
                       </div>
                       <div className="w-1/6 text-center text-white">
-                        RM {item.price.toFixed(2)}
+                      RM {(item.price ?? 0).toFixed(2)}
+
                       </div>
 
                       <div className="w-1/6 flex justify-center items-center">

@@ -1,38 +1,27 @@
 import React, { useEffect, useState, useRef } from "react";
-
-//add message
-interface Message {
-  fromName: string;
-  message: string;
-  timestamp?: number | string;
-}
-
-//add user 
-interface SystemMessage {
-  isSystem: boolean;
-  message: string[] | string;
-}
+import { Message } from "./type";
 
 const Chatbox = () => {
   const userRole = localStorage.getItem("userRole");
   const username = localStorage.getItem("username");
 
-  //receipent name
+ 
   const [toName, setToName] = useState<string>("");
-  //lsit of online user
+ 
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   //chat message
   const [messages, setMessages] = useState<Record<string, Message[]>>({});
-  // new ws instance
+
   const [socket, setSocket] = useState<WebSocket | null>(null);
   //current input message
   const [messageText, setMessageText] = useState("");
   //target chatter
   const [selectedUser, setSelectedUser] = useState<string>("");
   //websocket connection status
-  const [connectionStatus, setConnectionStatus] = useState<string>("Connecting...");
+  const [connectionStatus, setConnectionStatus] =
+    useState<string>("Connecting...");
   //reconnect attempt
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const maxReconnectAttempts = 5;
   const reconnectDelay = 3000;
@@ -45,114 +34,123 @@ const Chatbox = () => {
     ws.onopen = () => {
       console.log("WebSocket connected");
       setConnectionStatus("Connected");
-      
+
       // Send initial registration message
       if (username) {
         const initialMessage = JSON.stringify({
           toName: "server",
           message: `${username} has joined the chat.`,
-          fromName: username
+          fromName: username,
         });
-        
+
         ws.send(initialMessage);
       }
     };
 
-  // Modify your onmessage handler to ensure messages are properly stored
-ws.onmessage = (event) => {
-  console.log("Raw message received:", event.data);
-  
-  try {
-    const data = JSON.parse(event.data);
-    
-    if (data.isSystem) {
-      // System message handling remains the same
-      console.log("System message received:", data);
-      if (Array.isArray(data.message)) {
-        const filteredUsers = userRole === "admin" 
-          ? data.message
-          : data.message.filter((name: string) => name !== username);
-        
-        setOnlineUsers(filteredUsers);
-      }
-    } else {
-      // Handle chat messages - with more detailed logging
-      console.log("Chat message received:", data);
-      const senderName = data.fromName;
-      const receiverName = username;
-      
-      // Debug - print current username and roles
-      console.log("Current user:", username);
-      console.log("Current role:", userRole);
-      console.log("Message from:", senderName, "to:", receiverName);
-      
-      // For customer: store messages where I'm the sender or receiver
-      if (userRole === "customer" && (senderName === username || receiverName === username)) {
-        const otherUser = senderName === username ? receiverName : senderName;
-        
-        console.log("Customer storing message with:", otherUser);
-        
-        setMessages(prev => {
-          const existingMessages = prev[otherUser] || [];
-          const newMessage = {
-            fromName: senderName,
-            message: data.message,
-            timestamp: new Date(data.timestamp || Date.now()).toLocaleTimeString()
-          };
-          
-          console.log("Adding message to conversation:", newMessage);
-          
-          return {
-            ...prev,
-            [otherUser]: [...existingMessages, newMessage]
-          };
-        });
-        
-        // Auto-select this user if none selected
-        if (!selectedUser) {
-          console.log("Auto-selecting user:", otherUser);
-          setSelectedUser(otherUser);
+    // Modify your onmessage handler to ensure messages are properly stored
+    ws.onmessage = (event) => {
+      console.log("Raw message received:", event.data);
+
+      try {
+        const data = JSON.parse(event.data);
+
+        if (data.isSystem) {
+          // System message handling remains the same
+          console.log("System message received:", data);
+          if (Array.isArray(data.message)) {
+            const filteredUsers =
+              userRole === "admin"
+                ? data.message
+                : data.message.filter((name: string) => name !== username);
+
+            setOnlineUsers(filteredUsers);
+          }
+        } else {
+          // Handle chat messages - with more detailed logging
+          console.log("Chat message received:", data);
+          const senderName = data.fromName;
+          const receiverName = username;
+
+          // Debug - print current username and roles
+          console.log("Current user:", username);
+          console.log("Current role:", userRole);
+          console.log("Message from:", senderName, "to:", receiverName);
+
+          // For customer: store messages where I'm the sender or receiver
+          if (
+            userRole === "customer" &&
+            (senderName === username || receiverName === username)
+          ) {
+            const otherUser =
+              senderName === username ? receiverName : senderName;
+
+            console.log("Customer storing message with:", otherUser);
+
+            setMessages((prev) => {
+              const existingMessages = prev[otherUser] || [];
+              const newMessage = {
+                fromName: senderName,
+                message: data.message,
+                timestamp: new Date(
+                  data.timestamp || Date.now()
+                ).toLocaleTimeString(),
+              };
+
+              console.log("Adding message to conversation:", newMessage);
+
+              return {
+                ...prev,
+                [otherUser]: [...existingMessages, newMessage],
+              };
+            });
+
+            // Auto-select this user if none selected
+            if (!selectedUser) {
+              console.log("Auto-selecting user:", otherUser);
+              setSelectedUser(otherUser);
+            }
+          }
+
+          // For admin: store all messages
+          if (userRole === "admin") {
+            const relevantUser =
+              senderName === username ? receiverName : senderName;
+
+            console.log("Admin storing message with:", relevantUser);
+
+            setMessages((prev) => {
+              const existingMessages = prev[relevantUser] || [];
+              const newMessage = {
+                fromName: senderName,
+                message: data.message,
+                timestamp: new Date(
+                  data.timestamp || Date.now()
+                ).toLocaleTimeString(),
+              };
+
+              console.log("Adding message to conversation:", newMessage);
+
+              return {
+                ...prev,
+                [relevantUser]: [...existingMessages, newMessage],
+              };
+            });
+
+            // Auto-select this user if none selected
+            if (!selectedUser) {
+              console.log("Auto-selecting user:", relevantUser);
+              setSelectedUser(relevantUser);
+            }
+          }
         }
+      } catch (error) {
+        console.error("Error parsing message:", error);
       }
-      
-      // For admin: store all messages
-      if (userRole === "admin") {
-        const relevantUser = senderName === username ? receiverName : senderName;
-        
-        console.log("Admin storing message with:", relevantUser);
-        
-        setMessages(prev => {
-          const existingMessages = prev[relevantUser] || [];
-          const newMessage = {
-            fromName: senderName,
-            message: data.message,
-            timestamp: new Date(data.timestamp || Date.now()).toLocaleTimeString()
-          };
-          
-          console.log("Adding message to conversation:", newMessage);
-          
-          return {
-            ...prev,
-            [relevantUser]: [...existingMessages, newMessage]
-          };
-        });
-        
-        // Auto-select this user if none selected
-        if (!selectedUser) {
-          console.log("Auto-selecting user:", relevantUser);
-          setSelectedUser(relevantUser);
-        }
-      }
-    }
-  } catch (error) {
-    console.error("Error parsing message:", error);
-  }
-};
+    };
 
     ws.onclose = (event) => {
       console.log("WebSocket closed", event);
       setConnectionStatus("Disconnected");
-      
     };
 
     ws.onerror = (error) => {
@@ -161,7 +159,7 @@ ws.onmessage = (event) => {
     };
 
     setSocket(ws);
-    
+
     // Return cleanup function
     return () => {
       ws.close();
@@ -187,80 +185,98 @@ ws.onmessage = (event) => {
   }, [selectedUser]);
 
   const sendMessage = () => {
-    if (!messageText.trim() || !toName || !socket || socket.readyState !== WebSocket.OPEN) {
+    if (
+      !messageText.trim() ||
+      !toName ||
+      !socket ||
+      socket.readyState !== WebSocket.OPEN
+    ) {
       return;
     }
 
     const messageObj = {
       toName: toName,
       message: messageText,
-      fromName: username
+      fromName: username,
     };
 
     socket.send(JSON.stringify(messageObj));
-    
+
     // Add message to your own chat log immediately (for better UX)
-    setMessages(prev => {
+    setMessages((prev) => {
       const userMessages = prev[toName] || [];
-      
+
       return {
         ...prev,
-        [toName]: [...userMessages, {
-          fromName: username || "Me",
-          message: messageText,
-          timestamp: new Date().toLocaleTimeString()
-        }]
+        [toName]: [
+          ...userMessages,
+          {
+            fromName: username || "Me",
+            message: messageText,
+            timestamp: new Date().toLocaleTimeString(),
+          },
+        ],
       };
     });
-    
+
     setMessageText("");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       sendMessage();
     }
   };
 
   // Get current conversation messages
-  const currentMessages = selectedUser ? (messages[selectedUser] || []) : [];
+  const currentMessages = selectedUser ? messages[selectedUser] || [] : [];
 
   return (
     <div className="flex min-h-screen bg-gray-200 justify-center items-center">
       <div className="max-w-4xl w-full bg-white flex rounded-lg shadow-xl overflow-hidden">
         {/* Chat panel */}
-        <div className={`${userRole === "customer" ? "w-full" : "w-3/4"} p-4 flex flex-col`}>
+        <div
+          className={`${
+            userRole === "customer" ? "w-full" : "w-3/4"
+          } p-4 flex flex-col`}
+        >
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-2xl font-semibold text-gray-800">Chat</h3>
-            <span className={`px-2 py-1 rounded text-sm ${
-              connectionStatus === "Connected" ? "bg-green-100 text-green-800" : 
-              connectionStatus === "Disconnected" ? "bg-red-100 text-red-800" : 
-              "bg-yellow-100 text-yellow-800"
-            }`}>
+            <span
+              className={`px-2 py-1 rounded text-sm ${
+                connectionStatus === "Connected"
+                  ? "bg-green-100 text-green-800"
+                  : connectionStatus === "Disconnected"
+                  ? "bg-red-100 text-red-800"
+                  : "bg-yellow-100 text-yellow-800"
+              }`}
+            >
               {connectionStatus}
             </span>
           </div>
-          
+
           {selectedUser && (
             <p className="text-lg text-gray-700 mb-2">
               Chatting with: <span className="font-medium">{selectedUser}</span>
             </p>
           )}
-          
+
           {!selectedUser && userRole === "admin" && (
-            <p className="text-gray-500 mb-2">Select a user to start chatting</p>
+            <p className="text-gray-500 mb-2">
+              Select a user to start chatting
+            </p>
           )}
-          
+
           <div className="messages bg-gray-50 p-4 rounded-lg flex-grow h-96 overflow-y-auto">
             {currentMessages.length === 0 ? (
               <p className="text-gray-400 text-center mt-20">No messages yet</p>
             ) : (
               currentMessages.map((msg, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`message mb-3 p-3 rounded-lg max-w-3/4 ${
-                    msg.fromName === username 
-                      ? "bg-blue-100 text-blue-900 ml-auto" 
+                    msg.fromName === username
+                      ? "bg-blue-100 text-blue-900 ml-auto"
                       : "bg-white text-gray-800 border border-gray-200"
                   }`}
                 >
@@ -278,7 +294,7 @@ ws.onmessage = (event) => {
             )}
             <div ref={messagesEndRef} />
           </div>
-          
+
           <div className="mt-4 flex">
             <input
               type="text"
@@ -286,15 +302,23 @@ ws.onmessage = (event) => {
               onChange={(e) => setMessageText(e.target.value)}
               onKeyPress={handleKeyPress}
               className="flex-1 p-3 border rounded-l text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              placeholder={selectedUser ? "Type a message..." : "Select a user to chat"}
+              placeholder={
+                selectedUser ? "Type a message..." : "Select a user to chat"
+              }
               disabled={!selectedUser || connectionStatus !== "Connected"}
             />
             <button
               onClick={sendMessage}
-              disabled={!selectedUser || !messageText.trim() || connectionStatus !== "Connected"}
+              disabled={
+                !selectedUser ||
+                !messageText.trim() ||
+                connectionStatus !== "Connected"
+              }
               className={`p-3 ${
-                !selectedUser || !messageText.trim() || connectionStatus !== "Connected"
-                  ? "bg-gray-300 text-gray-500" 
+                !selectedUser ||
+                !messageText.trim() ||
+                connectionStatus !== "Connected"
+                  ? "bg-gray-300 text-gray-500"
                   : "bg-blue-500 text-white hover:bg-blue-600"
               } rounded-r transition`}
             >
@@ -302,7 +326,7 @@ ws.onmessage = (event) => {
             </button>
           </div>
         </div>
-        
+
         {/* User list panel for admins */}
         {userRole === "admin" && (
           <div className="w-1/4 bg-gray-800 text-white flex flex-col">
@@ -314,8 +338,8 @@ ws.onmessage = (event) => {
                 <p className="text-gray-400 text-center p-4">No users online</p>
               ) : (
                 onlineUsers.map((name, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className={`cursor-pointer hover:bg-gray-700 transition ${
                       selectedUser === name ? "bg-gray-700" : ""
                     }`}

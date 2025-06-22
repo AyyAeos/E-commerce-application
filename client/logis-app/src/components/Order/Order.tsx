@@ -46,7 +46,7 @@ const CheckOrder = () => {
     data: orders = [],
     error,
     isLoading,
-  } = useSWR(`http://localhost:8080/orders/${userId}`, fetcher);
+  } = useSWR(`/orders/${userId}`, fetcher);
 
   const DeleteOrder = ({ placeDate }: { placeDate: Order }) => {
     const currentDate = new Date();
