@@ -32,7 +32,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         checkOutMapper.updateOrderStatus(placeOrderDTO.getCartId());
         }
 
-        String redisKey = "cart:" + placeOrderDTOS.getFirst().getUserId();
+        String redisKey = "cart:" + placeOrderDTOS.get(0).getUserId();
         redisTemplate.delete(redisKey);
 
     }
