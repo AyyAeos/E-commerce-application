@@ -31,10 +31,8 @@ const ParentComment = ({
   itemId: number;
   setIsSuccess: (value: boolean) => void;
 }) => {
-  const [replyStates, setReplyStates] = useState<{ [key: number]: boolean }>(
-    {}
-  );
-  const [replyTexts, setReplyTexts] = useState<{ [key: number]: string }>({});
+  const [replyStates, setReplyStates] = useState<boolean>(false);
+  const [replyTexts, setReplyTexts] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -44,30 +42,14 @@ const ParentComment = ({
     hasMore,
   } = useReplies(parentId);
 
-  const toggleReply = (parentId: number) => {
-    setReplyStates((prev) => ({
-      ...prev,
-      [parentId]: !prev[parentId],
-    }));
-  };
-
-  const handleInputChange = (parentId: number, value: string) => {
-    setReplyTexts((prev) => ({
-      ...prev,
-      [parentId]: value,
-    }));
-  };
-
   const handleSubmitReply = async (parentId: number) => {
-    const replyContent = replyTexts[parentId];
-    if (!replyContent.trim()) return;
 
     setIsSubmitting(true);
 
     const reviewDTO = {
       itemId,
       userId,
-      content: replyContent,
+      content: replyTexts,
       parent: parentId,
     };
 
@@ -79,8 +61,8 @@ const ParentComment = ({
 
       if (response.data.code === 1 && response.data.msg === "success") {
         setIsSuccess(true);
-        setReplyTexts((prev) => ({ ...prev, [parentId]: "" }));
-        setReplyStates((prev) => ({ ...prev, [parentId]: false }));
+        setReplyTexts("");
+        setReplyStates(false);
       } else {
         alert("Error submitting reply");
       }
@@ -242,12 +224,12 @@ const ParentComment = ({
           variant="outline"
           size="sm"
           className="mb-3"
-          onClick={() => toggleReply(parentId)}
+          onClick={() => setReplyStates(prev => !prev)}
         >
-          {replyStates[parentId] ? "Cancel Reply" : "Add Reply"}
+          {replyStates ? "Cancel Reply" : "Add Reply"}
         </Button>
 
-        {replyStates[parentId] && (
+        {replyStates && (
           <div className="flex items-start space-x-3">
             <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
               <span className="text-blue-600 font-bold">U</span>
@@ -255,14 +237,14 @@ const ParentComment = ({
             <div className="flex-grow">
               <Input
                 placeholder="Write your reply..."
-                value={replyTexts[parentId] || ""}
-                onChange={(e) => handleInputChange(parentId, e.target.value)}
+                value={replyTexts}
+                onChange={(e) => setReplyTexts(e.target.value)}
                 className="mb-2"
                 disabled={isSubmitting}
               />
               <Button
                 onClick={() => handleSubmitReply(parentId)}
-                disabled={!replyTexts[parentId]?.trim() || isSubmitting}
+                disabled={!replyTexts?.trim() || isSubmitting}
                 className="flex items-center"
               >
                 <Send className="w-4 h-4 mr-2" />
