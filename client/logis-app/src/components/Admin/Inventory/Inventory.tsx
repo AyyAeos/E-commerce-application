@@ -19,6 +19,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "@/utils/axiosInstance";
 import EditForm from "./EditForm";
+import { Item, Variants } from "./type";
 type SearchFormDataType = {
   itemName: string;
   size: string;
@@ -28,21 +29,6 @@ type SearchFormDataType = {
   totalCounts?: number;
   page?: number;
   pageLimits?: number;
-};
-
-type Variants = {
-  size: string;
-  price: number;
-  stock: number;
-  sizeId: number;
-  onSale: number;
-};
-
-type Item = {
-  itemId: number;
-  itemName: string;
-  description: string;
-  variants: Variants[];
 };
 
 const Inventory: React.FC = () => {

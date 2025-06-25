@@ -271,6 +271,8 @@ CREATE TABLE comment (
     FOREIGN KEY (index_id) REFERENCES item_comment_index(index_id) ON DELETE CASCADE
 );
 
+UPDATE employee SET column_search = ?, column_2 = ? where user_id = ?;
+
 
 
 

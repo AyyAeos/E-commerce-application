@@ -12,6 +12,8 @@ import com.example.logis_app.service.CartService;
 
 import lombok.extern.slf4j.Slf4j;
 
+
+
 @RestController
 @Slf4j
 @RequestMapping("/carts")
@@ -22,7 +24,7 @@ public class CartController {
 
     @GetMapping("/{id}")
     public Result checkCart(@PathVariable Integer id) {
-        log.info("Querying user cart");
+        log.info("Querying user cart. ");
         List<CartPage> list = cartService.checkCart(id);
         return Result.success(list);
     }
@@ -31,7 +33,7 @@ public class CartController {
     public Result modifyQuantity(@PathVariable Integer userId,
                                  @RequestBody ModifyCartDTO modifyCartDTO) {
         modifyCartDTO.setUserId(userId);
-        log.info("Card id : {} , new Quantity : {} ", modifyCartDTO.getCartId(), modifyCartDTO.getQuantity());
+        log.info("Modifying cart item quantity. ");
         cartService.modifyQuantity(modifyCartDTO);
         return Result.success();
     }

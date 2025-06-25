@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Transactional
 @Service
@@ -24,16 +25,16 @@ public class CheckOutServiceImpl implements CheckOutService {
 
     @Transactional
     @Override
-    public void placeOrder(List<PlaceOrderDTO> placeOrderDTOS) {
-
+    public void placeOrder(List<PlaceOrderDTO> placeOrderDTOS, Integer userId) {
+        String orderId = new String(UUID.randomUUID().toString());
+        log.info("Place Order. ");
         for(PlaceOrderDTO placeOrderDTO : placeOrderDTOS) {
-            log.info("Placing order: {}", placeOrderDTO);
-        checkOutMapper.placeOrder(placeOrderDTO);
-        checkOutMapper.updateOrderStatus(placeOrderDTO.getCartId());
+            placeOrderDTO.setOrderId(orderId);
+            placeOrderDTO.setUserId(userId);
+            checkOutMapper.placeOrder(placeOrderDTO);
+            checkOutMapper.updateOrderStatus(placeOrderDTO.getCartId());
         }
-
         String redisKey = "cart:" + placeOrderDTOS.get(0).getUserId();
         redisTemplate.delete(redisKey);
-
     }
 }

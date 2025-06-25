@@ -4,17 +4,9 @@ import { Label } from "@radix-ui/react-label";
 
 import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { SearchFormDataType } from "./type";
 
-type SearchFormDataType = {
-  itemName: string;
-  onSale?: number;
-  minPrice?: number;
-  maxPrice?: number;
-  size?: string;
-  totalCounts?: number;
-  page?: number;
-  pageLimits?: number;
-};
+
 
 const SearchForm = ({
   searchFormData,

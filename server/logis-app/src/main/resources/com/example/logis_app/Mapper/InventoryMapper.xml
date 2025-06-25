@@ -103,7 +103,5 @@
     <delete id="deleteItem" >
         DELETE FROM inventory_sizes WHERE item_id = #{id} AND size_id = #{sizeId};
     </delete>
-
-
-
+    
 </mapper>

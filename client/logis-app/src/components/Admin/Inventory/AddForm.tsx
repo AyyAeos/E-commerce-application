@@ -1,27 +1,13 @@
 import { useState, ChangeEvent } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import { Button } from "@/components/ui/button";
+import { FormData, Variant } from "./type";
 
-
-// Define types for the form data
-interface Variant {
-  size: string;
-  price: number;
-  stock: number;
-  onSale: number;
-}
-
-interface FormData {
-  itemName: string;
-  description: string;
-  variants: Variant[];
-}
 
 const AddButton = ({ onClose }: { onClose: () => void }) => {
   // State for managing the form data
   const [formData, setFormData] = useState<FormData>({
     itemName: "",
-    price: 0,
     description: "",
     variants: [
       {

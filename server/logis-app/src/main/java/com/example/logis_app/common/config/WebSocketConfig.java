@@ -9,7 +9,6 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
 
 @Configuration
-@EnableWebSocket
 public class WebSocketConfig {
 
     @Bean

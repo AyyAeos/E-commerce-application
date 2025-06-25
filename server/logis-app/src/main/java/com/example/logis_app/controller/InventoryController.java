@@ -21,8 +21,6 @@ public class InventoryController {
     public Result getItemByParam(@ModelAttribute QueryItemDTO queryItemDTO) {
         log.info("Searched item : {} ", queryItemDTO);
         InventoryPage list = inventoryService.getItemBySelected(queryItemDTO);
-       log.info("Selected list : {}", list);
-
          return Result.success(list);
     }
 

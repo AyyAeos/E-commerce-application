@@ -27,7 +27,7 @@ public class RedisConfig {
 
         // Set up ObjectMapper with JavaTimeModule
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule()); // ✅ Support LocalDateTime
+        objectMapper.registerModule(new JavaTimeModule());
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
 
         // Use JSON Serializer

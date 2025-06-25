@@ -2,21 +2,7 @@
 import axiosInstance from "@/utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
-
-type Variants = {
-  size: string;
-  price: number;
-  stock: number;
-  sizeId: number;
-  onSale: number;
-};
-
-type Item = {
-  itemId: number;
-  itemName: string;
-  description: string;
-  variants: Variants[];
-};
+import { Item, Variants } from "./type";
 
 const EditForm = ({
   item,

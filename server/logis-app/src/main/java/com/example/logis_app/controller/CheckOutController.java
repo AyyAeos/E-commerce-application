@@ -20,13 +20,8 @@ public class CheckOutController {
     @PostMapping
     public Result placeOrder(@PathVariable Integer userId,
                              @RequestBody List<PlaceOrderDTO> placeOrderDTOS) {
-        String orderId = new String(UUID.randomUUID().toString());
-        for(PlaceOrderDTO placeOrderDTO : placeOrderDTOS) {
-            placeOrderDTO.setOrderId(orderId);
-            placeOrderDTO.setUserId(userId);
-        }
-        log.info(" Selected item  = {}", placeOrderDTOS);
-        checkOutService.placeOrder(placeOrderDTOS);
+        log.info("Placing Order");
+        checkOutService.placeOrder(placeOrderDTOS, userId);
         return Result.success();
 
     }
