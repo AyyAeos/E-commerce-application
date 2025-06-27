@@ -1,5 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Message } from "./type";
+import { filter } from "lodash";
+
+type onlineUserType = {
+  userName : String;
+  appointedStatus : boolean;
+}
 
 const Chatbox = () => {
   const userRole = localStorage.getItem("userRole");
@@ -8,7 +14,7 @@ const Chatbox = () => {
  
   const [toName, setToName] = useState<string>("");
  
-  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<onlineUserType[]>([]);
   //chat message
   const [messages, setMessages] = useState<Record<string, Message[]>>({});
 
@@ -25,22 +31,23 @@ const Chatbox = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const maxReconnectAttempts = 5;
   const reconnectDelay = 3000;
-
+  
   // setup websocket
   const setupWebSocket = () => {
     //connect to a server
     const ws = new WebSocket("ws://localhost:8080/chats");
 
     ws.onopen = () => {
-      console.log("WebSocket connected");
+      console.log("WebSocket connected1");
       setConnectionStatus("Connected");
 
       // Send initial registration message
       if (username) {
         const initialMessage = JSON.stringify({
           toName: "server",
-          message: `${username} has joined the chat.`,
+          message: `${username} has joined the chat1.`,
           fromName: username,
+          messageStatus : "OnOpen"
         });
 
         ws.send(initialMessage);
@@ -62,7 +69,8 @@ const Chatbox = () => {
               userRole === "admin"
                 ? data.message
                 : data.message.filter((name: string) => name !== username);
-
+            console.log("Filter : ", filteredUsers);
+            
             setOnlineUsers(filteredUsers);
           }
         } else {
@@ -78,7 +86,7 @@ const Chatbox = () => {
 
           // For customer: store messages where I'm the sender or receiver
           if (
-            userRole === "customer" &&
+            userRole === "CUSTOMER" &&
             (senderName === username || receiverName === username)
           ) {
             const otherUser =
@@ -98,6 +106,7 @@ const Chatbox = () => {
 
               console.log("Adding message to conversation:", newMessage);
 
+              
               return {
                 ...prev,
                 [otherUser]: [...existingMessages, newMessage],
@@ -130,6 +139,8 @@ const Chatbox = () => {
 
               console.log("Adding message to conversation:", newMessage);
 
+              console.log("Relevant", relevantUser);
+              
               return {
                 ...prev,
                 [relevantUser]: [...existingMessages, newMessage],
@@ -231,6 +242,21 @@ const Chatbox = () => {
   // Get current conversation messages
   const currentMessages = selectedUser ? messages[selectedUser] || [] : [];
 
+  //delete from onlineUsers
+  const handleSelectedUser = (name : string) => {
+    console.log("the name is " + name);
+    
+    setSelectedUser(name);
+
+    const removeMessage = JSON.stringify({
+          toName: "server",
+          message: `${username} has enter the chat room ${name}.`,
+          fromName: name,
+          messageStatus : "RemoveUser",
+        });
+      socket?.send(removeMessage)
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-200 justify-center items-center">
       <div className="max-w-4xl w-full bg-white flex rounded-lg shadow-xl overflow-hidden">
@@ -261,11 +287,14 @@ const Chatbox = () => {
             </p>
           )}
 
-          {!selectedUser && userRole === "admin" && (
-            <p className="text-gray-500 mb-2">
-              Select a user to start chatting
-            </p>
-          )}
+{!selectedUser ? (
+ 
+    <p className="text-gray-500 mb-2">
+      Select a user to start chatting
+    </p>
+  ) : (
+    <p>Please Wait for an Admin to enter the chat.</p>
+  )}
 
           <div className="messages bg-gray-50 p-4 rounded-lg flex-grow h-96 overflow-y-auto">
             {currentMessages.length === 0 ? (
@@ -303,7 +332,8 @@ const Chatbox = () => {
               onKeyPress={handleKeyPress}
               className="flex-1 p-3 border rounded-l text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
               placeholder={
-                selectedUser ? "Type a message..." : "Select a user to chat"
+                selectedUser ? "Type a message..." : 
+                userRole === "admin" ? "Choose a user" :  "Please Wait an Admin to Enter the Chat"
               }
               disabled={!selectedUser || connectionStatus !== "Connected"}
             />
@@ -326,7 +356,7 @@ const Chatbox = () => {
             </button>
           </div>
         </div>
-
+       
         {/* User list panel for admins */}
         {userRole === "admin" && (
           <div className="w-1/4 bg-gray-800 text-white flex flex-col">
@@ -337,17 +367,20 @@ const Chatbox = () => {
               {onlineUsers.length === 0 ? (
                 <p className="text-gray-400 text-center p-4">No users online</p>
               ) : (
-                onlineUsers.map((name, index) => (
+                onlineUsers.map((user, index) => (
                   <div
                     key={index}
                     className={`cursor-pointer hover:bg-gray-700 transition ${
-                      selectedUser === name ? "bg-gray-700" : ""
+                      selectedUser === user.userName ? "bg-gray-700" : ""
                     }`}
-                    onClick={() => setSelectedUser(name)}
+                    onClick={() => handleSelectedUser(user.userName)}
                   >
                     <div className="p-3 border-b border-gray-700 flex items-center">
-                      <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
-                      <span>{name}</span>
+<div
+  className={`w-2 h-2 rounded-full mr-2 ${
+    user.appointedStatus ? "bg-red-400" : "bg-green-400"
+  }`}
+></div>                      <span>{user.userName}</span>
                     </div>
                   </div>
                 ))

@@ -1,6 +1,6 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.DTO.ProductDTO.ReviewDTO;
+import com.example.logis_app.model.DTO.ProductDTO.ReviewDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

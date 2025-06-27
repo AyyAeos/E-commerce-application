@@ -1,8 +1,8 @@
 package com.example.logis_app.service;
 
-import com.example.logis_app.pojo.vo.InventoryPage;
-import com.example.logis_app.pojo.DTO.InventoryDTO.AddItemDTO;
-import com.example.logis_app.pojo.DTO.InventoryDTO.QueryItemDTO;
+import com.example.logis_app.model.vo.InventoryPage;
+import com.example.logis_app.model.DTO.InventoryDTO.AddItemDTO;
+import com.example.logis_app.model.DTO.InventoryDTO.QueryItemDTO;
 
 public interface InventoryService {
 

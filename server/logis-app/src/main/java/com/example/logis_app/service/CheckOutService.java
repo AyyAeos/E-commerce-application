@@ -1,6 +1,6 @@
 package com.example.logis_app.service;
 
-import com.example.logis_app.pojo.DTO.CartDTO.PlaceOrderDTO;
+import com.example.logis_app.model.DTO.CartDTO.PlaceOrderDTO;
 
 import java.util.List;
 

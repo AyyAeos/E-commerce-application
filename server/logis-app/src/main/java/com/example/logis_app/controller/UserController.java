@@ -1,7 +1,7 @@
 package com.example.logis_app.controller;
 
 import com.example.logis_app.common.enums.UserRole;
-import com.example.logis_app.pojo.vo.UserVO.UserPage;
+import com.example.logis_app.model.vo.UserVO.UserPage;
 import com.example.logis_app.common.Result;
 import com.example.logis_app.service.UserService;
 import lombok.extern.slf4j.Slf4j;

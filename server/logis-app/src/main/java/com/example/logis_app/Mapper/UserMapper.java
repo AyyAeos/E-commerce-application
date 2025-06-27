@@ -1,7 +1,7 @@
 package com.example.logis_app.Mapper;
 
 import com.example.logis_app.common.enums.UserRole;
-import com.example.logis_app.pojo.vo.UserVO.UserPage;
+import com.example.logis_app.model.vo.UserVO.UserPage;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

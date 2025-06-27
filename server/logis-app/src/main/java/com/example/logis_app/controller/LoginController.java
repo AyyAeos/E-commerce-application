@@ -1,8 +1,8 @@
 package com.example.logis_app.controller;
 
-import com.example.logis_app.pojo.vo.LoginVO.LoginUser;
-import com.example.logis_app.pojo.DTO.LoginDTO.LoginDTO;
-import com.example.logis_app.pojo.DTO.LoginDTO.RegisterDTO;
+import com.example.logis_app.model.vo.LoginVO.LoginUser;
+import com.example.logis_app.model.DTO.LoginDTO.LoginDTO;
+import com.example.logis_app.model.DTO.LoginDTO.RegisterDTO;
 import com.example.logis_app.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

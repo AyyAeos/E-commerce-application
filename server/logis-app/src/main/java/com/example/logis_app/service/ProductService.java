@@ -1,10 +1,10 @@
 package com.example.logis_app.service;
 
-import com.example.logis_app.pojo.vo.ProductVO.ProductComment;
-import com.example.logis_app.pojo.vo.ProductVO.ProductCommentList;
-import com.example.logis_app.pojo.vo.ProductVO.ProductPage;
-import com.example.logis_app.pojo.DTO.CartDTO.AddCartDTO;
-import com.example.logis_app.pojo.DTO.ProductDTO.LikeDTO;
+import com.example.logis_app.model.vo.ProductVO.ProductComment;
+import com.example.logis_app.model.vo.ProductVO.ProductCommentList;
+import com.example.logis_app.model.vo.ProductVO.ProductPage;
+import com.example.logis_app.model.DTO.CartDTO.AddCartDTO;
+import com.example.logis_app.model.DTO.ProductDTO.LikeDTO;
 
 import java.math.BigDecimal;
 import java.util.List;

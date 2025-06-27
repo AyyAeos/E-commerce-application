@@ -1,8 +1,8 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.vo.ProductVO.ProductCommentList;
-import com.example.logis_app.pojo.DTO.CartDTO.AddCartDTO;
-import com.example.logis_app.pojo.DTO.ProductDTO.LikeDTO;
+import com.example.logis_app.model.vo.ProductVO.ProductCommentList;
+import com.example.logis_app.model.DTO.CartDTO.AddCartDTO;
+import com.example.logis_app.model.DTO.ProductDTO.LikeDTO;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,7 +23,6 @@ public interface ProductMapper {
     BigDecimal checkPrice(Integer sizeId);
 
     boolean checkProductExist(AddCartDTO addCartDTO);
-
 
     void updateQuantity(AddCartDTO addCartDTO);
 

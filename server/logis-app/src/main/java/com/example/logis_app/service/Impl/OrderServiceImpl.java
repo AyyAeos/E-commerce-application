@@ -1,9 +1,9 @@
 package com.example.logis_app.service.Impl;
 
 import com.example.logis_app.Mapper.OrderMapper;
-import com.example.logis_app.pojo.vo.OrderVO.Item;
-import com.example.logis_app.pojo.vo.OrderVO.Order;
-import com.example.logis_app.pojo.DTO.ProductDTO.ReviewDTO;
+import com.example.logis_app.model.vo.OrderVO.Item;
+import com.example.logis_app.model.vo.OrderVO.Order;
+import com.example.logis_app.model.DTO.ProductDTO.ReviewDTO;
 import com.example.logis_app.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

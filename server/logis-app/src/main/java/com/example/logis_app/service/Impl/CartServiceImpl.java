@@ -3,14 +3,14 @@ package com.example.logis_app.service.Impl;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import com.example.logis_app.pojo.DTO.CartDTO.ModifyCartDTO;
+import com.example.logis_app.model.DTO.CartDTO.ModifyCartDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.logis_app.Mapper.CartMapper;
-import com.example.logis_app.pojo.vo.ProductVO.CartPage;
+import com.example.logis_app.model.vo.ProductVO.CartPage;
 import com.example.logis_app.service.CartService;
 import org.springframework.transaction.annotation.Transactional;
 

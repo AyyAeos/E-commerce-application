@@ -1,8 +1,8 @@
 package com.example.logis_app.service.Impl;
 
 import com.example.logis_app.Mapper.DepartmentMapper;
-import com.example.logis_app.pojo.vo.DepartmentPage;
-import com.example.logis_app.pojo.DTO.DepartmentQueryParam;
+import com.example.logis_app.model.vo.DepartmentPage;
+import com.example.logis_app.model.DTO.DepartmentQueryParam;
 import com.example.logis_app.service.DepartmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

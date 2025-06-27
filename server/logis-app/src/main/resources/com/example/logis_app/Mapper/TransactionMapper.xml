@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.logis_app.Mapper.TransactionMapper">
-    <select id="transactionList" resultType="com.example.logis_app.pojo.vo.TransactionVO.Transaction">
+    <select id="transactionList" resultType="com.example.logis_app.model.vo.TransactionVO.Transaction">
         SELECT transaction_id, transaction_type, item_id, amount, transaction_date, description
         FROM transactions
         ORDER BY transaction_date DESC
@@ -16,7 +16,7 @@
         FROM transactions
     </select>
 
-    <select id="querySpecificTransaction" resultType="com.example.logis_app.pojo.vo.TransactionVO.Transaction">
+    <select id="querySpecificTransaction" resultType="com.example.logis_app.model.vo.TransactionVO.Transaction">
         SELECT transaction_id, transaction_type, item_id, amount, transaction_date, description
         FROM transactions
         <where>

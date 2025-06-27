@@ -1,14 +1,12 @@
 package com.example.logis_app.service.Impl;
 
 import com.example.logis_app.Mapper.LoginMapper;
-import com.example.logis_app.pojo.vo.LoginVO.LoginUser;
-import com.example.logis_app.pojo.DTO.LoginDTO.LoginDTO;
-import com.example.logis_app.pojo.DTO.LoginDTO.RegisterDTO;
-import com.example.logis_app.pojo.vo.LoginVO.User;
+import com.example.logis_app.model.vo.LoginVO.LoginUser;
+import com.example.logis_app.model.DTO.LoginDTO.LoginDTO;
+import com.example.logis_app.model.DTO.LoginDTO.RegisterDTO;
+import com.example.logis_app.model.vo.LoginVO.User;
 import com.example.logis_app.service.LoginService;
-import com.example.logis_app.util.JwtUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.logis_app.common.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -22,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 

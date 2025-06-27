@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.logis_app.Mapper.DepartmentMapper">
 
-    <select id="findAllDepartment" resultType="com.example.logis_app.pojo.vo.DepartmentPage">
+    <select id="findAllDepartment" resultType="com.example.logis_app.model.vo.DepartmentPage">
         SELECT department_id, department_name, department_description
         FROM user_emp_department
     </select>

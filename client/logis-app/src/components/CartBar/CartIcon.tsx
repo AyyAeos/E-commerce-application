@@ -1,11 +1,8 @@
 import { ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom"
 
-type CartProps = {
-  userId: string;
-};
-
-const Cart : React.FC<CartProps> = ({userId}) => {
+const Cart = () => {
+  const userId = localStorage.getItem("userId");
     const navigate = useNavigate();
     return (
       <>

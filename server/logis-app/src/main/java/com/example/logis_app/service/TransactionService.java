@@ -1,7 +1,7 @@
 package com.example.logis_app.service;
 
-import com.example.logis_app.pojo.vo.TransactionVO.TransactionPage;
-import com.example.logis_app.pojo.DTO.TransactionQueryParam;
+import com.example.logis_app.model.vo.TransactionVO.TransactionPage;
+import com.example.logis_app.model.DTO.TransactionQueryParam;
 
 
 public interface TransactionService {

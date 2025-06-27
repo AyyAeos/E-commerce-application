@@ -1,13 +1,13 @@
 package com.example.logis_app.service.Impl;
 
 import com.example.logis_app.Mapper.InventoryMapper;
-import com.example.logis_app.pojo.vo.InventoryPage;
-import com.example.logis_app.pojo.vo.ProductVO.ProductPage;
-import com.example.logis_app.pojo.DTO.InventoryDTO.AddItemDTO;
-import com.example.logis_app.pojo.DTO.InventoryDTO.QueryItemDTO;
-import com.example.logis_app.pojo.DTO.InventoryDTO.InventoryVariantsDTO;
+import com.example.logis_app.model.vo.InventoryPage;
+import com.example.logis_app.model.vo.ProductVO.ProductPage;
+import com.example.logis_app.model.DTO.InventoryDTO.AddItemDTO;
+import com.example.logis_app.model.DTO.InventoryDTO.QueryItemDTO;
+import com.example.logis_app.model.DTO.InventoryDTO.InventoryVariantsDTO;
 import com.example.logis_app.service.InventoryService;
-import com.example.logis_app.util.ProductPageUtil;
+import com.example.logis_app.common.util.ProductPageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.DTO.LoginDTO.RegisterDTO;
-import com.example.logis_app.pojo.vo.LoginVO.User;
+import com.example.logis_app.model.DTO.LoginDTO.RegisterDTO;
+import com.example.logis_app.model.vo.LoginVO.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

@@ -1,7 +1,7 @@
 package com.example.logis_app.service;
 
-import com.example.logis_app.pojo.vo.DepartmentPage;
-import com.example.logis_app.pojo.DTO.DepartmentQueryParam;
+import com.example.logis_app.model.vo.DepartmentPage;
+import com.example.logis_app.model.DTO.DepartmentQueryParam;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@
 <mapper namespace="com.example.logis_app.Mapper.UserMapper">
 
 
-    <select id="getUserList" resultType="com.example.logis_app.pojo.vo.UserVO.UserPage">
+    <select id="getUserList" resultType="com.example.logis_app.model.vo.UserVO.UserPage">
     select user_id, name, user_phone, user_create_time, user_last_modified_time, username, password, email, role, department_id
         from user
         where role = #{role}

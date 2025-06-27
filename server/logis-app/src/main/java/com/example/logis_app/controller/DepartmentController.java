@@ -1,7 +1,7 @@
 package com.example.logis_app.controller;
 
-import com.example.logis_app.pojo.vo.DepartmentPage;
-import com.example.logis_app.pojo.DTO.DepartmentQueryParam;
+import com.example.logis_app.model.vo.DepartmentPage;
+import com.example.logis_app.model.DTO.DepartmentQueryParam;
 import com.example.logis_app.common.Result;
 import com.example.logis_app.service.DepartmentService;
 import lombok.extern.slf4j.Slf4j;

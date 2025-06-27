@@ -1,8 +1,8 @@
 package com.example.logis_app.Mapper;
 
-import com.example.logis_app.pojo.DTO.InventoryDTO.AddItemDTO;
-import com.example.logis_app.pojo.DTO.InventoryDTO.QueryItemDTO;
-import com.example.logis_app.pojo.DTO.InventoryDTO.InventoryVariantsDTO;
+import com.example.logis_app.model.DTO.InventoryDTO.AddItemDTO;
+import com.example.logis_app.model.DTO.InventoryDTO.QueryItemDTO;
+import com.example.logis_app.model.DTO.InventoryDTO.InventoryVariantsDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

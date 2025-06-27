@@ -1,6 +1,6 @@
 package com.example.logis_app.common.config;
 
-import com.example.logis_app.filter.JwtAuthenticationTokenFIlter;
+import com.example.logis_app.common.filter.JwtAuthenticationTokenFIlter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,10 +55,11 @@ public class SecurityConfig {
         return http.build();
     }
 
+    //https://docs.spring.io/spring-security/reference/reactive/integrations/cors.html
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
