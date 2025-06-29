@@ -19,7 +19,6 @@ type Item = {
 const Checkout = () => {
   const location = useLocation();
   const { placeOrderDTOS = [], totalPrice = 0 } = location.state || {};
-  const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
   //useState for comfirmation message for comfirm button
@@ -33,7 +32,7 @@ const Checkout = () => {
     setIsLoading(true);
     try {
       const response = await axiosInstance.post(
-        `/checkouts/${userId}`,
+        `/checkouts`,
         placeOrderDTOS
       );
       if (response.data.msg === "success" && response.data.code === 1) {
@@ -58,7 +57,7 @@ const Checkout = () => {
 
       <button
         className="fixed top-24 left-4 bg-white/10 text-white p-3 rounded-full shadow-lg hover:bg-white/20 hover:scale-[1.2]"
-        onClick={() => navigate(`/carts/${userId}`)}
+        onClick={() => navigate(`/carts`)}
       >
         <FaArrowLeft size={20} />
       </button>
@@ -117,7 +116,7 @@ const Checkout = () => {
           <div className="flex justify-center gap-4">
             <Button
               className="py-6 px-8 text-lg font-medium rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center gap-2"
-              onClick={() => navigate(`/carts/${userId}`)}
+              onClick={() => navigate(`/carts`)}
             >
               <FaArrowLeft size={16} />
               <span>Back to Cart</span>

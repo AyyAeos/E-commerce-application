@@ -7,6 +7,8 @@ import com.example.logis_app.model.DTO.LoginDTO.RegisterDTO;
 import com.example.logis_app.model.vo.LoginVO.User;
 import com.example.logis_app.service.LoginService;
 import com.example.logis_app.common.util.JwtUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -41,7 +43,7 @@ public class LoginServiceImpl implements UserDetailsService, LoginService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public LoginUser login(LoginDTO loginDTO) {
+    public String login(LoginDTO loginDTO) {
 
         // Authenticate the user
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
@@ -54,23 +56,19 @@ public class LoginServiceImpl implements UserDetailsService, LoginService {
 
         // Get the authenticated user details
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        String username = loginUser.getUser().getUserName();
+        String jwt = null;
 
-        // Generate JWT token
-        String jwt = JwtUtils.createJWT(username);
+        try {
+            String subjectJson = new ObjectMapper().writeValueAsString(loginUser.getUser()); // Convert to JSON
+            jwt = JwtUtils.createJWT(subjectJson);
+        } catch ( JsonProcessingException e) {
+            // Log the error or handle it
+            e.printStackTrace(); // or use a proper logger
+            throw new RuntimeException("Failed to serialize login user for JWT", e);
+        }
 
-        // Store the token in Redis (optional)
-        String redisKey = "login:" + loginUser.getUser().getUserName();
-        log.info(redisKey);
 
-
-
-        redisTemplate.opsForValue().set(redisKey, loginUser);
-        redisTemplate.expire(redisKey, 30, TimeUnit.MINUTES);
-
-        loginUser.setJwt(jwt);
-
-        return loginUser;
+        return jwt;
     }
 
 

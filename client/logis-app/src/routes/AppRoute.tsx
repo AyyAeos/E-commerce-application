@@ -13,6 +13,8 @@ import CheckOrder from "@/components/Order/Order";
 import Chatbots from "@/components/Chatbot/Chatbot";
 import LoginErrorMessage from "@/LoginErrorMessage";
 import Inventory from "@/components/Admin/Inventory/Inventory";
+import axiosInstance from "@/utils/axiosInstance";
+import NavBar from "@/components/NavBar/NavBar";
 // Your login error message component
 
 const AppRoutes: React.FC = () => {
@@ -22,21 +24,29 @@ const AppRoutes: React.FC = () => {
   // List of paths that do not require authentication
   const excludePaths = ["/", "/logins", "/register"];
 
-  useEffect(() => {
-    // Check if the user is logged in by looking for userId in localStorage
-    const userId = localStorage.getItem("userId"); // or token or whatever you're storing
-    if (userId) {
-      setIsUserLoggedIn(true);
-    } else {
+useEffect(() => {
+  const checkAuth = async () => {
+    try {
+      const response = await axiosInstance.get("/logins/auth/login", { withCredentials: true }); 
+      if (response.data && response.data.code === 1) {
+        setIsUserLoggedIn(true);
+      } else {
+        setIsUserLoggedIn(false);
+      }
+    } catch (err) {
       setIsUserLoggedIn(false);
     }
-  }, [location.pathname]);
+  };
+  checkAuth();
+}, [location.pathname]);
+
 
   // Determine if the route requires login
   const requiresLogin = !excludePaths.includes(location.pathname) && !isUserLoggedIn;
 
   return (
     <div>
+      <NavBar isLogin={isUserLoggedIn} setIsLogin={setIsUserLoggedIn} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/logins" element={<Login />} />

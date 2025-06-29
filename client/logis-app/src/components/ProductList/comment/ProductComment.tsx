@@ -4,54 +4,58 @@ import axiosInstance from "@/utils/axiosInstance";
 import ParentComment from "./ParentComment";
 import { CommentList } from "../type";
 
-
-
 const ProductComment = ({ itemId }: { itemId: number }) => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  
-  const userId = localStorage.getItem("userId") || "";
+
+  const userFetcher = async (url: string) => {
+    try {
+      const response = await axiosInstance.get(url);
+      if (response.data.code === 1 && response.data.msg === "success") {
+        return response.data.data;
+      }
+      throw new Error("User not authenticated");
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      return null;
+    }
+  };
 
   const fetcher = async (url: string) => {
     try {
       const response = await axiosInstance.get(url);
       if (response.data.msg === "success" && response.data.code === 1) {
-        console.log(response.data.data);
-
         return response.data.data;
       }
+      throw new Error("Failed to fetch comments");
     } catch (error) {
       console.error("Error fetching data:", error);
-      return (
-        <>
-        Error Fetching review . Please refresh the screen.
-        </>
-      )
+      throw error;
     }
-   
   };
 
-  const { data, error, isLoading } = useSWR<Comment>(
-    `/products/${itemId}/review`,
-    fetcher
-  );
+  const { data: userID, error: userError, isLoading: userLoading } = useSWR("/logins/auth/me", userFetcher);
+  const { data, error, isLoading } = useSWR<Comment>(`/products/${itemId}/review`, fetcher);
 
-  //GEt latest command
+  const userId = userID;
+  
   useEffect(() => {
     if (isSuccess) {
       const timeoutId = setTimeout(() => {
-        mutate(`http://localhost:8080/products/${itemId}/review`);
+        mutate(`/products/${itemId}/review`);
         setIsSuccess(false);
       }, 5000);
       return () => clearTimeout(timeoutId);
     }
   }, [isSuccess]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching data</div>;
-  if (!data) return null;
+  // Conditional rendering
+  if (userLoading || isLoading) return <div>Loading...</div>;
+  if (userError || !userID) return <div>Please log in</div>;
+  if (error || !data) return <div>Error fetching comments</div>;
 
 
-  // Group comments by parentId
+
+  // Group and sort comments
   const groupedComments: Record<number, CommentList[]> = {};
   data.productCommentLists.forEach((comment) => {
     if (!groupedComments[comment.parent]) {
@@ -60,9 +64,8 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
     groupedComments[comment.parent].push(comment);
   });
 
-  // Sort comments by newest first
   Object.keys(groupedComments).forEach((parentId) => {
-    groupedComments[parseInt(parentId)]?.sort(
+    groupedComments[parseInt(parentId)].sort(
       (a, b) =>
         new Date(b.createTime).getTime() - new Date(a.createTime).getTime()
     );
@@ -77,7 +80,7 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
             className="bg-white text-green-600 px-3 py-1 rounded-full font-bold hover:bg-gray-200 transition"
             onClick={() => {
               setIsSuccess(false);
-              mutate(`http://localhost:8080/products/${itemId}/review`);
+              mutate(`/products/${itemId}/review`);
             }}
           >
             Reload Now

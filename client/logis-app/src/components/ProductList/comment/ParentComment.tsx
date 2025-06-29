@@ -48,14 +48,13 @@ const ParentComment = ({
 
     const reviewDTO = {
       itemId,
-      userId,
       content: replyTexts,
       parent: parentId,
     };
 
     try {
       const response = await axiosInstance.post(
-        `/orders/${userId}`,
+        `/orders`,
         reviewDTO
       );
 
@@ -75,7 +74,11 @@ const ParentComment = ({
   };
 
   const handleLike = async (indexId: number, likedUser: number[]) => {
-    const isLiked = likedUser.includes(Number(userId));
+    console.log(likedUser);
+    
+    console.log(userId);
+    
+    const isLiked = Array.isArray(likedUser) && likedUser.includes(Number(userId));
 
     const likeDTO = {
       indexId: indexId,
@@ -86,7 +89,7 @@ const ParentComment = ({
 
     try {
       const response = await axiosInstance.post(
-        `/products/${userId}/like`,
+        `/products/like`,
         likeDTO
       );
       mutate(`/products/${itemId}/review`);
@@ -200,7 +203,9 @@ const ParentComment = ({
                           : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                       }`}
                       onClick={() =>
-                        handleLike(comment.indexId, comment.likedUser)
+                    
+                        
+                        handleLike(comment.indexId, comment.likedUser ?? [])
                       }
                     >
                       <ThumbsUp className="w-3 h-3 mr-1" />

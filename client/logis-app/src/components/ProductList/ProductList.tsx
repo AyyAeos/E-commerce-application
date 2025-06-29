@@ -11,7 +11,6 @@ import { getRandomGradient, SelectedProduct, Variant } from "./type";
 import LoginErrorMessage from "@/LoginErrorMessage";
 
 const ProductList = () => {
-  const userId = localStorage.getItem("userId") ?? "";
   const navigate = useNavigate();
 
   //Fetch producy list
@@ -61,8 +60,8 @@ const handleClick = (product: SelectedProduct) => {
 
   return (
     <div className="min-h-screen bg-primary">
-      <OrderIcon userId={userId} />
-      <Cart userId={userId} />
+      <OrderIcon />
+      <Cart />
 
       <div className="container mx-auto px-4 py-10">
         <div className="mb-10 text-center">

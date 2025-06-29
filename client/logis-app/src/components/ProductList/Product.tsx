@@ -23,7 +23,6 @@ const Product = () => {
   const { product }: { product: SelectedProduct } = location.state || {};
 
   const navigate = useNavigate();
-  const userId = localStorage.getItem("userId") ?? "";
   const [error, setError] = useState<string>("");
 
   // Cart Item
@@ -32,7 +31,6 @@ const Product = () => {
     itemName: "",
     sizeId: product.variants[0].sizeId,
     quantity: 0,
-    userId: userId ?? "",
     itemPrice: product.variants[0].price,
   });
 
@@ -68,7 +66,7 @@ const Product = () => {
       );
 
       if (response.data.msg === "success" && response.data.code === 1) {
-        navigate(`/carts/${userId}`);
+        navigate(`/carts`);
       }
     } catch (error) {
       console.log(error);
@@ -98,8 +96,8 @@ const Product = () => {
   return (
     <>
       <div className="min-h-screen bg-primary flex flex-col items-center">
-        <Cart userId={userId} />
-        <OrderIcon userId={userId} />
+        <Cart />
+        <OrderIcon />
 
         <button
           className="fixed top-24 right-4 bg-white/10 text-white p-3 rounded-full shadow-lg hover:bg-white/20 hover:scale-150 z-10"

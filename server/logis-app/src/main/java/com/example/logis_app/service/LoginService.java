@@ -11,5 +11,5 @@ public interface LoginService extends UserDetailsService {
 
     Boolean register(RegisterDTO registerDTO);
 
-    LoginUser login(LoginDTO loginDTO);
+    String login(LoginDTO loginDTO);
 }

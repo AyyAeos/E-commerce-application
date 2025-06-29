@@ -53,35 +53,34 @@ const Login: React.FC = () => {
   });
 
   //Validate User
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
-    try {
-      const response = await axiosInstance.post("/logins", {
+const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  setIsLoading(true);
+  try {
+    const response = await axiosInstance.post(
+      "/logins",
+      {
         username: values.username,
         password: values.password,
-      });
+      },
+    );
 
-      if (response.data.msg === "success" && response.data.code === 1) {
-        console.log("Login successful:");
-        //Set customer information
-        localStorage.setItem("token", response.data.data.jwt);
-        localStorage.setItem("username", response.data.data.user.userName);
-        localStorage.setItem("userRole", response.data.data.user.role);
-        localStorage.setItem("userId", response.data.data.user.userId);
-        setLoginFailed(false);
-        navigate("/products");
-      } else {
-        setLoginFailed(true);
-        setErrorMessage("Invalid username or password.");
-      }
-    } catch (error) {
-      console.log("Catch error", error);
-      setFetchFailed(true);
+    if (response.data.msg === "success" && response.data.code === 1) {
+      console.log("Login successful");
+
+      setLoginFailed(false);
+      window.location.href = "/products";
+    } else {
       setLoginFailed(true);
-    } finally {
-      setIsLoading(false); // request done
+      setErrorMessage("Invalid username or password.");
     }
-  };
+  } catch (error) {
+    console.log("Catch error", error);
+    setFetchFailed(true);
+    setLoginFailed(true);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   //Connection Problem with server
   if (fetchFailed) {

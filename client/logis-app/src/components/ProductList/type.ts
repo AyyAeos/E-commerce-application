@@ -17,7 +17,6 @@ export type AddItemType = {
   itemName: string;
   sizeId: number;
   quantity: number;
-  userId: string;
   itemPrice: number;
 };
 

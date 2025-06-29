@@ -17,7 +17,6 @@ import axiosInstance from "@/utils/axiosInstance";
 import { Item } from "./type/type";
 
 const CartPage = () => {
-  const userId = localStorage.getItem("userId");
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [error, setError] = useState<string>("");
 
@@ -40,7 +39,7 @@ const CartPage = () => {
     data,
     error: swrError,
     isLoading,
-  } = useSWR<Item[]>(`/carts/${userId}`, fetcher);
+  } = useSWR<Item[]>(`/carts`, fetcher);
 
   useEffect(() => {
     if (data) {
@@ -70,7 +69,7 @@ const CartPage = () => {
   const updateCartToServer = debounce(
     async (cartId: number, newQuantity: number, sizeId: number) => {
       try {
-        await axiosInstance.put(`/carts/${userId}`, {
+        await axiosInstance.put(`/carts`, {
           cartId,
           quantity: newQuantity,
           sizeId,
@@ -115,7 +114,7 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   const handleCheckOut = () => {
-    navigate(`/checkouts/${userId}`, {
+    navigate(`/checkouts`, {
       state: {
         placeOrderDTOS: CartItem.filter((prev) => prev.selected === true),
         totalPrice,

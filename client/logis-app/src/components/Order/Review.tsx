@@ -42,7 +42,6 @@ const WriteReview = ({
 
       const reviewDTO = {
         itemId: itemId,
-        userId: order.userId,
         content: reviewText,
         placedAt: order.placedAt,
         quantity: placeOrderDTO.quantity,
@@ -53,7 +52,7 @@ const WriteReview = ({
 
       try {
         const response = await axiosInstance.post(
-          `/orders/${order.userId}`,
+          `/orders`,
           reviewDTO
         );
         if (response.data.code === 1 && response.data.msg === "success") {

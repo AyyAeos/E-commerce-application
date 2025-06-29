@@ -1,5 +1,6 @@
 package com.example.logis_app.controller;
 
+import com.example.logis_app.model.vo.LoginVO.LoginUser;
 import com.example.logis_app.model.vo.ProductVO.ProductComment;
 import com.example.logis_app.model.vo.ProductVO.ProductCommentList;
 import com.example.logis_app.model.vo.ProductVO.ProductPage;
@@ -9,6 +10,7 @@ import com.example.logis_app.common.Result;
 import com.example.logis_app.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -18,6 +20,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/products")
 public class ProductController {
+
 
     @Autowired
     private ProductService productService;
@@ -38,7 +41,10 @@ public class ProductController {
 
     @PostMapping("/{id}")
     public Result addToCart(@PathVariable Integer id, @RequestBody AddCartDTO addCartDTO) {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = loginUser.getUser().getUserId();
         addCartDTO.setItemId(id);
+        addCartDTO.setUserId(userId);
         log.info("Add item to card : {}" , addCartDTO);
         productService.addToCard(addCartDTO);
         return Result.success();
@@ -55,12 +61,15 @@ public class ProductController {
     public Result getReviewList(@PathVariable Integer itemId) {
         log.info("Get review list for item : {}", itemId);
         ProductComment productCommentList = productService.getReviewList(itemId);
+
         return  Result.success(productCommentList);
     }
 
-    @PostMapping("/{userId}/like")
-    public Result updateLike(@PathVariable String userId, @RequestBody LikeDTO likeDTO) {
-        likeDTO.setUserId(Integer.parseInt(userId));
+    @PostMapping("/like")
+    public Result updateLike( @RequestBody LikeDTO likeDTO) {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = loginUser.getUser().getUserId();
+        likeDTO.setUserId(userId);
         log.info("Update like", likeDTO);
         productService.updateLike(likeDTO);
         return Result.success();
@@ -69,6 +78,9 @@ public class ProductController {
     @GetMapping("/replies")
     public Result loadReplies(@RequestParam Integer parentId, @RequestParam Integer page , @RequestParam Integer pageLimit) {
         List<ProductCommentList> list = productService.loadReplies(parentId, page, pageLimit);
+        for(ProductCommentList lsit : list) {
+            log.info(lsit.toString());
+        }
         return Result.success(list);
     }
 }

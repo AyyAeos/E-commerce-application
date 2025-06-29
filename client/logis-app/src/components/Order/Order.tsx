@@ -17,7 +17,6 @@ type OrderItem = {
 
 export type Order = {
   orderId: string;
-  userId: number;
   placedAt: string;
   updatedAt: string;
   status: string;
@@ -26,7 +25,6 @@ export type Order = {
 };
 
 const CheckOrder = () => {
-  const userId = localStorage.getItem("userId") ?? "";
 
   const navigate = useNavigate();
 
@@ -46,7 +44,7 @@ const CheckOrder = () => {
     data: orders = [],
     error,
     isLoading,
-  } = useSWR(`/orders/${userId}`, fetcher);
+  } = useSWR(`/orders`, fetcher);
 
   const DeleteOrder = ({ placeDate }: { placeDate: Order }) => {
     const currentDate = new Date();
@@ -83,14 +81,14 @@ const CheckOrder = () => {
 
   return (
     <div className="bg-primary text-primary-foreground min-h-screen">
-      <Cart userId={userId} />
+      <Cart  />
       <button
         className="fixed mt-4 right-20 bg-red-500 text-white p-3 rounded-full shadow-lg hover:bg-red-600"
         onClick={() => navigate(`/products`)}
       >
         EXIT
       </button>
-      <OrderIcon userId={userId} />
+      <OrderIcon  />
 
       {isLoading ? (
         <p>Loading orders...</p>
