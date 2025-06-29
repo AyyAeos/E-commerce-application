@@ -30,7 +30,7 @@ const Product = () => {
     itemId: product.itemId,
     itemName: "",
     sizeId: product.variants[0].sizeId,
-    quantity: 0,
+    quantity: 1,
     itemPrice: product.variants[0].price,
   });
 

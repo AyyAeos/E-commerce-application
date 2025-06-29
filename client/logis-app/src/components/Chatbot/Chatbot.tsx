@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Message } from "./type";
 import { filter } from "lodash";
+import axiosInstance from "@/utils/axiosInstance";
+import useSWR from "swr";
 
 type onlineUserType = {
   userName : String;
@@ -8,8 +10,25 @@ type onlineUserType = {
 }
 
 const Chatbox = () => {
-  const userRole = localStorage.getItem("userRole");
-  const username = localStorage.getItem("username");
+    const userFetcher = async (url: string) => {
+    try {
+      const response = await axiosInstance.get(url);
+      if (response.data.code === 1 && response.data.msg === "success") {
+        return response.data.data;
+      }
+      throw new Error("User not authenticated");
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      return null;
+    }
+  };
+
+    const { data , error: userError, isLoading: userLoading } = useSWR("/logins/auth/me", userFetcher);
+
+  const userRole = data?.role
+  const username = data?.userName;
+  console.log("Username :", username);
+  
 
  
   const [toName, setToName] = useState<string>("");

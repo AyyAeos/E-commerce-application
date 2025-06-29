@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import ParentComment from "./ParentComment";
 import { CommentList } from "../type";
+import { useReplies } from "./Replies";
 
 const ProductComment = ({ itemId }: { itemId: number }) => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -11,6 +12,8 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
     try {
       const response = await axiosInstance.get(url);
       if (response.data.code === 1 && response.data.msg === "success") {
+        console.log("User data : ", response.data.data);
+        
         return response.data.data;
       }
       throw new Error("User not authenticated");
@@ -33,10 +36,10 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
     }
   };
 
-  const { data: userID, error: userError, isLoading: userLoading } = useSWR("/logins/auth/me", userFetcher);
+  const { data :userID, error: userError, isLoading: userLoading } = useSWR("/logins/auth/me", userFetcher);
   const { data, error, isLoading } = useSWR<Comment>(`/products/${itemId}/review`, fetcher);
 
-  const userId = userID;
+  const userId = userID?.userId;
   
   useEffect(() => {
     if (isSuccess) {
@@ -80,7 +83,7 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
             className="bg-white text-green-600 px-3 py-1 rounded-full font-bold hover:bg-gray-200 transition"
             onClick={() => {
               setIsSuccess(false);
-              mutate(`/products/${itemId}/review`);
+             window.location.reload();
             }}
           >
             Reload Now

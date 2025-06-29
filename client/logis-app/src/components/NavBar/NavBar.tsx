@@ -21,6 +21,7 @@ export const NavBar = ({ isLogin, setIsLogin }) => {
         className="px-4 py-2"
         onClick={() => {
           navigate("/");
+          window.location.reload();
         }}
       >
         Tusla

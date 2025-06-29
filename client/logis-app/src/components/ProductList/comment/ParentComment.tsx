@@ -40,6 +40,7 @@ const ParentComment = ({
     loadMoreReplies,
     isLoading: isLoadingReplies,
     hasMore,
+    refetchReplies
   } = useReplies(parentId);
 
   const handleSubmitReply = async (parentId: number) => {
@@ -93,6 +94,7 @@ const ParentComment = ({
         likeDTO
       );
       mutate(`/products/${itemId}/review`);
+      await refetchReplies();
     } catch (error) {
       console.log(error);
     }
@@ -209,7 +211,7 @@ const ParentComment = ({
                       }
                     >
                       <ThumbsUp className="w-3 h-3 mr-1" />
-                      {(comment.likedUser ?? []).length}
+                      {new Set(comment.likedUser ?? []).size} 
                     </button>
                   </div>
                   <p className="text-gray-700 text-sm">{comment.content}</p>

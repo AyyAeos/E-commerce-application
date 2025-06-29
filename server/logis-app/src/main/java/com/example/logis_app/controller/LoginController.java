@@ -43,7 +43,7 @@ public class LoginController {
     @GetMapping("/auth/me")
     public Result getCurrentUser() {
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return Result.success(loginUser.getUser().getUserId());
+        return Result.success(loginUser.getUser());
     }
 
     @PostMapping("/logout")

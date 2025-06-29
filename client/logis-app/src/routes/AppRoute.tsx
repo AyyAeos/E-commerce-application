@@ -56,9 +56,9 @@ useEffect(() => {
         <Route path="/logins/admin" element={<AdminPage />} />
         <Route path="/admins/inventory" element={requiresLogin ? <LoginErrorMessage /> : <Inventory />} />
         <Route path="/products/:itemId" element={requiresLogin ? <LoginErrorMessage /> : <Product />} />
-        <Route path="/carts/:userId" element={requiresLogin ? <LoginErrorMessage /> : <CartPage />} />
-        <Route path="/checkouts/:userId" element={requiresLogin ? <LoginErrorMessage /> : <Checkout />} />
-        <Route path="/orders/:userId" element={requiresLogin ? <LoginErrorMessage /> : <CheckOrder />} />
+        <Route path="/carts" element={requiresLogin ? <LoginErrorMessage /> : <CartPage />} />
+        <Route path="/checkouts" element={requiresLogin ? <LoginErrorMessage /> : <Checkout />} />
+        <Route path="/orders" element={requiresLogin ? <LoginErrorMessage /> : <CheckOrder />} />
         <Route path="/chatbots" element={requiresLogin ? <LoginErrorMessage /> : <Chatbots />} />
 
         {/* Catch-all for invalid paths */}
