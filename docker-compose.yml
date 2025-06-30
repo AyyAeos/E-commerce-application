@@ -1,0 +1,36 @@
+
+services:
+  client:
+    build: ./client/logis-app
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+
+  server:
+    build: ./server/logis-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/logis
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: aeosaeos123
+      REDIS_HOST: redis
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: aeosaeos123
+      MYSQL_DATABASE: logis
+    ports:
+      - "3306:3306"
+    volumes:
