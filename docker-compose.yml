@@ -1,9 +1,15 @@
-
 services:
-  client:
+  client1:
     build: ./client/logis-app
     ports:
       - "5173:5173"
+    depends_on:
+      - server
+  
+  client2:
+    build: ./client/logis-app
+    ports:
+      - "5174:5173"
     depends_on:
       - server
 
@@ -18,12 +24,16 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/logis
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: aeosaeos123
-      REDIS_HOST: redis
+      SPRING_REDIS_HOST: redis
 
   redis:
-    image: redis
+    image: redis:7
+    container_name : redis
     ports:
       - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
 
   db:
     image: mysql:8
@@ -34,3 +44,9 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  redis_data:
+  mysql_data:

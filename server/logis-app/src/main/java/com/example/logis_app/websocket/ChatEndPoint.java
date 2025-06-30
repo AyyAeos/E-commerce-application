@@ -50,8 +50,6 @@ public class ChatEndPoint extends TextWebSocketHandler {
             String fromName = (String) messageMap.get("fromName");
             logger.info("session : {}" , session);
 
-
-
             if ("server".equals(toName)) {
                 String statusStr = (String) messageMap.get("messageStatus");
 

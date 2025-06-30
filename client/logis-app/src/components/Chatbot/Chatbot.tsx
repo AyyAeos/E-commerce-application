@@ -14,6 +14,8 @@ const Chatbox = () => {
     try {
       const response = await axiosInstance.get(url);
       if (response.data.code === 1 && response.data.msg === "success") {
+        console.log("Respomse : ", response.data.data);
+        
         return response.data.data;
       }
       throw new Error("User not authenticated");
@@ -29,6 +31,13 @@ const Chatbox = () => {
   const username = data?.userName;
   console.log("Username :", username);
   
+  // Set up WebSocket connection only after user info is loaded
+useEffect(() => {
+  if (!username) return;
+
+  const cleanup = setupWebSocket();
+  return cleanup;
+}, [username, userRole]);
 
  
   const [toName, setToName] = useState<string>("");
