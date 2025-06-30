@@ -22,8 +22,8 @@ public class ProductPageUtil {
         productList.forEach(data -> {
             Long itemId = (Long) data.get("item_id");
             String itemName = (String) data.get("item_name");
-            Boolean onSaleBoolean = (Boolean) data.get("on_sale");
-            Integer onSale = (onSaleBoolean != null && onSaleBoolean) ? 1 : 0;
+            Integer onSaleInt = (Integer) data.get("on_sale");
+            Integer onSale = (onSaleInt != null && onSaleInt == 1) ? 1 : 0;
             String description = (String) data.get("description");
             String size = (String) data.get("size");
             Integer stock = (Integer) data.get("stock");

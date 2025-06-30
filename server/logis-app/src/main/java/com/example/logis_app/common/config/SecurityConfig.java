@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Apply CORS configuration
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
-                        .requestMatchers("/logins", "/logins/register",  "/chats").permitAll() // Permit login and register endpoints
+                        .requestMatchers("/logins", "/logins/register",  "/chats", "/admins/**").permitAll() // Permit login and register endpoints
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationTokenFIlter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter

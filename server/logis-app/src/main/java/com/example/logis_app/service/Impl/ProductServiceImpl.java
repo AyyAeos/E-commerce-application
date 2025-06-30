@@ -28,11 +28,24 @@ public class ProductServiceImpl  implements ProductService {
 
     @Autowired
     private ProductMapper productMapper;
-       @Override
+    @Override
     public List<ProductPage> getProductList() {
-        
+        String redisKey = "product:list";
+
+        // Try to get data from Redis first
+        List<ProductPage> cachedList = (List<ProductPage>) redisTemplate.opsForValue().get(redisKey);
+        if (cachedList != null) {
+            return cachedList;
+        }
+
+        // If not in Redis, get from DB
         List<Map<String, Object>> productList = productMapper.getProductList();
-        return ProductPageUtil.transformToProductPage(productList);
+        List<ProductPage> result = ProductPageUtil.transformToProductPage(productList);
+
+        // Save to Redis
+        redisTemplate.opsForValue().set(redisKey, result);
+
+        return result;
     }
 
     @Override

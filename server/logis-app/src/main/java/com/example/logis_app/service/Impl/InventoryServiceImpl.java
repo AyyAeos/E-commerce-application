@@ -8,8 +8,10 @@ import com.example.logis_app.model.DTO.InventoryDTO.QueryItemDTO;
 import com.example.logis_app.model.DTO.InventoryDTO.InventoryVariantsDTO;
 import com.example.logis_app.service.InventoryService;
 import com.example.logis_app.common.util.ProductPageUtil;
+import com.example.logis_app.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,11 @@ import java.util.Map;
 public class InventoryServiceImpl implements InventoryService {
     @Autowired
     private InventoryMapper inventoryMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private ProductService productService;
 
     @Override
     public InventoryPage getItemBySelected(QueryItemDTO queryItemDTO) {
@@ -59,6 +66,8 @@ public class InventoryServiceImpl implements InventoryService {
                     inventoryVariantsDTO.setItemId(itemId); // Associate variant with the new item
                     inventoryMapper.insertItemSize(inventoryVariantsDTO); // Insert each variant
                 }
+
+updateRedis();
                 return true;
             }
             return false;
@@ -70,10 +79,19 @@ public class InventoryServiceImpl implements InventoryService {
 
         inventoryMapper.updateItem(item);
         inventoryMapper.updateInventorySize(item);
+updateRedis();
     }
 
     @Override
     public void deleteItem(Integer id, Integer sizeId) {
         inventoryMapper.deleteItem(id, sizeId);
+        updateRedis();
+
+    }
+
+    private  void updateRedis() {
+        redisTemplate.delete("product:list");
+        List<ProductPage> updatedList = productService.getProductList();
+        redisTemplate.opsForValue().set("product:list", updatedList);
     }
 }
