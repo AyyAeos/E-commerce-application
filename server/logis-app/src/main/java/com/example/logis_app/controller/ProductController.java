@@ -1,5 +1,6 @@
 package com.example.logis_app.controller;
 
+import com.example.logis_app.common.util.UserUtil;
 import com.example.logis_app.model.vo.LoginVO.LoginUser;
 import com.example.logis_app.model.vo.ProductVO.ProductComment;
 import com.example.logis_app.model.vo.ProductVO.ProductCommentList;
@@ -41,7 +42,7 @@ public class ProductController {
 
     @PostMapping("/{id}")
     public Result addToCart(@PathVariable Integer id, @RequestBody AddCartDTO addCartDTO) {
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginUser loginUser = UserUtil.getUser();
         Integer userId = loginUser.getUser().getUserId();
         addCartDTO.setItemId(id);
         addCartDTO.setUserId(userId);
@@ -67,7 +68,7 @@ public class ProductController {
 
     @PostMapping("/like")
     public Result updateLike( @RequestBody LikeDTO likeDTO) {
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginUser loginUser = UserUtil.getUser();
         Integer userId = loginUser.getUser().getUserId();
         likeDTO.setUserId(userId);
         log.info("Update like", likeDTO);
@@ -78,9 +79,6 @@ public class ProductController {
     @GetMapping("/replies")
     public Result loadReplies(@RequestParam Integer parentId, @RequestParam Integer page , @RequestParam Integer pageLimit) {
         List<ProductCommentList> list = productService.loadReplies(parentId, page, pageLimit);
-        for(ProductCommentList lsit : list) {
-            log.info(lsit.toString());
-        }
         return Result.success(list);
     }
 }

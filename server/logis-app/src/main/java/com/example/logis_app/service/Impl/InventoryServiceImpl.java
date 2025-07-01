@@ -37,15 +37,9 @@ public class InventoryServiceImpl implements InventoryService {
         Integer itemCounts = inventoryMapper.getSum(queryItemDTO);
         Integer page = queryItemDTO.getPage();
         Integer pageLimits = queryItemDTO.getPageLimits();
-
         List<ProductPage> list =  ProductPageUtil.transformToProductPage(productList);
-
         return new InventoryPage(list, itemCounts, page, pageLimits );
-
-
     }
-
-
 
     @Override
     public Boolean insertNewItem(AddItemDTO addItemDTO) {
@@ -66,8 +60,7 @@ public class InventoryServiceImpl implements InventoryService {
                     inventoryVariantsDTO.setItemId(itemId); // Associate variant with the new item
                     inventoryMapper.insertItemSize(inventoryVariantsDTO); // Insert each variant
                 }
-
-updateRedis();
+                updateRedis();
                 return true;
             }
             return false;
@@ -76,10 +69,9 @@ updateRedis();
 
     @Override
     public void updateItem(QueryItemDTO item) {
-
         inventoryMapper.updateItem(item);
         inventoryMapper.updateInventorySize(item);
-updateRedis();
+        updateRedis();
     }
 
     @Override

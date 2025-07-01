@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,7 @@ public class JwtAuthenticationTokenFIlter extends OncePerRequestFilter {
             // 1. Get JWT token from cookies
             String token = null;
             if (request.getCookies() != null) {
-                for (var cookie : request.getCookies()) {
+                for (Cookie cookie : request.getCookies()) {
                     if ("token".equals(cookie.getName())) {
                         token = cookie.getValue();
                         break;

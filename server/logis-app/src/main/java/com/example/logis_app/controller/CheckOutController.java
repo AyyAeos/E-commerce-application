@@ -1,4 +1,5 @@
 package com.example.logis_app.controller;
+import com.example.logis_app.common.util.UserUtil;
 import com.example.logis_app.model.DTO.CartDTO.PlaceOrderDTO;
 import com.example.logis_app.common.Result;
 import com.example.logis_app.model.vo.LoginVO.LoginUser;
@@ -21,7 +22,7 @@ public class CheckOutController {
     @PostMapping
     public Result placeOrder(@RequestBody List<PlaceOrderDTO> placeOrderDTOS) {
         log.info("Placing Order");
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginUser loginUser = UserUtil.getUser();
         checkOutService.placeOrder(placeOrderDTOS, loginUser.getUser().getUserId());
         return Result.success();
 

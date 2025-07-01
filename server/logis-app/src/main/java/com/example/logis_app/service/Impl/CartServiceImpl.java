@@ -38,21 +38,17 @@ public class CartServiceImpl implements CartService {
         long endTime = System.nanoTime();
 
         log.info(" Time for redis = {} ", endTime - startTime);
-        //Time for redis = 9 682 400ns
 
         if (cachedCart != null) {
             System.out.println("Cart data fetched from Redis for user: " + userId);
             return cachedCart;
         }
 
-        // if not in redis
         startTime = System.nanoTime();
         List<CartPage> cartData = cartMapper.checkCart(userId);
         endTime = System.nanoTime();
 
         log.info("Time for db = {} ms", (endTime - startTime) / 1_000_000);
-       // Time for db = 45 ms = 45 000 000ns
-
 
         // store in redis with expired time 10 min
         redisTemplate.opsForValue().set(redisKey, cartData);
@@ -64,12 +60,9 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void modifyQuantity(ModifyCartDTO modifyCartDTO) {
-    cartMapper.modifyQuantity(modifyCartDTO);
-
-        // 2️⃣ Remove outdated cart data from Redis
+        cartMapper.modifyQuantity(modifyCartDTO);
         String redisKey = "cart:" + modifyCartDTO.getUserId();
         redisTemplate.delete(redisKey);
-
         log.info("Cart updated in DB and Redis cache invalidated for user: " + modifyCartDTO.getUserId());
     }
 }

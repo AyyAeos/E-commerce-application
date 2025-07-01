@@ -38,11 +38,9 @@ public class ProductServiceImpl  implements ProductService {
             return cachedList;
         }
 
-        // If not in Redis, get from DB
         List<Map<String, Object>> productList = productMapper.getProductList();
         List<ProductPage> result = ProductPageUtil.transformToProductPage(productList);
 
-        // Save to Redis
         redisTemplate.opsForValue().set(redisKey, result);
 
         return result;
@@ -78,6 +76,7 @@ public class ProductServiceImpl  implements ProductService {
     @Override
     public ProductComment getReviewList(Integer itemId) {
         List<ProductCommentList> list = productMapper.getCommentsByItemId(itemId);
+        //Get liked user
         list.forEach(lists -> {
             lists.setLikedUser(productMapper.getLikedUser(lists.getIndexId()));
         });

@@ -1,5 +1,6 @@
 package com.example.logis_app.controller;
 
+import com.example.logis_app.common.util.UserUtil;
 import com.example.logis_app.model.vo.LoginVO.LoginUser;
 import com.example.logis_app.model.vo.OrderVO.Order;
 import com.example.logis_app.model.DTO.ProductDTO.ReviewDTO;
@@ -24,7 +25,7 @@ public class OrderController {
    
     @GetMapping
     public Result getOrderList() {
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginUser loginUser = UserUtil.getUser();
         Integer userId = loginUser.getUser().getUserId();
         log.info("Get order list of user id {} . . .", userId);
 
@@ -35,7 +36,7 @@ public class OrderController {
 
     @PostMapping
     public Result saveReview(@RequestBody ReviewDTO reviewDTO) {
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginUser loginUser = UserUtil.getUser();
         reviewDTO.setUserId(loginUser.getUser().getUserId());
         log.info("Write review : {} ", reviewDTO );
         orderService.saveReview(reviewDTO);

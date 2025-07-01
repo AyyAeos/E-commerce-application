@@ -19,10 +19,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getOrderList(Integer userId) {
+        //row based hashmap
         List<Map<String, Object>> orderMap = orderMapper.getOrderList(userId);
 
         Map<String, Order> ordermap = new HashMap<>();
 
+        //Extract into new hashmap
         for (Map<String, Object> item : orderMap) {
             String orderId = (String) item.get("order_id");
 
@@ -61,9 +63,6 @@ public class OrderServiceImpl implements OrderService {
                     .add(orderItem);
         }
 
-
-
-        //so convert all value into a collection and explicit case to array list?
         List<Order> list = new ArrayList<>(ordermap.values());
         list.sort(Comparator.comparing(Order::getPlacedAt).reversed());
         return list;
@@ -71,31 +70,38 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void saveReview(ReviewDTO reviewDTO) {
+        //Check Item exist
         Integer commentId = orderMapper.checkItemExist(reviewDTO.getItemId());
         reviewDTO.setCommentId(commentId);
 
         if (reviewDTO.getCommentId() != null) {
+            //update comment number
             orderMapper.updateItemCommentCount(reviewDTO.getItemId());
         } else {
+            //Create new comment
             orderMapper.insertItemCommentIfNotExists(reviewDTO);
         }
 
         if (reviewDTO.getParent() == null) {
+            //increase max parent comment
             Integer maxParent = orderMapper.findMaxParent(reviewDTO.getItemId());
             reviewDTO.setParent((maxParent == null) ? 1 : maxParent + 1);
             reviewDTO.setRoot(0);
         } else {
+            //increase root comment
             Integer maxRoot = orderMapper.findMaxRoot(reviewDTO.getItemId(), reviewDTO.getParent());
             System.out.println("Max Root Retrieved: " + maxRoot);
             reviewDTO.setRoot((maxRoot == null || maxRoot == 0) ? 1 : maxRoot + 1);
         }
 
-
-        // Insert the review index and the review itself
+        //Get auto generated index id
         orderMapper.insertItemCommentIndex(reviewDTO);
+
+        //Insert review details
         orderMapper.insertReviewDetails(reviewDTO);
 
         reviewDTO.setCreateTime(LocalDateTime.now());
+        //Store comment message
         orderMapper.storeComment(reviewDTO);
     }
 

@@ -2,6 +2,7 @@ package com.example.logis_app.controller;
 
 import java.util.List;
 
+import com.example.logis_app.common.util.UserUtil;
 import com.example.logis_app.model.DTO.CartDTO.ModifyCartDTO;
 import com.example.logis_app.common.Result;
 import com.example.logis_app.model.vo.ProductVO.CartPage;
@@ -21,27 +22,21 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    // ✅ Securely fetch cart by user ID from JWT
     @GetMapping
     public Result checkCart() {
         log.info("Querying user cart.");
-
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginUser loginUser = UserUtil.getUser();
         List<CartPage> list = cartService.checkCart(loginUser.getUser().getUserId());
         return Result.success(list);
     }
 
-    // ✅ Securely modify cart using authenticated user
     @PutMapping
     public Result modifyQuantity(@RequestBody ModifyCartDTO modifyCartDTO) {
         log.info("Modifying cart item quantity.");
-
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginUser loginUser = UserUtil.getUser();
         Integer userId = loginUser.getUser().getUserId();
         modifyCartDTO.setUserId(userId);
-
         cartService.modifyQuantity(modifyCartDTO);
-
         return Result.success();
     }
 }
