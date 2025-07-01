@@ -31,9 +31,7 @@ export const NavBar = ({ isLogin, setIsLogin }) => {
         <a href="/" className="hover:text-gray-400">
           Home
         </a>
-        <a href="#" className="hover:text-gray-400">
-          About
-        </a>
+       
         <a href="/products" className="hover:text-gray-400">
           Services
         </a>
@@ -41,7 +39,7 @@ export const NavBar = ({ isLogin, setIsLogin }) => {
           Admin
         </a>
         <a href="/chatbots" className="hover:text-gray-400">
-          Ai Chat
+          Chat
         </a>
         {isLogin ? (
           <Button className="hover:text-gray-400" onClick={handleLogout}>
