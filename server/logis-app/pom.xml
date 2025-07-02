@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/> 
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>logis-app</artifactId>
@@ -66,8 +66,8 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.24</version> <!-- Or the latest version -->
-			<scope>provided</scope> <!-- or use 'compile' if it's not already provided in your build -->
+			<version>1.18.24</version> 
+			<scope>provided</scope> 
 		</dependency>
 
 		<dependency>
@@ -105,7 +105,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if you prefer Gson -->
+			<artifactId>jjwt-jackson</artifactId> 
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
