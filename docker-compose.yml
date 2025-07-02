@@ -23,7 +23,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/logis
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: aeosaeos123
+      SPRING_DATASOURCE_PASSWORD: 
       SPRING_REDIS_HOST: redis
 
   redis:
@@ -39,7 +39,7 @@ services:
     image: mysql:8
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: aeosaeos123
+      MYSQL_ROOT_PASSWORD: 
       MYSQL_DATABASE: logis
     ports:
       - "3306:3306"
