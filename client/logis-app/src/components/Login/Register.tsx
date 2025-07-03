@@ -73,7 +73,6 @@ const Register: React.FC = () => {
         response.data.msg === "success" &&
         response.data.data === true
       ) {
-        console.log("Registration successful");
         navigate("/logins");
       }
     } catch (error: any) {

@@ -24,8 +24,6 @@ export const useReplies = (
       );
 
       if (response.data.code === 1 && response.data.data?.length > 0) {
-        console.log("Response = ", response.data.data);
-
         setReplies((prev) => [...prev, ...response.data.data]);
         setPage((prev) => prev + 1);
       } else {

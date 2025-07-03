@@ -34,7 +34,6 @@ const WriteReview = ({
       const placeOrderDTO = order.items.find((item) => item.itemId === itemId);
 
       if (!placeOrderDTO) {
-        console.log("Selected item not found.");
         return;
       }
 
@@ -59,9 +58,7 @@ const WriteReview = ({
       } catch (error) {
         console.log("Error submitting review", error);
       }
-    } else {
-      console.log("Please select an item type and write a review.");
-    }
+    } 
   };
 
   return (

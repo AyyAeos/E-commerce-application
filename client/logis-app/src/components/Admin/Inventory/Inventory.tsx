@@ -96,7 +96,6 @@ const Inventory: React.FC = () => {
           <CiSquarePlus
             className="ml-16 text-5xl "
             onClick={() => {
-              console.log("Add button Pressed");
               SetAddPage(true);
             }}
           />
