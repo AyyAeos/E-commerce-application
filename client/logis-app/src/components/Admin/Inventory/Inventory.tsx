@@ -47,6 +47,7 @@ const Inventory: React.FC = () => {
     try {
       const res = await axiosInstance.get(url, { params: searchForm });
       if (res.data.msg === "success") {
+        //Display Pagination
         setSearchForm({
           ...searchForm,
           totalCounts: res.data.data.itemCounts,
@@ -60,9 +61,9 @@ const Inventory: React.FC = () => {
       return [];
     }
   };
-  //auto refetch when searchForm changed
+  //fetch inventory data
   const { data, error, isLoading } = useSWR(
-    "http://localhost:8080/admins/inventory/search",
+    "/admins/inventory/search",
     fetcher
   );
 
@@ -74,9 +75,9 @@ const Inventory: React.FC = () => {
 
   const [AddPage, SetAddPage] = useState(false);
 
+  //Update inventory list
   const handleSubmit = () => {
-    console.log(searchForm);
-    mutate("http://localhost:8080/admins/inventory/search");
+    mutate("/admins/inventory/search");
   };
 
   const navigate = useNavigate();
@@ -91,7 +92,6 @@ const Inventory: React.FC = () => {
       </button>
       <div className="pt-8 overflow-y-scroll min-h-screen bg-white text-primary-foreground  px-5 sm:px-10 md:px-20">
         <div className="flex justify-center text-2xl font-bold">
-          {/*  let inventory take all space and other pull to right */}
           <span className="flex-1 text-center">Inventory</span>
           <CiSquarePlus
             className="ml-16 text-5xl "

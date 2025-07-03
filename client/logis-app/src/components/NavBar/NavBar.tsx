@@ -31,7 +31,7 @@ export const NavBar = ({ isLogin, setIsLogin }) => {
         <a href="/" className="hover:text-gray-400">
           Home
         </a>
-       
+
         <a href="/products" className="hover:text-gray-400">
           Services
         </a>
@@ -46,7 +46,10 @@ export const NavBar = ({ isLogin, setIsLogin }) => {
             Log Out
           </Button>
         ) : (
-          <Button className="hover:text-gray-400" onClick={() => navigate("/logins")}>
+          <Button
+            className="hover:text-gray-400"
+            onClick={() => navigate("/logins")}
+          >
             Login
           </Button>
         )}

@@ -67,7 +67,6 @@ const Register: React.FC = () => {
     setIsLoading(true);
     try {
       const response = await axiosInstance.post("/logins/register", values);
-      console.log(response.data);
       if (response.data.code === 0) {
         setErrorMessage(response.data.msg);
       } else if (
@@ -78,7 +77,6 @@ const Register: React.FC = () => {
         navigate("/logins");
       }
     } catch (error: any) {
-      console.log("Registration failed", error);
       const message =
         error.response?.data?.msg || "Registration failed. Try again.";
       console.log(message);

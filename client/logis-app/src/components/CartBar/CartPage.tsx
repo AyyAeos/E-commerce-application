@@ -20,6 +20,7 @@ const CartPage = () => {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [error, setError] = useState<string>("");
 
+  //fetch cart item
   const fetcher = async (url: string) => {
     try {
       const res = await axiosInstance.get(url);
@@ -47,18 +48,20 @@ const CartPage = () => {
     }
   }, [data]);
 
+  // Use isSelected to determine the add to cart item
   const handleCheckboxClick = useCallback((item: Item) => {
     setCartItem((prevData) => {
       return prevData.map((prev) => {
         if (prev.sizeId === item.sizeId) {
           const isSelected = !prev.selected;
-          setTotalPrice(
-            (prevTotal) =>
+          setTotalPrice((prevTotal) => {
+            return (
               prevTotal +
               (isSelected
                 ? item.price * item.quantity
                 : -item.price * item.quantity)
-          );
+            );
+          });
           return { ...prev, selected: isSelected };
         }
         return prev;
@@ -207,8 +210,7 @@ const CartPage = () => {
                         {item.size}
                       </div>
                       <div className="w-1/6 text-center text-white">
-                      RM {(item.price ?? 0).toFixed(2)}
-
+                        RM {(item.price ?? 0).toFixed(2)}
                       </div>
 
                       <div className="w-1/6 flex justify-center items-center">

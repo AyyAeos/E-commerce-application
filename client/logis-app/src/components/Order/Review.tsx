@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { Order } from "./Order";
 import axiosInstance from "@/utils/axiosInstance";
 
-
 const WriteReview = ({
   order,
   onClose,
@@ -14,13 +13,12 @@ const WriteReview = ({
   const [reviewText, setReviewText] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
-  const handleReviewChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setReviewText(event.target.value);
+  const handleReviewChange = (e) => {
+    setReviewText(e.target.value);
   };
 
   const typeMap = new Map<number, string>();
+  //return key
   const uniqueItemTypes = useMemo(() => {
     order.items.forEach((item) => {
       if (!typeMap.has(item.itemId)) {
@@ -51,10 +49,7 @@ const WriteReview = ({
       };
 
       try {
-        const response = await axiosInstance.post(
-          `/orders`,
-          reviewDTO
-        );
+        const response = await axiosInstance.post(`/orders`, reviewDTO);
         if (response.data.code === 1 && response.data.msg === "success") {
           setIsSuccess(true);
         } else {

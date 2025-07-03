@@ -40,11 +40,10 @@ const ParentComment = ({
     loadMoreReplies,
     isLoading: isLoadingReplies,
     hasMore,
-    refetchReplies
+    refetchReplies,
   } = useReplies(parentId);
 
   const handleSubmitReply = async (parentId: number) => {
-
     setIsSubmitting(true);
 
     const reviewDTO = {
@@ -54,10 +53,7 @@ const ParentComment = ({
     };
 
     try {
-      const response = await axiosInstance.post(
-        `/orders`,
-        reviewDTO
-      );
+      const response = await axiosInstance.post(`/orders`, reviewDTO);
 
       if (response.data.code === 1 && response.data.msg === "success") {
         setIsSuccess(true);
@@ -75,24 +71,16 @@ const ParentComment = ({
   };
 
   const handleLike = async (indexId: number, likedUser: number[]) => {
-    console.log(likedUser);
-    
-    console.log(userId);
-    
-    const isLiked = Array.isArray(likedUser) && likedUser.includes(Number(userId));
+    const isLiked =
+      Array.isArray(likedUser) && likedUser.includes(Number(userId));
 
     const likeDTO = {
       indexId: indexId,
       like: isLiked,
     };
 
-    console.log(likeDTO);
-
     try {
-      const response = await axiosInstance.post(
-        `/products/like`,
-        likeDTO
-      );
+      const response = await axiosInstance.post(`/products/like`, likeDTO);
       mutate(`/products/${itemId}/review`);
       await refetchReplies();
     } catch (error) {
@@ -205,13 +193,11 @@ const ParentComment = ({
                           : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                       }`}
                       onClick={() =>
-                    
-                        
                         handleLike(comment.indexId, comment.likedUser ?? [])
                       }
                     >
                       <ThumbsUp className="w-3 h-3 mr-1" />
-                      {new Set(comment.likedUser ?? []).size} 
+                      {new Set(comment.likedUser ?? []).size}
                     </button>
                   </div>
                   <p className="text-gray-700 text-sm">{comment.content}</p>
@@ -231,7 +217,7 @@ const ParentComment = ({
           variant="outline"
           size="sm"
           className="mb-3"
-          onClick={() => setReplyStates(prev => !prev)}
+          onClick={() => setReplyStates((prev) => !prev)}
         >
           {replyStates ? "Cancel Reply" : "Add Reply"}
         </Button>

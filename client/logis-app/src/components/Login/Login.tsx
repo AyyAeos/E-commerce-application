@@ -53,34 +53,29 @@ const Login: React.FC = () => {
   });
 
   //Validate User
-const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  setIsLoading(true);
-  try {
-    const response = await axiosInstance.post(
-      "/logins",
-      {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.post("/logins", {
         username: values.username,
         password: values.password,
-      },
-    );
+      });
 
-    if (response.data.msg === "success" && response.data.code === 1) {
-      console.log("Login successful");
-
-      setLoginFailed(false);
-      window.location.href = "/products";
-    } else {
+      if (response.data.msg === "success" && response.data.code === 1) {
+        setLoginFailed(false);
+        window.location.href = "/products";
+      } else {
+        setLoginFailed(true);
+        setErrorMessage("Invalid username or password.");
+      }
+    } catch (error) {
+      console.log("Catch error", error);
+      setFetchFailed(true);
       setLoginFailed(true);
-      setErrorMessage("Invalid username or password.");
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    console.log("Catch error", error);
-    setFetchFailed(true);
-    setLoginFailed(true);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   //Connection Problem with server
   if (fetchFailed) {

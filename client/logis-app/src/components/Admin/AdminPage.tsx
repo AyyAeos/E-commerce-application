@@ -8,10 +8,6 @@ const AdminPage: React.FC = () => {
     
            <nav className="border-l-4 border-blue-600 p-10 bg-white min-h-screen w-1/4">
             <Link to="/admins/inventory" className="block py-4 hover:text-red-600 underline">Check Inventory</Link>
-            <Link to="/admins/order" className="block py-4 hover:text-red-600 underline">Check Order</Link>
-            <Link to="/admins/user" className="block py-4 hover:text-red-600 underline">Check User</Link>
-            <Link to="/logins/admin" className="block py-4 hover:text-red-600 underline">Check Employees</Link>
-            <Link to="/logins/admin" className="block py-4 hover:text-red-600 underline">Check Department</Link>
         </nav>
             
             <div className="flex-1 flex flex-col justify-center items-center space-y-6">

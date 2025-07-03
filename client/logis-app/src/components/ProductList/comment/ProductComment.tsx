@@ -8,12 +8,11 @@ import { useReplies } from "./Replies";
 const ProductComment = ({ itemId }: { itemId: number }) => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
+  //fetch userId
   const userFetcher = async (url: string) => {
     try {
       const response = await axiosInstance.get(url);
       if (response.data.code === 1 && response.data.msg === "success") {
-        console.log("User data : ", response.data.data);
-        
         return response.data.data;
       }
       throw new Error("User not authenticated");
@@ -23,6 +22,7 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
     }
   };
 
+  //Fetcher parent product comment
   const fetcher = async (url: string) => {
     try {
       const response = await axiosInstance.get(url);
@@ -36,11 +36,19 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
     }
   };
 
-  const { data :userID, error: userError, isLoading: userLoading } = useSWR("/logins/auth/me", userFetcher);
-  const { data, error, isLoading } = useSWR<Comment>(`/products/${itemId}/review`, fetcher);
+  const {
+    data: userID,
+    error: userError,
+    isLoading: userLoading,
+  } = useSWR("/logins/auth/me", userFetcher);
+  const { data, error, isLoading } = useSWR<Comment>(
+    `/products/${itemId}/review`,
+    fetcher
+  );
 
   const userId = userID?.userId;
-  
+
+  //Submit Comment Success
   useEffect(() => {
     if (isSuccess) {
       const timeoutId = setTimeout(() => {
@@ -51,12 +59,9 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
     }
   }, [isSuccess]);
 
-  // Conditional rendering
   if (userLoading || isLoading) return <div>Loading...</div>;
   if (userError || !userID) return <div>Please log in</div>;
   if (error || !data) return <div>Error fetching comments</div>;
-
-
 
   // Group and sort comments
   const groupedComments: Record<number, CommentList[]> = {};
@@ -67,6 +72,7 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
     groupedComments[comment.parent].push(comment);
   });
 
+  //Loop map
   Object.keys(groupedComments).forEach((parentId) => {
     groupedComments[parseInt(parentId)].sort(
       (a, b) =>
@@ -83,7 +89,7 @@ const ProductComment = ({ itemId }: { itemId: number }) => {
             className="bg-white text-green-600 px-3 py-1 rounded-full font-bold hover:bg-gray-200 transition"
             onClick={() => {
               setIsSuccess(false);
-             window.location.reload();
+              window.location.reload();
             }}
           >
             Reload Now

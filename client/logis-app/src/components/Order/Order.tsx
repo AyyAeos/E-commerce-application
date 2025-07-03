@@ -25,14 +25,12 @@ export type Order = {
 };
 
 const CheckOrder = () => {
-
   const navigate = useNavigate();
 
   const fetcher = async (url: string) => {
     try {
       const response = await axiosInstance.get(url);
       if (response.data.msg === "success" && response.data.code === 1) {
-        console.log(response.data.data);
         return response.data.data;
       }
     } catch (error) {
@@ -40,11 +38,7 @@ const CheckOrder = () => {
     }
   };
 
-  const {
-    data: orders = [],
-    error,
-    isLoading,
-  } = useSWR(`/orders`, fetcher);
+  const { data: orders = [], error, isLoading } = useSWR(`/orders`, fetcher);
 
   const DeleteOrder = ({ placeDate }: { placeDate: Order }) => {
     const currentDate = new Date();
@@ -59,6 +53,7 @@ const CheckOrder = () => {
       placeDate.isExpired = false;
     }
 
+    //return delete order button if expired
     return (
       <>
         {placeDate.isExpired === false && (
@@ -71,24 +66,25 @@ const CheckOrder = () => {
   };
   const [review, setReview] = useState<boolean>(false);
 
+  //Review order id
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null); // To store the full order details
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   const handleWriteReview = (order: Order) => {
-    setSelectedOrderId(order.orderId); // Set the selected order's ID
-    setSelectedOrder(order); // Pass the full order details to the state
+    setSelectedOrderId(order.orderId);
+    setSelectedOrder(order);
   };
 
   return (
     <div className="bg-primary text-primary-foreground min-h-screen">
-      <Cart  />
+      <Cart />
       <button
         className="fixed mt-4 right-20 bg-red-500 text-white p-3 rounded-full shadow-lg hover:bg-red-600"
         onClick={() => navigate(`/products`)}
       >
         EXIT
       </button>
-      <OrderIcon  />
+      <OrderIcon />
 
       {isLoading ? (
         <p>Loading orders...</p>

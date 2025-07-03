@@ -31,10 +31,7 @@ const Checkout = () => {
   const placeOrder = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post(
-        `/checkouts`,
-        placeOrderDTOS
-      );
+      const response = await axiosInstance.post(`/checkouts`, placeOrderDTOS);
       if (response.data.msg === "success" && response.data.code === 1) {
         setOrderPlaced(true);
         setConfirmationMessage(false);

@@ -5,43 +5,45 @@ import axiosInstance from "@/utils/axiosInstance";
 import useSWR from "swr";
 
 type onlineUserType = {
-  userName : String;
-  appointedStatus : boolean;
-}
+  userName: String;
+  appointedStatus: boolean;
+};
 
+//Fetch user role and user name from server
 const Chatbox = () => {
-    const userFetcher = async (url: string) => {
+  const userFetcher = async (url: string) => {
     try {
       const response = await axiosInstance.get(url);
       if (response.data.code === 1 && response.data.msg === "success") {
-        console.log("Respomse : ", response.data.data);
-        
         return response.data.data;
       }
       throw new Error("User not authenticated");
     } catch (error) {
-      console.error("Error fetching user info:", error);
       return null;
     }
   };
 
-    const { data , error: userError, isLoading: userLoading } = useSWR("/logins/auth/me", userFetcher);
+  const {
+    data,
+    error: userError,
+    isLoading: userLoading,
+  } = useSWR("/logins/auth/me", userFetcher);
 
-  const userRole = data?.role
+  const userRole = data?.role;
   const username = data?.userName;
   console.log("Username :", username);
-  
+
   // Set up WebSocket connection only after user info is loaded
-useEffect(() => {
-  if (!username) return;
+  useEffect(() => {
+    if (!username) return;
 
-  const cleanup = setupWebSocket();
-  return cleanup;
-}, [username, userRole]);
+    const cleanup = setupWebSocket();
+    return cleanup;
+  }, [username, userRole]);
 
- 
+  //Name message forward to
   const [toName, setToName] = useState<string>("");
- 
+  //all online user
   const [onlineUsers, setOnlineUsers] = useState<onlineUserType[]>([]);
   //chat message
   const [messages, setMessages] = useState<Record<string, Message[]>>({});
@@ -49,24 +51,24 @@ useEffect(() => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   //current input message
   const [messageText, setMessageText] = useState("");
+
   //target chatter
   const [selectedUser, setSelectedUser] = useState<string>("");
+
   //websocket connection status
   const [connectionStatus, setConnectionStatus] =
     useState<string>("Connecting...");
-  //reconnect attempt
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const maxReconnectAttempts = 5;
   const reconnectDelay = 3000;
-  
+
   // setup websocket
   const setupWebSocket = () => {
     //connect to a server
     const ws = new WebSocket("ws://localhost:8080/chats");
 
     ws.onopen = () => {
-      console.log("WebSocket connected1");
       setConnectionStatus("Connected");
 
       // Send initial registration message
@@ -75,44 +77,38 @@ useEffect(() => {
           toName: "server",
           message: `${username} has joined the chat1.`,
           fromName: username,
-          messageStatus : "OnOpen"
+          messageStatus: "OnOpen",
         });
 
         ws.send(initialMessage);
       }
     };
 
-    // Modify your onmessage handler to ensure messages are properly stored
+    //Received Message
     ws.onmessage = (event) => {
-      console.log("Raw message received:", event.data);
-
       try {
         const data = JSON.parse(event.data);
 
         if (data.isSystem) {
-          // System message handling remains the same
-          console.log("System message received:", data);
+          //Handle system message
           if (Array.isArray(data.message)) {
             const filteredUsers =
               userRole === "admin"
                 ? data.message
                 : data.message.filter((name: string) => name !== username);
-            console.log("Filter : ", filteredUsers);
-            
+
             setOnlineUsers(filteredUsers);
           }
         } else {
-          // Handle chat messages - with more detailed logging
-          console.log("Chat message received:", data);
+          // Handle chat messages from user
           const senderName = data.fromName;
           const receiverName = username;
 
-          // Debug - print current username and roles
-          console.log("Current user:", username);
-          console.log("Current role:", userRole);
-          console.log("Message from:", senderName, "to:", receiverName);
+          // // Debug - print current username and roles
+          // console.log("Current user:", username);
+          // console.log("Current role:", userRole);
+          // console.log("Message from:", senderName, "to:", receiverName);
 
-          // For customer: store messages where I'm the sender or receiver
           if (
             userRole === "CUSTOMER" &&
             (senderName === username || receiverName === username)
@@ -120,8 +116,7 @@ useEffect(() => {
             const otherUser =
               senderName === username ? receiverName : senderName;
 
-            console.log("Customer storing message with:", otherUser);
-
+            //set the message to the receiver []
             setMessages((prev) => {
               const existingMessages = prev[otherUser] || [];
               const newMessage = {
@@ -132,28 +127,22 @@ useEffect(() => {
                 ).toLocaleTimeString(),
               };
 
-              console.log("Adding message to conversation:", newMessage);
-
-              
               return {
                 ...prev,
                 [otherUser]: [...existingMessages, newMessage],
               };
             });
 
-            // Auto-select this user if none selected
+            //Select the User
             if (!selectedUser) {
-              console.log("Auto-selecting user:", otherUser);
               setSelectedUser(otherUser);
             }
           }
 
-          // For admin: store all messages
+          // For admin
           if (userRole === "admin") {
             const relevantUser =
               senderName === username ? receiverName : senderName;
-
-            console.log("Admin storing message with:", relevantUser);
 
             setMessages((prev) => {
               const existingMessages = prev[relevantUser] || [];
@@ -165,19 +154,13 @@ useEffect(() => {
                 ).toLocaleTimeString(),
               };
 
-              console.log("Adding message to conversation:", newMessage);
-
-              console.log("Relevant", relevantUser);
-              
               return {
                 ...prev,
                 [relevantUser]: [...existingMessages, newMessage],
               };
             });
 
-            // Auto-select this user if none selected
             if (!selectedUser) {
-              console.log("Auto-selecting user:", relevantUser);
               setSelectedUser(relevantUser);
             }
           }
@@ -188,7 +171,6 @@ useEffect(() => {
     };
 
     ws.onclose = (event) => {
-      console.log("WebSocket closed", event);
       setConnectionStatus("Disconnected");
     };
 
@@ -199,13 +181,13 @@ useEffect(() => {
 
     setSocket(ws);
 
-    // Return cleanup function
+    //clean up
     return () => {
       ws.close();
     };
   };
 
-  // Set up WebSocket connection on component mount
+  // Set up WebSocket connection
   useEffect(() => {
     const cleanup = setupWebSocket();
     return cleanup;
@@ -241,7 +223,7 @@ useEffect(() => {
 
     socket.send(JSON.stringify(messageObj));
 
-    // Add message to your own chat log immediately (for better UX)
+    //clear message
     setMessages((prev) => {
       const userMessages = prev[toName] || [];
 
@@ -270,20 +252,18 @@ useEffect(() => {
   // Get current conversation messages
   const currentMessages = selectedUser ? messages[selectedUser] || [] : [];
 
-  //delete from onlineUsers
-  const handleSelectedUser = (name : string) => {
-    console.log("the name is " + name);
-    
+  //Change online status of client
+  const handleSelectedUser = (name: string) => {
     setSelectedUser(name);
 
     const removeMessage = JSON.stringify({
-          toName: "server",
-          message: `${username} has enter the chat room ${name}.`,
-          fromName: name,
-          messageStatus : "RemoveUser",
-        });
-      socket?.send(removeMessage)
-  }
+      toName: "server",
+      message: `${username} has enter the chat room ${name}.`,
+      fromName: name,
+      messageStatus: "RemoveUser",
+    });
+    socket?.send(removeMessage);
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-200 justify-center items-center">
@@ -301,8 +281,8 @@ useEffect(() => {
                 connectionStatus === "Connected"
                   ? "bg-green-100 text-green-800"
                   : connectionStatus === "Disconnected"
-                  ? "bg-red-100 text-red-800"
-                  : "bg-yellow-100 text-yellow-800"
+                    ? "bg-red-100 text-red-800"
+                    : "bg-yellow-100 text-yellow-800"
               }`}
             >
               {connectionStatus}
@@ -315,14 +295,13 @@ useEffect(() => {
             </p>
           )}
 
-{!selectedUser ? (
- 
-    <p className="text-gray-500 mb-2">
-      Select a user to start chatting
-    </p>
-  ) : (
-    <p>Please Wait for an Admin to enter the chat.</p>
-  )}
+          {!selectedUser ? (
+            <p className="text-gray-500 mb-2">
+              Select a user to start chatting
+            </p>
+          ) : (
+            <p>Please Wait for an Admin to enter the chat.</p>
+          )}
 
           <div className="messages bg-gray-50 p-4 rounded-lg flex-grow h-96 overflow-y-auto">
             {currentMessages.length === 0 ? (
@@ -360,8 +339,11 @@ useEffect(() => {
               onKeyPress={handleKeyPress}
               className="flex-1 p-3 border rounded-l text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
               placeholder={
-                selectedUser ? "Type a message..." : 
-                userRole === "admin" ? "Choose a user" :  "Please Wait an Admin to Enter the Chat"
+                selectedUser
+                  ? "Type a message..."
+                  : userRole === "admin"
+                    ? "Choose a user"
+                    : "Please Wait an Admin to Enter the Chat"
               }
               disabled={!selectedUser || connectionStatus !== "Connected"}
             />
@@ -384,7 +366,7 @@ useEffect(() => {
             </button>
           </div>
         </div>
-       
+
         {/* User list panel for admins */}
         {userRole === "admin" && (
           <div className="w-1/4 bg-gray-800 text-white flex flex-col">
@@ -404,11 +386,12 @@ useEffect(() => {
                     onClick={() => handleSelectedUser(user.userName)}
                   >
                     <div className="p-3 border-b border-gray-700 flex items-center">
-<div
-  className={`w-2 h-2 rounded-full mr-2 ${
-    user.appointedStatus ? "bg-red-400" : "bg-green-400"
-  }`}
-></div>                      <span>{user.userName}</span>
+                      <div
+                        className={`w-2 h-2 rounded-full mr-2 ${
+                          user.appointedStatus ? "bg-red-400" : "bg-green-400"
+                        }`}
+                      ></div>{" "}
+                      <span>{user.userName}</span>
                     </div>
                   </div>
                 ))

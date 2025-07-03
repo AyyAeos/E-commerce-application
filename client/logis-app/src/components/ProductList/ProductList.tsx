@@ -8,12 +8,11 @@ import { Skeleton } from "../ui/skeleton";
 import { FaShoppingBag, FaSearch, FaArrowRight } from "react-icons/fa";
 import axiosInstance from "@/utils/axiosInstance";
 import { getRandomGradient, SelectedProduct, Variant } from "./type";
-import LoginErrorMessage from "@/LoginErrorMessage";
 
 const ProductList = () => {
   const navigate = useNavigate();
 
-  //Fetch producy list
+  //Fetch product list
   const fetcher = async (url: string) => {
     try {
       const res = await axiosInstance.get(url);
@@ -27,11 +26,10 @@ const ProductList = () => {
   };
 
   const { data, error, isLoading } = useSWR(`/products`, fetcher);
-  console.log("data : ", data)
 
-  // Set Price Change Map
   let priceMap = new Map();
 
+  //Set Max and min
   data?.forEach((product: SelectedProduct) => {
     product.variants.forEach((variant: Variant) => {
       if (!priceMap.has(product.itemId)) {
@@ -49,14 +47,11 @@ const ProductList = () => {
   });
 
   // Navigate to Selected Product
-const handleClick = (product: SelectedProduct) => {
-  console.log("Product : ", product);
-  
-  // If using react-router-dom
-  navigate(`/products/${product.itemId}`, {
-    state: { product }, // You can pass state like this
-  });
-};
+  const handleClick = (product: SelectedProduct) => {
+    navigate(`/products/${product.itemId}`, {
+      state: { product },
+    });
+  };
 
   return (
     <div className="min-h-screen bg-primary">

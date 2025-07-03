@@ -121,6 +121,16 @@ Make sure the following are installed on your system:
 
 ---
 
+## Running the Redis Server in port 6379
+
+1. Paste the command in docker terminal.
+    ```bash
+    docker run -d --name redis-server -p 6379:6379 redis
+    ```
+
+## Create table in MySQL
+1.  Paste the file in db-init in directory into MySQL.
+
 
 
 

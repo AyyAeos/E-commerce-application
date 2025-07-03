@@ -195,7 +195,7 @@ const Product = () => {
                     <button
                       className="w-full py-4 text-lg font-medium rounded-xl bg-black hover:scale-105 text-white flex items-center justify-center gap-2"
                       onClick={addToCart}
-                      disabled = {addItem.quantity <= 0}
+                      disabled={addItem.quantity <= 0}
                     >
                       <FaShoppingCart />
                       <span>Add to Cart</span>

@@ -3,10 +3,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 
 import { Button } from "@/components/ui/button";
-import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { SearchFormDataType } from "./type";
-
-
 
 const SearchForm = ({
   searchFormData,
@@ -17,6 +21,7 @@ const SearchForm = ({
   setSearchFormData: React.Dispatch<SetStateAction<SearchFormDataType>>;
   handleSubmit: () => void;
 }) => {
+  //pagination
   const handlePageChange = (newPage: number) => {
     setSearchFormData((prev) => ({ ...prev, page: newPage }));
     setTimeout(handleSubmit, 0);
@@ -112,7 +117,7 @@ const SearchForm = ({
             id="totalCounts"
             type="number"
             value={searchFormData.totalCounts}
-            disabled 
+            disabled
             onChange={(e) =>
               setSearchFormData({
                 ...searchFormData,

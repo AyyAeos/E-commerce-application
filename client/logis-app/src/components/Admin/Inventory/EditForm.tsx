@@ -1,4 +1,3 @@
-
 import axiosInstance from "@/utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
@@ -23,6 +22,7 @@ const EditForm = ({
     sizeId: 0,
   });
 
+  //Preinsert edit item
   useEffect(() => {
     if (item) {
       setFormData({
@@ -38,15 +38,12 @@ const EditForm = ({
   }, [item, variant]);
 
   const handleSubmit = async (item: Item) => {
-    console.log("Form Submitted", FormData);
     try {
       const response = await axiosInstance.put(
         `/admins/inventory/${item.itemId}`,
         FormData
       );
       if (response.data.msg === "success" && response.data.code === 1) {
-        console.log("Updated");
-
         //refresh page
         window.location.reload();
 

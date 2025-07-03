@@ -27,12 +27,14 @@ public class LoginController {
     @Autowired
     private com.example.logis_app.service.LoginService loginService;
 
+    //Route validation
     @GetMapping("/auth/login")
     public Result me(HttpServletRequest request) {
         LoginUser loginUser = UserUtil.getUser();
         return Result.success(loginUser);
     }
 
+    //Get User Details
     @GetMapping("/auth/me")
     public Result getCurrentUser() {
         LoginUser loginUser = UserUtil.getUser();

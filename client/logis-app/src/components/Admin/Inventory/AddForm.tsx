@@ -3,9 +3,8 @@ import axiosInstance from "@/utils/axiosInstance";
 import { Button } from "@/components/ui/button";
 import { FormData, Variant } from "./type";
 
-
 const AddButton = ({ onClose }: { onClose: () => void }) => {
-  // State for managing the form data
+  //Add item form
   const [formData, setFormData] = useState<FormData>({
     itemName: "",
     description: "",
@@ -19,22 +18,15 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
     ],
   });
 
-  // Function to create the item and post to the server
-  // Function to create the item and post to the server
   const createItem = async () => {
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/admins/inventory/create",
+        "/admins/inventory/create",
         formData
       );
-      console.log("Response:", response.data);
 
-      // Check if the response is successful
       if (response.data.msg === "success" && response.data.data === true) {
-        // Close the modal first
         onClose();
-
-        // Show the success message using alert
         alert("Item successfully added!");
       } else {
         alert("Item already existed");
@@ -50,6 +42,7 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
     field: keyof Variant,
     value: any
   ) => {
+    //find the appropriate value and change the state
     const updatedVariants = [...formData.variants];
     updatedVariants[index][field] = value;
     setFormData({ ...formData, variants: updatedVariants });
@@ -71,7 +64,6 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl px-4 sm:w-[500px] overflow-y-scroll">
         <h2 className="text-2xl font-bold mb-4">Add an item</h2>
 
-        {/* Item Name */}
         <div className="mb-4 flex flex-col sm:flex-row sm:items-center">
           <label className="w-full sm:w-1/3 text-left mb-2 sm:mb-0">
             Item Name:
@@ -80,7 +72,7 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
             type="text"
             value={formData.itemName}
             className="border-4 border-slate-500 text-center w-full sm:w-2/3"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            onChange={(e) =>
               setFormData({ ...formData, itemName: e.target.value })
             }
           />
@@ -94,7 +86,7 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
           <textarea
             value={formData.description}
             className="border-4 border-slate-500 text-center w-full sm:w-2/3 resize-y h-28 p-2"
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+            onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
           />
@@ -116,7 +108,7 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
                     type="text"
                     value={variant.size}
                     className="border-4 border-slate-500 text-center w-full"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    onChange={(e) =>
                       handleVariantChange(index, "size", e.target.value)
                     }
                   />
@@ -129,7 +121,7 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
                     type="number"
                     value={variant.price}
                     className="border-4 border-slate-500 text-center w-full"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    onChange={(e) =>
                       handleVariantChange(
                         index,
                         "price",
@@ -146,7 +138,7 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
                     type="number"
                     value={variant.stock}
                     className="border-4 border-slate-500 text-center w-full"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    onChange={(e) =>
                       handleVariantChange(
                         index,
                         "stock",
@@ -162,7 +154,7 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
                   <select
                     className="border-4 border-slate-500 text-center w-full"
                     value={variant.onSale}
-                    onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                    onChange={(e) =>
                       handleVariantChange(
                         index,
                         "onSale",
@@ -185,7 +177,7 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
         <div className="flex justify-between mt-4 space-x-2 flex-col sm:flex-row gap-y-4">
           <button
             className="px-8 py-2 bg-red-500 text-white rounded"
-            onClick={() => onClose()}
+            onClick={onClose}
           >
             No
           </button>
