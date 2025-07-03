@@ -1,4 +1,4 @@
-# 🍽️ E-Commerce Web Based Application
+#  E-Commerce Web Based Application
 
 This project consists of:
 
