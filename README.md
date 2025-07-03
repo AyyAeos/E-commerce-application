@@ -24,6 +24,7 @@ Make sure the following are installed on your system:
 - Java 17+
 - Maven
 - Docker
+- You are required to manually add products. Navigate to Admin and add item
 ---
 ## ⚙️ Example `application.yml` for Spring Boot
 
@@ -55,7 +56,7 @@ Make sure the following are installed on your system:
 ```
 
 
-2. Update the db/environment same with the application.yml if using docker.
+2. Update the db/environment same with the application.yml if using docker in docker-compose.yml.
     ```bash
         server:
          environment:
@@ -70,8 +71,14 @@ Make sure the following are installed on your system:
     ```
 
 ## 🔌 Option 1 : Running with docker 
+1. Get jar file for Spring Boot
+   ```bash
+    cd server
+    cd logis-app
+    mvn clean install
+   ```
 
-1.  In the logis folder, run the command :
+2.  In the logis folder, run the command :
     ```bash
     docker compose build
     docker compose up
