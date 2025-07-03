@@ -24,7 +24,13 @@ Make sure the following are installed on your system:
 - Java 17+
 - Maven
 - Docker
+- Manually adding products is required. Navigate to Admin and add item
 ---
+## Live Chat Implementation
+
+1. After registration, change the user role to “admin”.
+2. Use another client in a different browser to enter the live chat as an admin.
+
 ## ⚙️ Example `application.yml` for Spring Boot
 
 1. Add in server/logis-app/src/main/resources, Update the datasource.
@@ -55,7 +61,7 @@ Make sure the following are installed on your system:
 ```
 
 
-2. Update the db/environment same with the application.yml if using docker.
+2. Update the db/environment same with the application.yml if using docker in docker-compose.yml.
     ```bash
         server:
          environment:
@@ -70,8 +76,14 @@ Make sure the following are installed on your system:
     ```
 
 ## 🔌 Option 1 : Running with docker 
+1. Get jar file for Spring Boot
+   ```bash
+    cd server
+    cd logis-app
+    mvn clean install
+   ```
 
-1.  In the logis folder, run the command :
+2.  In the logis folder, run the command :
     ```bash
     docker compose build
     docker compose up
