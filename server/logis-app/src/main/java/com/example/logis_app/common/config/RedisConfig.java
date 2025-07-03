@@ -49,7 +49,7 @@ public class RedisConfig {
         // Use JSON Serializer
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
 
-        // Set RedisTemplate Serialization Rules
+        // Set RedisTemplate Serialization 
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(serializer);
         template.setHashKeySerializer(new StringRedisSerializer());

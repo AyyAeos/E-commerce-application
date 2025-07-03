@@ -45,7 +45,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ItemAlreadyExistsException.class)
     public ResponseEntity<String> handleItemAlreadyExistsException(ItemAlreadyExistsException ex) {
-        // Return an error response without terminating the backend
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

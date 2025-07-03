@@ -37,7 +37,7 @@ public class JwtAuthenticationTokenFIlter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-            // 1. Get JWT token from cookies
+            // Get JWT token from cookies
             String token = null;
             if (request.getCookies() != null) {
                 for (Cookie cookie : request.getCookies()) {
@@ -50,13 +50,13 @@ public class JwtAuthenticationTokenFIlter extends OncePerRequestFilter {
 
             log.info("JWT Token from cookie: {}", token);
 
-            // 2. If no token, continue without authentication
+            // If no token, continue without authentication
             if (!StringUtils.hasText(token)) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            // 3. Parse JWT and extract subject (your user info JSON string)
+            // Parse JWT and extract subject (your user info JSON string)
             Claims claims;
             String subject;
             try {
@@ -68,17 +68,17 @@ public class JwtAuthenticationTokenFIlter extends OncePerRequestFilter {
                 throw new RuntimeException("Invalid token");
             }
 
-            // 4. Convert subject (JSON string) to User object
+            // Convert subject (JSON string) to User object
             User user = new ObjectMapper().readValue(subject, User.class); // Or inject ObjectMapper
             LoginUser loginUser = new LoginUser(user);
 
-            // 5. Set Authentication
+            // Set Authentication
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            // 6. Continue
+            // Continue
             filterChain.doFilter(request, response);
         }
     }

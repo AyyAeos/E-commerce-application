@@ -56,12 +56,13 @@ public class ChatEndPoint extends TextWebSocketHandler {
                 if (statusStr != null) {
                     ServerMessageType messageStatus = ServerMessageType.valueOf(statusStr);
                     logger.info("Message status: {}", messageStatus);
-
+                    //Unassigned new client
                     if (messageStatus == ServerMessageType.OnOpen && !onlineUsers.containsKey(fromName)) {
-
+                    
                         onlineUsers.put(new UserStatus(fromName, false), session);
                         logger.info("User {} registered", fromName);
                         broadcastOnlineUsers();
+                        //Assigned client
                     } else if (messageStatus == ServerMessageType.RemoveUser) {
                         UserStatus oldKey = new UserStatus(fromName, false);
                         WebSocketSession existingSession = onlineUsers.remove(oldKey);

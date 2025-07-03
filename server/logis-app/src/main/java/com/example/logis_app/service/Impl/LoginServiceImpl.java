@@ -70,6 +70,7 @@ public class LoginServiceImpl implements UserDetailsService, LoginService {
     }
 
 
+    //Validate User 
     @Override
     public LoginUser loadUserByUsername(String username) throws UsernameNotFoundException {
 
