@@ -28,7 +28,7 @@ Make sure the following are installed on your system:
 ## ⚙️ Example `application.yml` for Spring Boot
 
 1. Add in server/logis-app/src/main/resources, Update the datasource.
-
+```bash
     spring:
         application:
             name: logis_app
@@ -52,6 +52,7 @@ Make sure the following are installed on your system:
         level:
             com.zaxxer.hikari: DEBUG
             org.springframework.jdbc: DEBUG
+```
 
 
 2. Update the db/environment same with the application.yml if using docker.
