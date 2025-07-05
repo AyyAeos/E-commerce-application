@@ -4,6 +4,9 @@ This project consists of:
 
 - **Client** (React)
 - **Spring Boot Backend Server**
+- **Redis**
+- **MySQL**
+- **ChatGPT UI design**
 
 ---
 
@@ -33,7 +36,7 @@ Make sure the following are installed on your system:
 
 ## ⚙️ Example `application.yml` for Spring Boot
 
-1. Add in server/logis-app/src/main/resources, Update the datasource.
+1. Add application.yml in server/logis-app/src/main/resources, Update the datasource.
 ```bash
     spring:
         application:
