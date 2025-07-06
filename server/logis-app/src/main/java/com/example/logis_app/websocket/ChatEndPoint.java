@@ -19,7 +19,7 @@ public class ChatEndPoint extends TextWebSocketHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ChatEndPoint.class);
 
-    // Keep track of connected users by username
+    // Keep track of connected users by username and session
     private static final Map<UserStatus, WebSocketSession> onlineUsers = new ConcurrentHashMap<>();
 
     private final ObjectMapper mapper = new ObjectMapper();
@@ -50,12 +50,19 @@ public class ChatEndPoint extends TextWebSocketHandler {
             String fromName = (String) messageMap.get("fromName");
             logger.info("session : {}" , session);
 
+            //Server message
             if ("server".equals(toName)) {
                 String statusStr = (String) messageMap.get("messageStatus");
 
                 if (statusStr != null) {
+                    //Convert to enum
                     ServerMessageType messageStatus = ServerMessageType.valueOf(statusStr);
                     logger.info("Message status: {}", messageStatus);
+                    /**
+                     * All client will show in the list.
+                     * If the client have not assigned by any admin, it appears green
+                     * If admin clicked to chat with client , set false and remove user from online user.
+                     */
                     //Unassigned new client
                     if (messageStatus == ServerMessageType.OnOpen && !onlineUsers.containsKey(fromName)) {
                     
@@ -123,6 +130,7 @@ public class ChatEndPoint extends TextWebSocketHandler {
         afterConnectionClosed(session, CloseStatus.SERVER_ERROR);
     }
 
+    //Broadcast all online user for admins
     private void broadcastOnlineUsers() {
         try {
             List<UserStatus> usernames = new ArrayList<>(onlineUsers.keySet());
