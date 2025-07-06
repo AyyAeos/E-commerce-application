@@ -60,7 +60,7 @@ Make sure the following are installed on your system:
 ![Homepage](assets/Product_Review.png)
 
 6. Live Chat Page
-![Homepage](assets/Chat_Page.png)
+![Homepage](assets/Customer_Support.png)
    
 
 ## ⚙️ Example `application.yml` for Spring Boot
