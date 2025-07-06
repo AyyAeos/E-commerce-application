@@ -90,7 +90,7 @@ const Chatbox = () => {
         const data = JSON.parse(event.data);
 
         if (data.isSystem) {
-          //Handle system message
+          //System Message used to update online and unassigned user.
           if (Array.isArray(data.message)) {
             const filteredUsers =
               userRole === "admin"
@@ -116,7 +116,7 @@ const Chatbox = () => {
             const otherUser =
               senderName === username ? receiverName : senderName;
 
-            //set the message to the receiver []
+            //set the message to the receiver
             setMessages((prev) => {
               const existingMessages = prev[otherUser] || [];
               const newMessage = {
@@ -252,7 +252,7 @@ const Chatbox = () => {
   // Get current conversation messages
   const currentMessages = selectedUser ? messages[selectedUser] || [] : [];
 
-  //Change online status of client
+  //Change online status of client to assigned
   const handleSelectedUser = (name: string) => {
     setSelectedUser(name);
 
