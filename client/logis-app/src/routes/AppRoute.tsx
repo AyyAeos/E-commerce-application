@@ -16,7 +16,7 @@ import Inventory from "@/components/Admin/Inventory/Inventory";
 import axiosInstance from "@/utils/axiosInstance";
 import NavBar from "@/components/NavBar/NavBar";
 
-const AppRoutes= () => {
+const AppRoutes = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const location = useLocation();
 
@@ -50,7 +50,7 @@ const AppRoutes= () => {
     <div>
       <NavBar isLogin={isUserLoggedIn} setIsLogin={setIsUserLoggedIn} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home isLogin={isUserLoggedIn} />} />
         <Route path="/logins" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route

@@ -12,6 +12,7 @@ const EditForm = ({
   variant: Variants;
   onClose: () => void;
 }) => {
+  //Edit Form Data
   const [FormData, setFormData] = useState({
     itemName: "",
     price: 0,
@@ -38,6 +39,25 @@ const EditForm = ({
   }, [item, variant]);
 
   const handleSubmit = async (item: Item) => {
+    if (!FormData.itemName.trim()) {
+      alert("Item Name cannot be empty.");
+      return;
+    }
+
+    if (!FormData.description.trim()) {
+      alert("Description cannot be empty.");
+      return;
+    }
+
+    if (FormData.price <= 0) {
+      alert("Invalid price! Please give a valid value.");
+      return;
+    }
+
+    if (FormData.stock <= 0) {
+      alert("Invalid stock ! Please give a valid value");
+      return;
+    }
     try {
       const response = await axiosInstance.put(
         `/admins/inventory/${item.itemId}`,

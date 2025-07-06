@@ -2,8 +2,17 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { FaArrowRight, FaHome } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-const Home: React.FC = () => {
+const Home: React.FC = ({ isLogin }) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isLogin) {
+      navigate("/products");
+    }
+  }, [isLogin, navigate]);
+
   return (
     <div className="min-h-screen bg-primary text-white flex flex-col justify-center items-center px-4">
       <div className="max-w-4xl w-full mx-auto text-center flex flex-col items-center">

@@ -33,7 +33,7 @@ export const NavBar = ({ isLogin, setIsLogin }) => {
         </a>
 
         <a href="/products" className="hover:text-gray-400">
-          Services
+          Shop
         </a>
         <a href="/logins/admin" className="hover:text-gray-400">
           Admin

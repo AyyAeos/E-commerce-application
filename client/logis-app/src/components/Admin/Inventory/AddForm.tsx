@@ -20,39 +20,49 @@ const AddButton = ({ onClose }: { onClose: () => void }) => {
 
   const createItem = async () => {
     if (!formData.itemName.trim()) {
-    alert("Item Name cannot be empty.");
-    return;
-  }
-
-  if (!formData.description.trim()) {
-    alert("Description cannot be empty.");
-    return;
-  }
-
-  // Validate each variant
-  for (let i = 0; i < formData.variants.length; i++) {
-    const variant = formData.variants[i];
-
-    if (!variant.size.trim()) {
-      alert(`Variant ${i + 1}: Size cannot be empty.`);
+      alert("Item Name cannot be empty.");
       return;
     }
 
-    if (isNaN(variant.price) || variant.price < 0) {
-      alert(`Variant ${i + 1}: Price must be a non-negative number.`);
+    if (!formData.description.trim()) {
+      alert("Description cannot be empty.");
       return;
     }
 
-    if (isNaN(variant.stock) || variant.stock < 0) {
-      alert(`Variant ${i + 1}: Stock must be a non-negative number.`);
+    if (formData.price <= 0) {
+      alert("Invalid price! Please give a valid value.");
       return;
     }
 
-    if (![0, 1].includes(variant.onSale)) {
-      alert(`Variant ${i + 1}: On Sale must be 0 or 1.`);
+    if (formData.stock <= 0) {
+      alert("Invalid stock ! Please give a valid value");
       return;
     }
-  }
+
+    // Validate each variant
+    for (let i = 0; i < formData.variants.length; i++) {
+      const variant = formData.variants[i];
+
+      if (!variant.size.trim()) {
+        alert(`Variant ${i + 1}: Size cannot be empty.`);
+        return;
+      }
+
+      if (isNaN(variant.price) || variant.price < 0) {
+        alert(`Variant ${i + 1}: Price must be a non-negative number.`);
+        return;
+      }
+
+      if (isNaN(variant.stock) || variant.stock < 0) {
+        alert(`Variant ${i + 1}: Stock must be a non-negative number.`);
+        return;
+      }
+
+      if (![0, 1].includes(variant.onSale)) {
+        alert(`Variant ${i + 1}: On Sale must be 0 or 1.`);
+        return;
+      }
+    }
     try {
       const response = await axiosInstance.post(
         "/admins/inventory/create",

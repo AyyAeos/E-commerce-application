@@ -27,17 +27,23 @@ public class LoginController {
     @Autowired
     private com.example.logis_app.service.LoginService loginService;
 
-    //Route validation
+    // Route validation
     @GetMapping("/auth/login")
     public Result me(HttpServletRequest request) {
         LoginUser loginUser = UserUtil.getUser();
+        if (loginUser == null) {
+            return Result.error("Unauthorized"); 
+        }
         return Result.success(loginUser);
     }
 
-    //Get User Details
+    // Get User Details
     @GetMapping("/auth/me")
     public Result getCurrentUser() {
         LoginUser loginUser = UserUtil.getUser();
+        if (loginUser == null || loginUser.getUser() == null) {
+            return Result.error("Unauthorized");
+        }
         return Result.success(loginUser.getUser());
     }
 

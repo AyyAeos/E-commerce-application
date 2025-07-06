@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.logis_app.Mapper.LoginMapper">
     <select id="login" resultType="com.example.logis_app.model.vo.LoginVO.User">
-        SELECT *
+        SELECT user_id AS userId, username AS userName, role, password
         FROM user
         WHERE username = #{username}
     </select>
