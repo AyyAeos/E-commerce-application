@@ -1,13 +1,18 @@
 #  E-Commerce Web Based Application
 
+## About This Project
+
+This is a personal project as part of my learning. Some features are skipped.
+1. UI design is from ChatGPT
+2. Admin CRUD
+3. Product Image
+
 This project consists of:
 
 - **Client** (React)
 - **Spring Boot Backend Server**
 - **Redis**
 - **MySQL**
-- **ChatGPT UI design**
-
 ---
 
 ## ✨ Features
