@@ -48,6 +48,7 @@ public class ChatEndPoint extends TextWebSocketHandler {
             String toName = (String) messageMap.get("toName");
             String messageContent = (String) messageMap.get("message");
             String fromName = (String) messageMap.get("fromName");
+            String role = (String)messageMap.get("role");
             logger.info("session : {}" , session);
 
             //Server message
@@ -66,15 +67,15 @@ public class ChatEndPoint extends TextWebSocketHandler {
                     //Unassigned new client
                     if (messageStatus == ServerMessageType.OnOpen && !onlineUsers.containsKey(fromName)) {
                     
-                        onlineUsers.put(new UserStatus(fromName, false), session);
+                        onlineUsers.put(new UserStatus(fromName,role, false), session);
                         logger.info("User {} registered", fromName);
                         broadcastOnlineUsers();
                         //Assigned client
                     } else if (messageStatus == ServerMessageType.RemoveUser) {
-                        UserStatus oldKey = new UserStatus(fromName, false);
+                        UserStatus oldKey = new UserStatus(fromName, "CUSTOMER", false);
                         WebSocketSession existingSession = onlineUsers.remove(oldKey);
                         if (existingSession != null) {
-                            onlineUsers.put(new UserStatus(fromName, true), existingSession);
+                            onlineUsers.put(new UserStatus(fromName, "CUSTOMER", true), existingSession);
                         }
                         logger.info("User {} removed from unappointed", fromName);
                         broadcastOnlineUsers();

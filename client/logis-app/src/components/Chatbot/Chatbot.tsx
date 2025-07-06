@@ -7,6 +7,7 @@ import useSWR from "swr";
 type onlineUserType = {
   userName: String;
   appointedStatus: boolean;
+  role: String;
 };
 
 //Fetch user role and user name from server
@@ -77,6 +78,7 @@ const Chatbox = () => {
           toName: "server",
           message: `${username} has joined the chat1.`,
           fromName: username,
+          role: userRole,
           messageStatus: "OnOpen",
         });
 
@@ -92,12 +94,7 @@ const Chatbox = () => {
         if (data.isSystem) {
           //System Message used to update online and unassigned user.
           if (Array.isArray(data.message)) {
-            const filteredUsers =
-              userRole === "admin"
-                ? data.message
-                : data.message.filter((name: string) => name !== username);
-
-            setOnlineUsers(filteredUsers);
+            setOnlineUsers(data.message);
           }
         } else {
           // Handle chat messages from user
@@ -219,6 +216,7 @@ const Chatbox = () => {
       toName: toName,
       message: messageText,
       fromName: username,
+      role: userRole,
     };
 
     socket.send(JSON.stringify(messageObj));
@@ -377,24 +375,27 @@ const Chatbox = () => {
               {onlineUsers.length === 0 ? (
                 <p className="text-gray-400 text-center p-4">No users online</p>
               ) : (
-                onlineUsers.map((user, index) => (
-                  <div
-                    key={index}
-                    className={`cursor-pointer hover:bg-gray-700 transition ${
-                      selectedUser === user.userName ? "bg-gray-700" : ""
-                    }`}
-                    onClick={() => handleSelectedUser(user.userName)}
-                  >
-                    <div className="p-3 border-b border-gray-700 flex items-center">
-                      <div
-                        className={`w-2 h-2 rounded-full mr-2 ${
-                          user.appointedStatus ? "bg-red-400" : "bg-green-400"
-                        }`}
-                      ></div>{" "}
-                      <span>{user.userName}</span>
+                onlineUsers
+                //filter out admins
+                  .filter((user) => user.role !== "admin")
+                  .map((user, index) => (
+                    <div
+                      key={index}
+                      className={`cursor-pointer hover:bg-gray-700 transition ${
+                        selectedUser === user.userName ? "bg-gray-700" : ""
+                      }`}
+                      onClick={() => handleSelectedUser(user.userName)}
+                    >
+                      <div className="p-3 border-b border-gray-700 flex items-center">
+                        <div
+                          className={`w-2 h-2 rounded-full mr-2 ${
+                            user.appointedStatus ? "bg-red-400" : "bg-green-400"
+                          }`}
+                        ></div>{" "}
+                        <span>{user.userName}</span>
+                      </div>
                     </div>
-                  </div>
-                ))
+                  ))
               )}
             </div>
           </div>

@@ -1,42 +1,35 @@
 package com.example.logis_app.model.DTO.ChatbotDTO;
 
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserStatus {
     private String userName;
+    private String role;
     private boolean appointedStatus;
-
-    public UserStatus(String userName, boolean appointedStatus) {
-        this.userName = userName;
-        this.appointedStatus = appointedStatus;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public boolean isAppointedStatus() {
-        return appointedStatus;
-    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserStatus)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         UserStatus that = (UserStatus) o;
-        return appointedStatus == that.appointedStatus &&
-                Objects.equals(userName, that.userName);
+        return appointedStatus == that.appointedStatus && Objects.equals(userName, that.userName) && Objects.equals(role, that.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName, appointedStatus);
+        return Objects.hash(userName, role, appointedStatus);
     }
 
     @Override
     public String toString() {
         return "UserStatus{" +
                 "userName='" + userName + '\'' +
+                ", role='" + role + '\'' +
                 ", appointedStatus=" + appointedStatus +
                 '}';
     }
