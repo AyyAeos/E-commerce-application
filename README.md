@@ -2,10 +2,12 @@
 
 ## About This Project
 
-This is a personal project as part of my learning. Some features are skipped.
-1. UI design is from ChatGPT
-2. Admin CRUD
-3. Product Image
+This is a personal project developed as part of my learning. Some features are simplified or intentionally skipped for demonstration purposes:
+	1.	UI design is assisted by ChatGPT.
+	2.	Admin CRUD are skipped.
+	3.	Product images are skipped.
+	4.	Admin routes can be accessed by customers for demo purposes.
+Role-based access can be verified via the /auth/me endpoint (role === `admin`), which returns the authenticated user object. 
 
 This project consists of:
 
