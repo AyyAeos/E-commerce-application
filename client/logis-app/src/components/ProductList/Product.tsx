@@ -59,6 +59,12 @@ const Product = () => {
 
   //Add Selected Item to Cart
   const addToCart = async () => {
+
+    if(addItem.quantity == 0) {
+      alert("Quantity cannot be 0.")
+      return;
+    }
+
     try {
       const response = await axiosInstance.post(
         `/products/${product.itemId}`,
