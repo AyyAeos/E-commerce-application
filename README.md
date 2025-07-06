@@ -79,15 +79,10 @@ logging:
     ```
 
 ## 🔌 Option 1 : Running with docker 
-1. Get jar file for Spring Boot
-   ```bash
-    cd server
-    cd logis-app
-    mvn clean install
-   ```
 
-2.  In the logis folder, run the command :
+1.  In the logis folder, run the command :
     ```bash
+    docker compose down -v // if wanted to delete cache data.
     docker compose build
     docker compose up
     ```
