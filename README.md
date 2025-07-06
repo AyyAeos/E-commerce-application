@@ -39,28 +39,28 @@ Make sure the following are installed on your system:
 1. Add application.yml in server/logis-app/src/main/resources, Update the datasource.
 ```bash
 spring:
-  application:
-    name: logis_app
+    application:
+        name: logis_app
 
-  datasource:
-    url: jdbc:mysql://db:3306/logis
-    username: root
-    password: aeosaeos123
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    datasource:
+        url: jdbc:mysql://db:3306/logis
+        username: root
+        password: ADD_YOUR_PASSWORD
+        driver-class-name: com.mysql.cj.jdbc.Driver
 
-  redis:
-    host: ${SPRING_REDIS_HOST:localhost}
-    port: 6379
+    redis:
+        host: ${SPRING_REDIS_HOST:localhost}
+        port: 6379
 
-  mybatis:
+mybatis:
     configuration:
-      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-      map-underscore-to-camel-case: true
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl 
+        map-underscore-to-camel-case: true
 
-  logging:
-    level:
-      com.zaxxer.hikari: DEBUG
-      org.springframework.jdbc: DEBUG
+logging:
+  level:
+    com.zaxxer.hikari: DEBUG
+    org.springframework.jdbc: DEBUG    
 ```
 
 
