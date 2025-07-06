@@ -31,8 +31,28 @@ Make sure the following are installed on your system:
 ---
 ## Live Chat Implementation
 
-1. After registration, change the user role to “admin”.
+1. After registration, change the user role to “admin” in MySQL database.
 2. Use another client in a different browser to enter the live chat as an admin.
+
+## Project Screenshot
+1. Admin Management Page
+![Homepage](assets/Admin_Page.png)
+
+2. Admin Add Product Page
+![Homepage](assets/Admin_AddPage.png)
+
+3. Product List Page
+![Homepage](assets/Product_List.png)
+
+4. Product Page
+![Homepage](assets/Product_Page.png)
+
+5. Product Review Page
+![Homepage](assets/Product_Review.png)
+
+6. Live Chat Page
+![Homepage](assets/Chat_Page.png)
+   
 
 ## ⚙️ Example `application.yml` for Spring Boot
 
