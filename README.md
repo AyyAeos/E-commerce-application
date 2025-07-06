@@ -65,7 +65,7 @@ Make sure the following are installed on your system:
 
 ## ⚙️ Example `application.yml` for Spring Boot
 
-1. Add application.yml in server/logis-app/src/main/resources, Update the datasource.
+1. Add application.yml in server/logis-app/src/main/resources, Update the datasource password.
 ```bash
 spring:
     application:
