@@ -4,7 +4,6 @@
 
 This is a personal project developed as part of my learning. Some features are simplified or intentionally skipped for demonstration purposes: 
 
-- **UI design is assisted by ChatGPT.**	
 - **Admin CRUD are skipped.**
 - **Product images are skipped.**
 - **Admin routes can be accessed by customers for demo purposes.**
