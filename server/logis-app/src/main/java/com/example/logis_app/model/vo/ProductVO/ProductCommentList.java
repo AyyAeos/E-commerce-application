@@ -26,4 +26,5 @@ public class ProductCommentList {
         private String itemName;
         private String sizeName;
         private List<Integer> likedUser;
+        private String replyTo;
 }

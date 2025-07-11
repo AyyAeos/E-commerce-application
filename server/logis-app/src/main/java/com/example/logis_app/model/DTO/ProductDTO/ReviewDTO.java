@@ -30,4 +30,5 @@ public class ReviewDTO {
     private Integer root;
 
     private LocalDateTime createTime;
+    private String replyTo;
 }

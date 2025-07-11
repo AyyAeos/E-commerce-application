@@ -35,8 +35,8 @@
 
 
     <insert id="insertItemCommentIndex" useGeneratedKeys="true" keyProperty="indexId">
-        INSERT INTO item_comment_index (item_id, comment_id, user_id, type, parent, root)
-        VALUES (#{itemId}, #{commentId}, #{userId}, #{type}, #{parent}, #{root})
+        INSERT INTO item_comment_index (item_id, comment_id, user_id, type, parent, root, reply_to)
+        VALUES (#{itemId}, #{commentId}, #{userId}, #{type}, #{parent}, #{root}, #{replyTo})
     </insert>
 
     <insert id="insertReviewDetails">
