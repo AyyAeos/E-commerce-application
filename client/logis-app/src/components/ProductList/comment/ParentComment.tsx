@@ -264,6 +264,12 @@ const ParentComment = ({
                 <Send className="w-4 h-4 mr-2" />
                 {isSubmitting ? "Sending..." : "Send Reply"}
               </Button>
+              {replyTo && (
+                <p className="text-xs text-gray-500 mb-1">
+                  Replying to{" "}
+                  <span className="font-semibold text-gray-600">{replyTo}</span>
+                </p>
+              )}
             </div>
           </div>
         )}
