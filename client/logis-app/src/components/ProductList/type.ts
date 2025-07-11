@@ -52,4 +52,5 @@ export const getRandomGradient = () => {
   itemName?: string;
   sizeName?: string;
   likedUser: number[];
+  replyTo : string;
 }

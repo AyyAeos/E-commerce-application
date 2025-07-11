@@ -17,6 +17,7 @@ import useSWR, { mutate } from "swr";
 import { useReplies } from "./Replies";
 import axiosInstance from "@/utils/axiosInstance";
 import { CommentList } from "../type";
+import { set } from "lodash";
 
 const ParentComment = ({
   userId,
@@ -34,6 +35,7 @@ const ParentComment = ({
   const [replyStates, setReplyStates] = useState<boolean>(false);
   const [replyTexts, setReplyTexts] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [replyTo, setReplyTo] = useState<string>("");
 
   const {
     replies,
@@ -50,6 +52,7 @@ const ParentComment = ({
       itemId,
       content: replyTexts,
       parent: parentId,
+      replyTo,
     };
 
     try {
@@ -59,6 +62,7 @@ const ParentComment = ({
         setIsSuccess(true);
         setReplyTexts("");
         setReplyStates(false);
+        setReplyTo("");
       } else {
         alert("Error submitting reply");
       }
@@ -184,7 +188,17 @@ const ParentComment = ({
                   <div className="flex justify-between items-center mb-1">
                     <h4 className="font-medium text-gray-800 text-sm">
                       {comment.username}
+                      {comment.replyTo && (
+                        <>
+                          <span className="text-gray-400 mx-1">
+                            &gt;&gt;&gt;
+                          </span>
+                          {comment.replyTo}
+                        </>
+                      )}
                     </h4>
+
+                    <h6 className="font-medium text-gray-800 text-sm"></h6>
 
                     <button
                       className={`flex items-center text-xs font-semibold px-2 py-1 rounded-lg transition-all ${
@@ -204,6 +218,13 @@ const ParentComment = ({
                   <p className="text-xs text-gray-500 mt-1">
                     {new Date(comment.createTime).toLocaleString()}
                   </p>
+                  {/* Reply Button */}
+                  <button
+                    className="text-xs text-blue-600 hover:underline right"
+                    onClick={() => setReplyTo(comment.username)}
+                  >
+                    Reply
+                  </button>
                 </div>
               </div>
             </div>

@@ -131,36 +131,29 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `logis`.`item_comment_index`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `logis`.`item_comment_index` (
-  `index_id` INT NOT NULL AUTO_INCREMENT,
-  `item_id` INT UNSIGNED NULL DEFAULT NULL,
-  `comment_id` INT NOT NULL,
-  `user_id` INT UNSIGNED NULL DEFAULT NULL,
-  `root` INT NULL DEFAULT '0',
-  `parent` INT NULL DEFAULT NULL,
-  `like_count` INT NULL DEFAULT '0',
-  `type` ENUM('AuthorLiked', 'AuthorPinned', 'AuthorReply', 'AuthorSend') NULL DEFAULT NULL,
-  `create_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+CREATE TABLE `item_comment_index` (
+  `index_id` int NOT NULL AUTO_INCREMENT,
+  `item_id` int unsigned DEFAULT NULL,
+  `comment_id` int NOT NULL,
+  `user_id` int unsigned DEFAULT NULL,
+  `root` int DEFAULT '0',
+  `parent` int DEFAULT NULL,
+  `like_count` int DEFAULT '0',
+  `type` enum('AuthorLiked','AuthorPinned','AuthorReply','AuthorSend') DEFAULT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `reply_to` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`index_id`),
-  INDEX `comment_id` (`comment_id` ASC) VISIBLE,
-  INDEX `idx_root` (`root` ASC) VISIBLE,
-  INDEX `idx_parent` (`parent` ASC) VISIBLE,
-  INDEX `idx_user_id` (`user_id` ASC) VISIBLE,
-  INDEX `idx_item_id` (`item_id` ASC) VISIBLE,
-  CONSTRAINT `item_comment_index_ibfk_1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `logis`.`user` (`user_id`),
-  CONSTRAINT `item_comment_index_ibfk_2`
-    FOREIGN KEY (`comment_id`)
-    REFERENCES `logis`.`item_comment` (`comment_id`),
-  CONSTRAINT `item_comment_index_ibfk_3`
-    FOREIGN KEY (`item_id`)
-    REFERENCES `logis`.`inventory` (`item_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 69
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+  KEY `comment_id` (`comment_id`),
+  KEY `idx_root` (`root`),
+  KEY `idx_parent` (`parent`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_item_id` (`item_id`),
+  CONSTRAINT `item_comment_index_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  CONSTRAINT `item_comment_index_ibfk_2` FOREIGN KEY (`comment_id`) REFERENCES `item_comment` (`comment_id`),
+  CONSTRAINT `item_comment_index_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `inventory` (`item_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 -- -----------------------------------------------------
