@@ -56,7 +56,7 @@ Make sure the following are installed on your system:
 ![Homepage](assets/Product_Page.png)
 
 5. Product Review Page
-![Homepage](assets/Product_Review.png)
+![Homepage](assets/product review.png)
 
 6. Live Chat Page
 ![Homepage](assets/Customer_Support.png)
