@@ -110,7 +110,7 @@ logging:
 
 1.  In the logis folder, run the command :
     ```bash
-    docker compose down -v // if wanted to delete cache data.
+    docker compose down -v //  delete cache data.
     docker compose build
     docker compose up
     ```
