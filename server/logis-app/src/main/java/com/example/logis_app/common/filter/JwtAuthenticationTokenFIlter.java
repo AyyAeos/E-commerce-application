@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.Objects;
 @Component
 @Slf4j
-//spring's concreate only 1 per time the normla one will got spammed
+
 public class JwtAuthenticationTokenFIlter extends OncePerRequestFilter {
 
     @Autowired
