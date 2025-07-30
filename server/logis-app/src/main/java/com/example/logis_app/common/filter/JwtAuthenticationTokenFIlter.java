@@ -68,8 +68,8 @@ public class JwtAuthenticationTokenFIlter extends OncePerRequestFilter {
                 throw new RuntimeException("Invalid token");
             }
 
-            // Convert subject (JSON string) to User object
-            User user = new ObjectMapper().readValue(subject, User.class); // Or inject ObjectMapper
+            // Convert subject  to User object
+            User user = new ObjectMapper().readValue(subject, User.class); 
             LoginUser loginUser = new LoginUser(user);
 
             // Set Authentication
