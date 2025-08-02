@@ -29,9 +29,6 @@ import java.util.Objects;
 public class JwtAuthenticationTokenFIlter extends OncePerRequestFilter {
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Autowired
     private ObjectMapper objectMapper;
 
     @Override
